@@ -32,7 +32,7 @@ import org.optimizationBenchmarking.utils.math.functions.MathematicalFunction;
        for x in iterable:
            i = 0
            for y in partials:
-               if abs(x) < abs(y):
+               if abs(x) &lt; abs(y):
                    x, y = y, x
                hi = x + y
                lo = y - (hi - x)
@@ -41,7 +41,7 @@ import org.optimizationBenchmarking.utils.math.functions.MathematicalFunction;
                    i += 1
                x = hi
            partials[i:] = [x]
-       return sum_exact(partials
+       return sum_exact(partials)
  * </pre>
  * <p>
  * The {@code C} source code behind that method is:
@@ -64,9 +64,9 @@ math_fsum(PyObject *self, PyObject *seq)
     PyFPE_START_PROTECT("fsum", Py_DECREF(iter); return NULL)
 
     for(;;) {
-        assert(0 <= n && n <= m);
-        assert((m == NUM_PARTIALS && p == ps) ||
-               (m >  NUM_PARTIALS && p != NULL));
+        assert(0 &lt;= n &amp;&amp; n &lt;= m);
+        assert((m == NUM_PARTIALS &amp;&amp; p == ps) ||
+               (m &gt;  NUM_PARTIALS &amp;&amp; p != NULL));
 
         item = PyIter_Next(iter);
         if (item == NULL) {
@@ -80,9 +80,9 @@ math_fsum(PyObject *self, PyObject *seq)
             goto _fsum_error;
 
         xsave = x;
-        for (i = j = 0; j < n; j++) {
+        for (i = j = 0; j &lt; n; j++) {
             y = p[j];
-            if (fabs(x) < fabs(y)) {
+            if (fabs(x) &lt; fabs(y)) {
                 t = x; x = y; y = t;
             }
             hi = x + y;
@@ -106,7 +106,7 @@ math_fsum(PyObject *self, PyObject *seq)
                 special_sum += xsave;
                 n = 0;
             }
-            else if (n >= m && _fsum_realloc(&p, n, ps, &m))
+            else if (n &gt;= m &amp;&amp; _fsum_realloc(&amp;p, n, ps, &amp;m))
                 goto _fsum_error;
             else
                 p[n++] = x;
@@ -123,20 +123,20 @@ math_fsum(PyObject *self, PyObject *seq)
     }
 
     hi = 0.0;
-    if (n > 0) {
+    if (n &gt; 0) {
         hi = p[--n];
-        while (n > 0) {
+        while (n &gt; 0) {
             x = hi;
             y = p[--n];
-            assert(fabs(y) < fabs(x));
+            assert(fabs(y) &lt; fabs(x));
             hi = x + y;
             yr = hi - x;
             lo = y - yr;
             if (lo != 0.0)
                 break;
         }
-        if (n > 0 && ((lo < 0.0 && p[n-1] < 0.0) ||
-                      (lo > 0.0 && p[n-1] > 0.0))) {
+        if (n &gt; 0 &amp;&amp; ((lo &lt; 0.0 &amp;&amp; p[n-1] &lt; 0.0) ||
+                      (lo &gt; 0.0 &amp;&amp; p[n-1] &gt; 0.0))) {
             y = lo * 2.0;
             x = hi + y;
             yr = x - hi;
@@ -181,6 +181,7 @@ _fsum_error:
  * (in order to deal with the fact that {@code double} has a 52 bit
  * mantissa and thus can only represent a subset of the 64 bit long values
  * accurately).</li>
+ * </ol>
  * <h2>Seel Also</h2>
  * <ol>
  * <li>http://code.activestate.com/recipes/393090-binary-floating-point-

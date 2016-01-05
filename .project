@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>utils-charts</name>
+	<name>utils-math</name>
 	<comment>The mathematics utilities of the optimizationBenchmarking.org tool chain.</comment>
 	<projects>
 	</projects>
