@@ -19,11 +19,14 @@ before_install:
   - if [[ $SHIPPABLE_JDK_VERSION == "oraclejdk8" ]] ; then export JAVA_HOME="/usr/lib/jvm/java-8-oracle"; export PATH="$PATH:/usr/lib/jvm/java-8-oracle/bin"; export java_path="/usr/lib/jvm/java-8-oracle/jre/bin/java"; fi
   - update-alternatives --set java $java_path
   - java -version
-# Install the required Ant version
+# Install the required Ant and Maven version
+  - shippable_retry sudo apt-get -q -y -f update
   - shippable_retry sudo apt-get -y install maven
   - shippable_retry wget "https://raw.githubusercontent.com/optimizationBenchmarking/utils-build/master/antWebInstallerLinux.sh"
   - chmod 755 antWebInstallerLinux.sh
   - shippable_retry sudo ./antWebInstallerLinux.sh --purgeAnt=false
+# installing R
+  - sudo apt-get -q -y -f install r-base r-base-dev
   
 # install override
 install:

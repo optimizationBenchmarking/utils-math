@@ -22,6 +22,7 @@ cache:
 script: ant
 
 before_install:
+  - sudo apt-get -q -y -f update
 # Install the required Ant version
   - wget "https://raw.githubusercontent.com/optimizationBenchmarking/utils-build/master/antWebInstallerLinux.sh"
   - chmod 755 antWebInstallerLinux.sh
@@ -32,6 +33,8 @@ before_install:
   - sudo hostname "$(hostname | cut -c1-63)"
   - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
   - cat /etc/hosts # optionally check the content *after*
+# installing R
+  - sudo apt-get -q -y -f install r-base r-base-dev
   
 # prevent Maven from running
 install:
