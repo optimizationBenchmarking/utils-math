@@ -4,36 +4,37 @@ import org.junit.Ignore;
 import org.optimizationBenchmarking.utils.math.functions.MathematicalFunction;
 import org.optimizationBenchmarking.utils.math.functions.arithmetic.SaturatingSub;
 
-import test.junit.org.optimizationBenchmarking.utils.math.functions.MathematicalFunctionTest;
-import test.junit.org.optimizationBenchmarking.utils.math.functions.TestCase;
+import shared.junit.org.optimizationBenchmarking.utils.math.functions.FunctionTestCase;
+import shared.junit.org.optimizationBenchmarking.utils.math.functions.MathematicalFunctionTest;
 
 /** The test of the saturating subtract function */
 public final class SaturatingSubTest extends MathematicalFunctionTest {
 
   /** the test cases */
-  private static final TestCase[] TEST_CASES = { //
-      new TestCase(1, 1, 0), //
-      new TestCase(-1, 0, 1), //
-      new TestCase(0, 2, 2), //
-      new TestCase(-1, 2, 3), //
-      new TestCase(5, 4, -1), //
-      new TestCase(6, 4, -2), //
-      new TestCase(-7, -4, 3), //
+  private static final FunctionTestCase[] TEST_CASES = { //
+      new FunctionTestCase(1, 1, 0), //
+      new FunctionTestCase(-1, 0, 1), //
+      new FunctionTestCase(0, 2, 2), //
+      new FunctionTestCase(-1, 2, 3), //
+      new FunctionTestCase(5, 4, -1), //
+      new FunctionTestCase(6, 4, -2), //
+      new FunctionTestCase(-7, -4, 3), //
       //
-      new TestCase(Long.MAX_VALUE, Long.MAX_VALUE, 0L), //
-      new TestCase(Long.MAX_VALUE, Long.MAX_VALUE, -1L), //
-      new TestCase(Long.MAX_VALUE, Long.MAX_VALUE, -2L), //
-      new TestCase(Long.MAX_VALUE, Long.MAX_VALUE, -Long.MAX_VALUE), //
-      new TestCase(Long.MAX_VALUE, Long.MAX_VALUE, Long.MIN_VALUE), //
-      new TestCase(0L, Long.MAX_VALUE, Long.MAX_VALUE), //
-      new TestCase(1L, Long.MAX_VALUE, (Long.MAX_VALUE - 1L)), //
+      new FunctionTestCase(Long.MAX_VALUE, Long.MAX_VALUE, 0L), //
+      new FunctionTestCase(Long.MAX_VALUE, Long.MAX_VALUE, -1L), //
+      new FunctionTestCase(Long.MAX_VALUE, Long.MAX_VALUE, -2L), //
+      new FunctionTestCase(Long.MAX_VALUE, Long.MAX_VALUE,
+          -Long.MAX_VALUE), //
+      new FunctionTestCase(Long.MAX_VALUE, Long.MAX_VALUE, Long.MIN_VALUE), //
+      new FunctionTestCase(0L, Long.MAX_VALUE, Long.MAX_VALUE), //
+      new FunctionTestCase(1L, Long.MAX_VALUE, (Long.MAX_VALUE - 1L)), //
       //
-      new TestCase(Long.MIN_VALUE, Long.MIN_VALUE, 0L), //
-      new TestCase(Long.MIN_VALUE, Long.MIN_VALUE, 1L), //
-      new TestCase(Long.MIN_VALUE, Long.MIN_VALUE, 2L), //
-      new TestCase(Long.MIN_VALUE, Long.MIN_VALUE, Long.MAX_VALUE), //
-      new TestCase(0, Long.MIN_VALUE, Long.MIN_VALUE), //
-      new TestCase(-1L, Long.MIN_VALUE, (-Long.MAX_VALUE)),//
+      new FunctionTestCase(Long.MIN_VALUE, Long.MIN_VALUE, 0L), //
+      new FunctionTestCase(Long.MIN_VALUE, Long.MIN_VALUE, 1L), //
+      new FunctionTestCase(Long.MIN_VALUE, Long.MIN_VALUE, 2L), //
+      new FunctionTestCase(Long.MIN_VALUE, Long.MIN_VALUE, Long.MAX_VALUE), //
+      new FunctionTestCase(0, Long.MIN_VALUE, Long.MIN_VALUE), //
+      new FunctionTestCase(-1L, Long.MIN_VALUE, (-Long.MAX_VALUE)),//
   };
 
   /** create */
@@ -55,7 +56,7 @@ public final class SaturatingSubTest extends MathematicalFunctionTest {
 
   /** {@inheritDoc} */
   @Override
-  public final TestCase[] getTestCases() {
+  public final FunctionTestCase[] getTestCases() {
     return SaturatingSubTest.TEST_CASES;
   }
 

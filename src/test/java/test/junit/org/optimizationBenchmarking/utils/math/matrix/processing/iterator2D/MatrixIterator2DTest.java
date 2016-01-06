@@ -12,7 +12,7 @@ import org.optimizationBenchmarking.utils.math.matrix.impl.LongMatrix1D;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIterator2D;
 
 import shared.junit.TestBase;
-import test.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
+import shared.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
 
 /**
  * Test the matrix iterator 2D.

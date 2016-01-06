@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.optimizationBenchmarking.utils.math.matrix.impl.ByteMatrix1D;
 
-import test.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
+import shared.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
 
 /** test the int matrix */
 public class ByteMatrix1DTest extends MatrixTest<ByteMatrix1D> {

@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.optimizationBenchmarking.utils.math.matrix.impl.DoubleMatrix2D;
 
-import test.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
+import shared.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
 
 /** test the double matrix */
 public class DoubleMatrix2DTest extends MatrixTest<DoubleMatrix2D> {

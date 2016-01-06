@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.optimizationBenchmarking.utils.math.matrix.impl.FloatMatrix1D;
 
-import test.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
+import shared.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
 
 /** test the double matrix */
 public class FloatMatrix1DTest extends MatrixTest<FloatMatrix1D> {

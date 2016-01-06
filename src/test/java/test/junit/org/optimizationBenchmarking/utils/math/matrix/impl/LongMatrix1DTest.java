@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.optimizationBenchmarking.utils.math.matrix.impl.LongMatrix1D;
 
-import test.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
+import shared.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
 
 /** test the long matrix */
 public class LongMatrix1DTest extends MatrixTest<LongMatrix1D> {

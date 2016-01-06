@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.optimizationBenchmarking.utils.math.matrix.IMatrix;
 import org.optimizationBenchmarking.utils.math.matrix.processing.ConcatenatedMatrix;
 
-import test.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
+import shared.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
 
 /** test the concatenated matrix */
 public class ConcatenatedMatrixTest
