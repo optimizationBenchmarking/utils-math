@@ -8,5 +8,6 @@
 [<img alt="Wercker Build Status" src="https://img.shields.io/wercker/ci/568ba550b1b23faa66185263.svg" height="20"/>](https://app.wercker.com/#applications/568ba550b1b23faa66185263)
 [<img alt="Shippable Build Status" src="https://img.shields.io/shippable/568ba7061895ca4474675a6b.svg" height="20"/>](https://app.shippable.com/projects/568ba7061895ca4474675a6b)
 [<img alt="AppVeyor Build Status" src="https://img.shields.io/appveyor/ci/thomasWeise/utils-math.svg" height="20"/>](https://ci.appveyor.com/project/thomasWeise/utils-math)
+[<img alt="Drone IO Build Status" src="https://drone.io/github.com/optimizationBenchmarking/utils-math/status.png" height="20"/>](https://drone.io/github.com/optimizationBenchmarking/utils-math/latest)
 
 This library provides the mathematics utility classes used by the [optimizationBenchmarking](http://www.github.com/optimizationBenchmarking/) tool suite. Details about the licensing of this project and the projects it depends on are given in [LICENSE.md](https://github.com/optimizationBenchmarking/utils-math/blob/master/LICENSE.md).
