@@ -14,7 +14,7 @@ The following libraries are needed by *the library*:
 
 
 * `commons-math3-3.5.jar`
-    - License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt) (see file "[meta/licenses/apache-2.0.txt](http://github.com/optimizationBenchmarking/optimizationBenchmarking/tree/master/meta/licenses/apache-2.0.txt)")
+    - License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt) (see file "[meta/licenses/apache-2.0.txt](http://github.com/optimizationBenchmarking/utils-math/tree/master/meta/licenses/apache-2.0.txt)")
     - Version: 3.5
     - Status: freely available in the internet
     - Source: [repo.maven.apache.org](http://repo.maven.apache.org/maven2/org/apache/commons/commons-math3/3.5/commons-math3-3.5.jar)
@@ -37,7 +37,7 @@ If you have any questions about *the library*, want to contribute to *the librar
 
 ## Contact
 
-The main author, copyright holder, and corresponding author of *the project* is Dr. Thomas Weise.
+The main author, copyright holder, and corresponding author of *the library* is Dr. Thomas Weise.
 
 **Dr. Thomas Weise**
 Nature Inspired Computation and Applications Laboratory (NICAL)
