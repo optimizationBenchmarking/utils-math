@@ -2,6 +2,8 @@ package test.junit.org.optimizationBenchmarking.utils.math.matrix.impl;
 
 import java.util.Random;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.optimizationBenchmarking.utils.math.matrix.impl.ByteMatrix1D;
 
 import shared.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
@@ -12,6 +14,12 @@ public class ByteMatrix1DTest extends MatrixTest<ByteMatrix1D> {
   /** the constructor */
   public ByteMatrix1DTest() {
     super();
+  }
+
+  /** test whether the matrix is an integer matrix */
+  @Test(timeout = 3600000)
+  public void testIsInteger() {
+    Assert.assertTrue(this.getInstance().isIntegerMatrix());
   }
 
   /** {@inheritDoc} */

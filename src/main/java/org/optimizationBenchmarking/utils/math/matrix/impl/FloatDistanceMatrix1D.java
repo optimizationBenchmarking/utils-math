@@ -5,12 +5,12 @@ import org.optimizationBenchmarking.utils.math.matrix.AbstractMatrix;
 /**
  * A square matrix whose diagonal elements are all {@code 0} and the
  * elements below the diagonal mirror those above, backed by a
- * one-dimensional array of {@code double}.
+ * one-dimensional array of {@code float}.
  */
-public final class DoubleDistanceMatrix1D extends DistanceMatrix {
+public final class FloatDistanceMatrix1D extends DistanceMatrix {
 
   /** the data */
-  private final double[] m_data;
+  private final float[] m_data;
 
   /**
    * create the matrix
@@ -20,7 +20,7 @@ public final class DoubleDistanceMatrix1D extends DistanceMatrix {
    * @param m
    *          the m
    */
-  public DoubleDistanceMatrix1D(final double[] data, final int m) {
+  public FloatDistanceMatrix1D(final float[] data, final int m) {
     super(m);
     DistanceMatrix._checkSize(data.length, m);
     this.m_data = data;
@@ -69,6 +69,6 @@ public final class DoubleDistanceMatrix1D extends DistanceMatrix {
   /** {@inheritDoc} */
   @Override
   public final AbstractMatrix asRowVector() {
-    return new DoubleMatrix1D(this.m_data, 1, this.m_data.length);
+    return new FloatMatrix1D(this.m_data, 1, this.m_data.length);
   }
 }

@@ -2,6 +2,8 @@ package test.junit.org.optimizationBenchmarking.utils.math.matrix.impl;
 
 import java.util.Random;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.optimizationBenchmarking.utils.math.matrix.impl.FloatMatrix1D;
 
 import shared.junit.org.optimizationBenchmarking.utils.math.matrix.MatrixTest;
@@ -12,6 +14,12 @@ public class FloatMatrix1DTest extends MatrixTest<FloatMatrix1D> {
   /** the constructor */
   public FloatMatrix1DTest() {
     super();
+  }
+
+  /** test whether the matrix is an integer matrix */
+  @Test(timeout = 3600000)
+  public void testIsInteger() {
+    Assert.assertFalse(this.getInstance().isIntegerMatrix());
   }
 
   /** {@inheritDoc} */
