@@ -3,17 +3,13 @@ package org.optimizationBenchmarking.utils.math.mathEngine.impl.R;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.optimizationBenchmarking.utils.EmptyUtils;
-import org.optimizationBenchmarking.utils.config.Configuration;
+import org.optimizationBenchmarking.utils.io.paths.PathFinderBuilder;
 import org.optimizationBenchmarking.utils.io.paths.PathUtils;
-import org.optimizationBenchmarking.utils.io.paths.predicates.CanExecutePredicate;
-import org.optimizationBenchmarking.utils.io.paths.predicates.FileNamePredicate;
-import org.optimizationBenchmarking.utils.io.paths.predicates.IsFilePredicate;
+import org.optimizationBenchmarking.utils.io.paths.predicates.TextProcessResultPredicate;
 import org.optimizationBenchmarking.utils.math.mathEngine.impl.abstr.MathEngineTool;
-import org.optimizationBenchmarking.utils.predicates.AndPredicate;
 import org.optimizationBenchmarking.utils.tools.impl.process.ExternalProcess;
 import org.optimizationBenchmarking.utils.tools.impl.process.ExternalProcessBuilder;
 import org.optimizationBenchmarking.utils.tools.impl.process.ExternalProcessExecutor;
@@ -60,7 +56,6 @@ public final class R extends MathEngineTool {
     super();
 
     Path r;
-    ArrayList<Path> list;
     HashSet<String> params;
     int size;
     ExternalProcessExecutor exec;
@@ -75,58 +70,20 @@ public final class R extends MathEngineTool {
 
     if ((exec != null) && (exec.canUse())) {
 
-      list = new ArrayList<>();
-      try {
-        r = Configuration.getRoot().getPath(R.PARAM_R_BINARY, null);
-        if (r != null) {
-          list.add(r);
-        }
-      } catch (final Throwable t) {
-        //
-      }
+      r = new PathFinderBuilder()//
+          .addConfigArgVisitFirst(R.PARAM_R_BINARY)//
+          .addVisitFirst("/usr/bin/R") //$NON-NLS-1$
+          .addVisitFirst("C:\\Program Files\\R\\") //$NON-NLS-1$
+          .addVisitFirst("C:\\Program Files (x86)\\R\\") //$NON-NLS-1$
+          .addNamePredicate(true, "R", //$NON-NLS-1$
+              "Rterm") //$NON-NLS-1$
+          .mustBeExecutableFile()//
+          .addPathPredicate(new _RAtLeastVersion3Criterion())//
+          .addPathPredicate(new TextProcessResultPredicate("--help"))//$NON-NLS-1$
+          .create().call();
 
-      try {
-        r = PathUtils.normalize("/usr/bin/R"); //$NON-NLS-1$
-        if (r != null) {
-          list.add(r);
-        }
-      } catch (final Throwable t) {
-        //
-      }
-
-      try {
-        r = PathUtils.normalize("C:\\Program Files\\R\\"); //$NON-NLS-1$
-        if (r != null) {
-          list.add(r);
-        }
-      } catch (final Throwable t) {
-        //
-      }
-
-      try {
-        r = PathUtils.normalize("C:\\Program Files (x86)\\R\\"); //$NON-NLS-1$
-        if (r != null) {
-          list.add(r);
-        }
-      } catch (final Throwable t) {
-        //
-      }
-
-      r = null;
-      try {
-        r = PathUtils.findFirstInPath(//
-            new AndPredicate<>(//
-                new FileNamePredicate(true,
-                    new String[] { "R", //$NON-NLS-1$
-                        "Rterm" }), //$NON-NLS-1$
-                new AndPredicate<>(
-                    //
-                    CanExecutePredicate.INSTANCE,
-                    new _RAtLeastVersion3Criterion())), //
-            IsFilePredicate.INSTANCE, //
-            list.toArray(new Path[list.size()]));
-
-        if (r != null) {
+      if (r != null) {
+        try {
           builder = exec.use();
           builder.setExecutable(r);
           builder.setMergeStdOutAndStdErr(true);
@@ -173,10 +130,9 @@ public final class R extends MathEngineTool {
             }
           }
 
+        } catch (final Throwable t) {
+          r = null;
         }
-
-      } catch (final Throwable t) {
-        r = null;
       }
     }
 
