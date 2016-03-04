@@ -8,7 +8,6 @@ import java.util.HashSet;
 import org.optimizationBenchmarking.utils.EmptyUtils;
 import org.optimizationBenchmarking.utils.io.paths.PathFinderBuilder;
 import org.optimizationBenchmarking.utils.io.paths.PathUtils;
-import org.optimizationBenchmarking.utils.io.paths.predicates.TextProcessResultPredicate;
 import org.optimizationBenchmarking.utils.math.mathEngine.impl.abstr.MathEngineTool;
 import org.optimizationBenchmarking.utils.tools.impl.process.ExternalProcess;
 import org.optimizationBenchmarking.utils.tools.impl.process.ExternalProcessBuilder;
@@ -79,7 +78,7 @@ public final class R extends MathEngineTool {
               "Rterm") //$NON-NLS-1$
           .mustBeExecutableFile()//
           .addPathPredicate(new _RAtLeastVersion3Criterion())//
-          .addPathPredicate(new TextProcessResultPredicate("--help"))//$NON-NLS-1$
+          .addCanExecuteAsTextProcess("--help")//$NON-NLS-1$
           .create().call();
 
       if (r != null) {
