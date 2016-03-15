@@ -153,7 +153,6 @@ public final class R extends MathEngineTool {
     this.m_params = (((params != null) && ((size = params.size()) > 0))//
         ? params.toArray(new String[size]) : EmptyUtils.EMPTY_STRINGS);
     this.m_rUserLibPath = ((r != null) ? R.__getUserLib() : null);
-    System.out.println(this.m_rUserLibPath);
   }
 
   /** {@inheritDoc} */
