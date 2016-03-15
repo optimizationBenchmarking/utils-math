@@ -12,29 +12,21 @@ import org.optimizationBenchmarking.utils.math.mathEngine.spec.IMathEngineTool;
 import org.optimizationBenchmarking.utils.math.matrix.IMatrix;
 import org.optimizationBenchmarking.utils.math.matrix.impl.MatrixBuilder;
 
-import shared.junit.TestBase;
+import shared.junit.org.optimizationBenchmarking.utils.tools.ToolTest;
 import shared.randomization.RandomUtils;
 
 /** A test for maths engines */
 @Ignore
-public abstract class MathEngineTest extends TestBase {
-
-  /** create the test */
-  protected MathEngineTest() {
-    super();
-  }
+public abstract class MathEngineTest extends ToolTest<IMathEngineTool> {
 
   /**
-   * Get the math engine tool
+   * create the test
    *
-   * @return the tool
+   * @param tool
+   *          the tool
    */
-  protected abstract IMathEngineTool getTool();
-
-  /** test whether the math engine tool can be constructed */
-  @Test(timeout = 3600000)
-  public void testToolNotNull() {
-    Assert.assertNotNull(this.getTool());
+  protected MathEngineTest(final IMathEngineTool tool) {
+    super(tool);
   }
 
   /** test whether we can read and write boolean values */
@@ -48,7 +40,7 @@ public abstract class MathEngineTest extends TestBase {
     String variable;
     Boolean value;
 
-    tool = this.getTool();
+    tool = this.getInstance();
     Assert.assertNotNull(tool);
 
     if (!(tool.canUse())) {
@@ -116,7 +108,7 @@ public abstract class MathEngineTest extends TestBase {
     String variable;
     Long value;
 
-    tool = this.getTool();
+    tool = this.getInstance();
     Assert.assertNotNull(tool);
 
     if (!(tool.canUse())) {
@@ -198,7 +190,7 @@ public abstract class MathEngineTest extends TestBase {
     String variable;
     Double value;
 
-    tool = this.getTool();
+    tool = this.getInstance();
     Assert.assertNotNull(tool);
 
     if (!(tool.canUse())) {
@@ -392,7 +384,7 @@ public abstract class MathEngineTest extends TestBase {
     String variable;
     IMatrix value;
 
-    tool = this.getTool();
+    tool = this.getInstance();
     Assert.assertNotNull(tool);
 
     if (!(tool.canUse())) {
@@ -468,7 +460,7 @@ public abstract class MathEngineTest extends TestBase {
     String variable;
     IMatrix value;
 
-    tool = this.getTool();
+    tool = this.getInstance();
     Assert.assertNotNull(tool);
 
     if (!(tool.canUse())) {

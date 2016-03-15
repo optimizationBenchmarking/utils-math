@@ -16,13 +16,7 @@ public class REngineTest extends MathEngineTest {
 
   /** create the test */
   public REngineTest() {
-    super();
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  protected final IMathEngineTool getTool() {
-    return R.getInstance();
+    super(R.getInstance());
   }
 
   /**
@@ -36,7 +30,7 @@ public class REngineTest extends MathEngineTest {
     final IMathEngineTool tool;
     final IMatrix matrixA, matrixAInverse;
 
-    tool = this.getTool();
+    tool = this.getInstance();
     Assert.assertNotNull(tool);
 
     if (!(tool.canUse())) {
