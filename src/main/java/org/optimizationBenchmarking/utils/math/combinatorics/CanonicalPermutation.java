@@ -169,7 +169,7 @@ public final class CanonicalPermutation {
       res = new int[count];
       if ((--num) > 0) {
         blue = CanonicalPermutation.__blueprint(num);
-        System.arraycopy(blue, 1, res, 0, num);
+        System.arraycopy(blue, 0, res, 1, num);
       }
       return res;
     }
