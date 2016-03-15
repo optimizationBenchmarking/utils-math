@@ -1,3 +1,4 @@
 aInverse<-solve(a);
-rcommUsePackage("cluster");
-numClusters<-length(kmeans(iris[1:4],3)[[7]]);
+if(safeUsePackage("cluster")) {
+ numClusters<-length(kmeans(iris[1:4],3)[[7]]);
+}

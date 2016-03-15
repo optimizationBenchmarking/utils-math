@@ -2,10 +2,16 @@ package org.optimizationBenchmarking.utils.math.mathEngine.impl.R;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.HashSet;
 
 import org.optimizationBenchmarking.utils.EmptyUtils;
+import org.optimizationBenchmarking.utils.config.Configuration;
+import org.optimizationBenchmarking.utils.error.ErrorUtils;
+import org.optimizationBenchmarking.utils.error.RethrowMode;
+import org.optimizationBenchmarking.utils.io.EOSFamily;
 import org.optimizationBenchmarking.utils.io.paths.PathFinderBuilder;
 import org.optimizationBenchmarking.utils.io.paths.PathUtils;
 import org.optimizationBenchmarking.utils.math.mathEngine.impl.abstr.MathEngineTool;
@@ -43,8 +49,16 @@ public final class R extends MathEngineTool {
   /** the parameter denoting the path of the {@code R} binary */
   public static final String PARAM_R_BINARY = "pathOfRBinary"; //$NON-NLS-1$
 
+  /** the user path */
+  static final String USER_LIB = "R_LIBS_USER"; //$NON-NLS-1$
+
   /** the path to the {@code R} executable */
   final Path m_rBinary;
+
+  /**
+   * the user library path of {@code R} - not needed under Windows Systems
+   */
+  final Path m_rUserLibPath;
 
   /** the parameters to use for running {@code R} */
   final String[] m_params;
@@ -138,7 +152,8 @@ public final class R extends MathEngineTool {
     this.m_rBinary = r;
     this.m_params = (((params != null) && ((size = params.size()) > 0))//
         ? params.toArray(new String[size]) : EmptyUtils.EMPTY_STRINGS);
-
+    this.m_rUserLibPath = ((r != null) ? R.__getUserLib() : null);
+    System.out.println(this.m_rUserLibPath);
   }
 
   /** {@inheritDoc} */
@@ -167,6 +182,61 @@ public final class R extends MathEngineTool {
   @Override
   public final String toString() {
     return "R Process Automator"; //$NON-NLS-1$
+  }
+
+  /**
+   * get/create the path
+   *
+   * @return the path
+   */
+  private static final Path __getUserLib() {
+    final Path userDir;
+    Path path;
+
+    if (EOSFamily.DETECTED == EOSFamily.Windows) {
+      return null;
+    }
+
+    path = Configuration.getRoot().getPath(R.USER_LIB, null);
+    if (path != null) {
+      try {
+        Files.createDirectories(path);
+        if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
+          return path;
+        }
+      } catch (final Throwable error) {
+        ErrorUtils.logError(Configuration.getGlobalLogger(), //
+            "Error while trying to create default user library for R.", //$NON-NLS-1$
+            error, true, RethrowMode.DONT_RETHROW);
+      }
+    }
+
+    userDir = PathUtils.getUserHomeDir();
+    if (userDir != null) {
+      path = PathUtils.createPathInside(userDir, "R/lib"); //$NON-NLS-1$
+      if (Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
+        return path;
+      }
+
+      path = PathUtils.createPathInside(userDir, "R/library"); //$NON-NLS-1$
+      if (Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
+        return path;
+      }
+    }
+
+    path = PathUtils.createPathInside(PathUtils.getTempDir(), "R/lib"); //$NON-NLS-1$
+    try {
+      Files.createDirectories(path);
+      if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
+        return path;
+      }
+    } catch (final Throwable error) {
+      ErrorUtils.logError(Configuration.getGlobalLogger(), //
+          "Error while trying to create default user library for R.", //$NON-NLS-1$
+          error, true, RethrowMode.DONT_RETHROW);
+    }
+
+    return PathUtils.getTempDir();
   }
 
   /** create the R engine */

@@ -51,7 +51,7 @@ public final class REngine extends MathEngine {
   private static final String TRUE = "TRUE"; //$NON-NLS-1$
 
   /** the function to print a matrix */
-  private static final String PRINT_FUNCTION_NAME = "rcommPrintMatrix";//$NON-NLS-1$
+  private static final String PRINT_FUNCTION_NAME = "safePrintMatrix";//$NON-NLS-1$
 
   /**
    * create
@@ -204,6 +204,11 @@ public final class REngine extends MathEngine {
 
       line = this.__nextLine();
       index = line.indexOf(' ');
+      if ((index <= 0) || (index >= (line.length() - 1))) {
+        throw new IllegalStateException(
+            "Dimension line of matrix from R is '" + line //$NON-NLS-1$
+                + "' invalid: does not contain a space between two numbers.");//$NON-NLS-1$
+      }
       m = Integer.parseInt(line.substring(0, index));
       mb.setM(m);
       n = Integer.parseInt(line.substring(index + 1));

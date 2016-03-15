@@ -6,7 +6,7 @@ options(digits=22);
 # read it. Unfortunately, write.table et al. seem to not
 # respect the above option with digits, hence we need to brew
 # our own method.
-rcommPrintMatrix <- function(mat) {
+safePrintMatrix <- function(mat) {
   op   <- options(digits=22);
   
   if(is.matrix(mat)) {  
@@ -55,24 +55,36 @@ rcommPrintMatrix <- function(mat) {
 #
 ## This function executes a command or expression. It eats away
 ## possible errors and output.
-rcommExec <- function(expression) {
-  temp <- suppressMessages(suppressWarnings(capture.output(
-    tryCatch(expression, error=function(e) { }))));
+safeExec <- function(expression) {
+ retVal <- FALSE;
+  temp  <- suppressMessages(suppressWarnings(invisible(capture.output(
+    tryCatch({expression; retVal <- TRUE},
+             error=function(e) { retVal <- FALSE; },
+             warning=function(e) { })))));
   rm(temp);
+  return(retVal)
 }
 #
 # Load a library. Silently install it if it is not yet installed.
-# Quit if it cannot be installed.
-rcommUsePackage <- function(package) {
-  rcommExec(check<-require(package, quietly=TRUE, character.only=TRUE));  
-  if(!(check)) {
-     rcommExec(system(paste0("Rscript -e 'install.packages(\"",
-      package, "\", repos=\"http://cran.us.r-project.org\", dependencies=TRUE, clean=TRUE, quiet=TRUE)'"),
-      intern=FALSE, ignore.stdout=TRUE, ignore.stderr=TRUE));
-  
-    rcommExec(check<-require(package, quietly=TRUE, character.only=TRUE));
-    if(!(check)) {
-      q();
-    }                        
-  }  
+# Returns true
+safeUsePackage <- function(package) {
+  loaded <- FALSE;
+  if(safeExec(loaded<-require(package, quietly=TRUE, character.only=TRUE))) {
+    if(!loaded){
+      if(safeExec(system(paste0("Rscript -e 'install.packages(\"", package, 
+         "\", repos=c(\"http://cran.us.r-project.org\", ",
+         "\"http://cran.uk.r-project.org\", ",
+         "\"http://mirrors.ustc.edu.cn/CRAN\", ",
+         "\"http://cran.wu.ac.at/\", ",
+         "\"http://cran.utstat.utoronto.ca/\", ",
+         "\"http://cran.rstudio.com/\", ",
+         "\"https://cran.uni-muenster.de/\", ",
+         "\"http://ftp.iitm.ac.in/cran/\"), ",
+         "dependencies=TRUE, clean=TRUE, quiet=TRUE)'"),
+         intern=FALSE, ignore.stdout=TRUE, ignore.stderr=TRUE))) {
+        safeExec(loaded<-require(package, quietly=TRUE, character.only=TRUE));
+      }
+    }
+  }
+  return(loaded)
 }

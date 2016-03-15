@@ -38,8 +38,13 @@ public final class REngineBuilder
     log = this.getLogger();
 
     builder = TextProcessExecutor.getInstance().use();
+
     r = R.getInstance();
+
     builder.setExecutable(r.m_rBinary);
+    if (r.m_rUserLibPath != null) {
+      builder.putEnvironmentPath(R.USER_LIB, r.m_rUserLibPath);
+    }
 
     builder.setDirectory(PathUtils.getTempDir());
     for (final String s : r.m_params) {
