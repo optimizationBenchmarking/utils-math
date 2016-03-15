@@ -69,20 +69,23 @@ safeExec <- function(expression) {
 # Returns true
 safeUsePackage <- function(package) {
   loaded <- FALSE;
-  if(safeExec(loaded<-require(package, quietly=TRUE, character.only=TRUE))) {
-    if(!loaded){
-      if(safeExec(system(paste0("Rscript -e 'install.packages(\"", package, 
-         "\", repos=c(\"http://cran.us.r-project.org\", ",
-         "\"http://cran.uk.r-project.org\", ",
-         "\"http://mirrors.ustc.edu.cn/CRAN\", ",
-         "\"http://cran.wu.ac.at/\", ",
-         "\"http://cran.utstat.utoronto.ca/\", ",
-         "\"http://cran.rstudio.com/\", ",
-         "\"https://cran.uni-muenster.de/\", ",
-         "\"http://ftp.iitm.ac.in/cran/\"), ",
-         "dependencies=TRUE, clean=TRUE, quiet=TRUE)'"),
-         intern=FALSE, ignore.stdout=TRUE, ignore.stderr=TRUE))) {
-        safeExec(loaded<-require(package, quietly=TRUE, character.only=TRUE));
+  if(!(safeExec(loaded<-require(package, quietly=TRUE, character.only=TRUE)))) {
+    loaded<-FALSE;
+  }
+  if(!loaded){
+    if(safeExec(system(paste0("Rscript -e 'install.packages(", '"', package, 
+       "\", repos=c(\"http://cran.us.r-project.org\", ",
+       "\"http://cran.uk.r-project.org\", ",
+       "\"http://mirrors.ustc.edu.cn/CRAN\", ",
+       "\"http://cran.wu.ac.at/\", ",
+       "\"http://cran.utstat.utoronto.ca/\", ",
+       "\"http://cran.rstudio.com/\", ",
+       "\"https://cran.uni-muenster.de/\", ",
+       "\"http://ftp.iitm.ac.in/cran/\"), ",
+       "dependencies=TRUE, clean=TRUE, quiet=TRUE)'"),
+       intern=FALSE, ignore.stdout=TRUE, ignore.stderr=TRUE))) {
+      if(!(safeExec(loaded<-require(package, quietly=TRUE, character.only=TRUE)))) {
+        loaded<-FALSE;
       }
     }
   }
