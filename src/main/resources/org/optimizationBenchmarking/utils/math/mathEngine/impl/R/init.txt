@@ -62,7 +62,7 @@ safeExec <- function(expression) {
              error=function(e) { retVal <- FALSE; },
              warning=function(e) { })))));
   rm(temp);
-  return(retVal)
+  return(invisible(retVal))
 }
 #
 # Load a library. Silently install it if it is not yet installed.
@@ -89,5 +89,5 @@ safeUsePackage <- function(package) {
       }
     }
   }
-  return(loaded)
+  return(invisible(loaded))
 }
