@@ -14,7 +14,7 @@ public abstract class MatrixIteration2DState
    *          the iteration to copy
    */
   MatrixIteration2DState(final _MatrixIteration2DBase copy) {
-    super();
+    super(copy);
   }
 
   /**
