@@ -9,7 +9,7 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIte
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EMissingValueMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DBuilder;
 
-/** The first test for the matrix iteration */
+/** A test for the matrix iteration */
 public class MatrixIteration2DTestLongLongIncreasingKeepPreviousSkipSkip2
     extends MatrixIteration2DTest {
 
@@ -20,7 +20,6 @@ public class MatrixIteration2DTestLongLongIncreasingKeepPreviousSkipSkip2
 
   /** create */
   @Override
-
   protected void setup(final MatrixIteration2DBuilder builder) {
     builder.setEndMode(EMissingValueMode.SKIP);
     builder.setStartMode(EMissingValueMode.SKIP);
