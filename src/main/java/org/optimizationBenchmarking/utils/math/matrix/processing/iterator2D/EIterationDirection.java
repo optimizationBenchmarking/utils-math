@@ -47,7 +47,7 @@ public enum EIterationDirection {
       if (matrix.m() > 0) {
         current = matrix.getLong(0, impl.m_xDimension);
         if (hasNot
-            || (increasing ? (start < current) : (start > current))) {
+            || (increasing ? (current < start) : (current > start))) {
           start = current;
           hasNot = false;
         }
@@ -83,7 +83,7 @@ public enum EIterationDirection {
         current = _MatrixIteration2DImpl
             ._d(matrix.getDouble(0, impl.m_xDimension));
         if (hasNot
-            || (increasing ? (start < current) : (start > current))) {
+            || (increasing ? (current < start) : (current > start))) {
           start = current;
           hasNot = false;
         }
@@ -260,9 +260,9 @@ public enum EIterationDirection {
       max = matrix.m();
       for (position = impl.m_indexes[index]; position < max; position++) {
         current = matrix.getLong(position, impl.m_xDimension);
-        if (increasing ? (forbidden < current) : (forbidden > current)) {
+        if (increasing ? (current > forbidden) : (current < forbidden)) {
           if (hasNot || //
-              (increasing ? (start > current) : (start < current))) {
+              (increasing ? (current < start) : (current > start))) {
             hasNot = false;
             start = current;
           }
@@ -302,9 +302,9 @@ public enum EIterationDirection {
       for (position = impl.m_indexes[index]; position < max; position++) {
         current = _MatrixIteration2DImpl._d(//
             matrix.getDouble(position, impl.m_xDimension));
-        if (increasing ? (forbidden < current) : (forbidden > current)) {
+        if (increasing ? (current > forbidden) : (current < forbidden)) {
           if (hasNot || //
-              (increasing ? (start > current) : (start < current))) {
+              (increasing ? (current < start) : (current > start))) {
             hasNot = false;
             start = current;
           }
