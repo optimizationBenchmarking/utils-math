@@ -8,6 +8,7 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIte
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIterationMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EMissingValueMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DBuilder;
+import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DState;
 
 /** A test for the matrix iteration */
 public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip3
@@ -30,19 +31,50 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip3
 
     builder.setMatrices(//
         new LongMatrix1D(new long[] { //
-            Long.MAX_VALUE, 10, //
-            1000, 20, //
-            200, 30, //
-            30, 40,//
+            Long.MAX_VALUE, 10L, //
+            1000L, 20L, //
+            200L, 30L, //
+            30L, 40L,//
     }, 4, 2), //
         new LongMatrix1D(new long[] { //
-            1000, 100, //
-            200, 200, //
-            30, 300, //
-            Long.MIN_VALUE, 400,//
+            1000L, 100L, //
+            200L, 200L, //
+            30L, 300L, //
+            Long.MIN_VALUE, 400L,//
     }, 4, 2)
 
     );
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected void checkState(final int step,
+      final MatrixIteration2DState state) {
+    super.checkState(step, state);
+
+    switch (step) {
+      case 0: {
+        Assert.assertEquals(1, state.getSourceMatrixCount());
+        Assert.assertEquals(0, state.getSourceMatrixIndex(0));
+        return;
+      }
+      case 1:
+      case 2:
+      case 3: {
+        Assert.assertEquals(2, state.getSourceMatrixCount());
+        Assert.assertEquals(0, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(1, state.getSourceMatrixIndex(1));
+        return;
+      }
+      case 4: {
+        Assert.assertEquals(1, state.getSourceMatrixCount());
+        Assert.assertEquals(1, state.getSourceMatrixIndex(0));
+        return;
+      }
+      default: {
+        throw new AssertionError("Only five steps allowed."); //$NON-NLS-1$
+      }
+    }
   }
 
   /** {@inheritDoc} */

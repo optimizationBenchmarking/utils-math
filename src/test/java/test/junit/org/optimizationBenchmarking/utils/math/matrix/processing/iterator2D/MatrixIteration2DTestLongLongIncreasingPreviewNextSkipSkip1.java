@@ -8,6 +8,7 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIte
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIterationMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EMissingValueMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DBuilder;
+import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DState;
 
 /** A test for the matrix iteration */
 public class MatrixIteration2DTestLongLongIncreasingPreviewNextSkipSkip1
@@ -30,10 +31,10 @@ public class MatrixIteration2DTestLongLongIncreasingPreviewNextSkipSkip1
 
     builder.setMatrices(//
         new LongMatrix1D(new long[] { //
-            0, 10, //
-            1, 20, //
-            2, 30, //
-            3, 40,//
+            0L, 10L, //
+            1L, 20L, //
+            2L, 30L, //
+            3L, 40L,//
     }, 4, 2));
   }
 
@@ -42,6 +43,15 @@ public class MatrixIteration2DTestLongLongIncreasingPreviewNextSkipSkip1
   protected void checkTotalSteps(final int totalSteps) {
     super.checkTotalSteps(totalSteps);
     Assert.assertEquals(4, totalSteps);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected void checkState(final int step,
+      final MatrixIteration2DState state) {
+    super.checkState(step, state);
+    Assert.assertEquals(1, state.getSourceMatrixCount());
+    Assert.assertEquals(0, state.getSourceMatrixIndex(0));
   }
 
   /** {@inheritDoc} */

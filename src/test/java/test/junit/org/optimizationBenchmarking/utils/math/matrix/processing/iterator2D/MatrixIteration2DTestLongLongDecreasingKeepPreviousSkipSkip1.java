@@ -8,6 +8,7 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIte
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIterationMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EMissingValueMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DBuilder;
+import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DState;
 
 /** A test for the matrix iteration */
 public class MatrixIteration2DTestLongLongDecreasingKeepPreviousSkipSkip1
@@ -30,11 +31,11 @@ public class MatrixIteration2DTestLongLongDecreasingKeepPreviousSkipSkip1
 
     builder.setMatrices(//
         new LongMatrix1D(new long[] { //
-            40000, -100, //
-            3, 10, //
-            2, 20, //
-            1, 30, //
-            0, 40,//
+            40000L, -100L, //
+            3L, 10L, //
+            2L, 20L, //
+            1L, 30L, //
+            0L, 40L,//
     }, 5, 2));
   }
 
@@ -47,8 +48,16 @@ public class MatrixIteration2DTestLongLongDecreasingKeepPreviousSkipSkip1
 
   /** {@inheritDoc} */
   @Override
-  protected void checkX(final int step, final BasicNumber x) {
+  protected void checkState(final int step,
+      final MatrixIteration2DState state) {
+    super.checkState(step, state);
+    Assert.assertEquals(1, state.getSourceMatrixCount());
+    Assert.assertEquals(0, state.getSourceMatrixIndex(0));
+  }
 
+  /** {@inheritDoc} */
+  @Override
+  protected void checkX(final int step, final BasicNumber x) {
     super.checkX(step, x);
 
     Assert.assertTrue(x.isInteger());

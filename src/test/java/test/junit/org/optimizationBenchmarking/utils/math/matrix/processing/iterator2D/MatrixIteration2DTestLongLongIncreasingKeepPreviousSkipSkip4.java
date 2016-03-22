@@ -8,6 +8,7 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIte
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIterationMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EMissingValueMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DBuilder;
+import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DState;
 
 /** The first test for the matrix iteration */
 public class MatrixIteration2DTestLongLongIncreasingKeepPreviousSkipSkip4
@@ -30,29 +31,74 @@ public class MatrixIteration2DTestLongLongIncreasingKeepPreviousSkipSkip4
 
     builder.setMatrices(//
         new LongMatrix1D(new long[] { //
-            0, 10, //
-            1, 20, //
-            2, 30, //
-            3, 40,//
+            0L, 10L, //
+            1L, 20L, //
+            2L, 30L, //
+            3L, 40L,//
     }, 4, 2), //
         new LongMatrix1D(new long[] { //
-            -1, 100, //
-            0, 200, //
-            1, 300, //
-            2, 400, //
-            3, 500, //
-            4, 600,//
+            -1L, 100L, //
+            0L, 200L, //
+            1L, 300L, //
+            2L, 400L, //
+            3L, 500L, //
+            4L, 600L,//
     }, 6, 2), //
         new LongMatrix1D(new long[] { //
-            Long.MIN_VALUE, 999999, //
-            0, 99999, //
-            1, 9999, //
-            2, 999, //
-            3, 99, //
-            Long.MAX_VALUE, 9//
+            Long.MIN_VALUE, 999999L, //
+            0L, 99999L, //
+            1L, 9999L, //
+            2L, 999L, //
+            3L, 99L, //
+            Long.MAX_VALUE, 9L,//
     }, 6, 2)
 
     );
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected void checkState(final int step,
+      final MatrixIteration2DState state) {
+    super.checkState(step, state);
+
+    switch (step) {
+      case 0: {
+        Assert.assertEquals(1, state.getSourceMatrixCount());
+        Assert.assertEquals(2, state.getSourceMatrixIndex(0));
+        return;
+      }
+      case 1: {
+        Assert.assertEquals(2, state.getSourceMatrixCount());
+        Assert.assertEquals(1, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(2, state.getSourceMatrixIndex(1));
+        return;
+      }
+      case 2:
+      case 3:
+      case 4:
+      case 5: {
+        Assert.assertEquals(3, state.getSourceMatrixCount());
+        Assert.assertEquals(0, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(1, state.getSourceMatrixIndex(1));
+        Assert.assertEquals(2, state.getSourceMatrixIndex(2));
+        return;
+      }
+      case 6: {
+        Assert.assertEquals(2, state.getSourceMatrixCount());
+        Assert.assertEquals(1, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(2, state.getSourceMatrixIndex(1));
+        return;
+      }
+      case 7: {
+        Assert.assertEquals(1, state.getSourceMatrixCount());
+        Assert.assertEquals(2, state.getSourceMatrixIndex(0));
+        return;
+      }
+      default: {
+        throw new AssertionError("Only eight steps allowed."); //$NON-NLS-1$
+      }
+    }
   }
 
   /** {@inheritDoc} */

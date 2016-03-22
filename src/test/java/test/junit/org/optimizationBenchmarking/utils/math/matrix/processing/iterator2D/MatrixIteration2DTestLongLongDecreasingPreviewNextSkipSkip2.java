@@ -8,6 +8,7 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIte
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIterationMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EMissingValueMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DBuilder;
+import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DState;
 
 /** A test for the matrix iteration */
 public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip2
@@ -30,8 +31,17 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip2
 
     builder.setMatrices(//
         new LongMatrix1D(new long[] { //
-            Long.MIN_VALUE, 10, //
+            Long.MIN_VALUE, 10L, //
     }, 1, 2));
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected void checkState(final int step,
+      final MatrixIteration2DState state) {
+    super.checkState(step, state);
+    Assert.assertEquals(1, state.getSourceMatrixCount());
+    Assert.assertEquals(0, state.getSourceMatrixIndex(0));
   }
 
   /** {@inheritDoc} */

@@ -74,6 +74,18 @@ class _MatrixIteration2DImpl extends MatrixIteration2DState {
             " is invalid."); //$NON-NLS-1$
   }
 
+  /** {@inheritDoc} */
+  @Override
+  public final int getSourceMatrixCount() {
+    return this.m_y.m_currentN;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final IMatrix getSourceMatrix(final int yIndexN) {
+    return this.m_matrices[this.getSourceMatrixIndex(yIndexN)];
+  }
+
   /** run! */
   final void _run() {
     this.m_y._reset();

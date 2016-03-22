@@ -54,7 +54,7 @@ public abstract class MatrixIteration2DTest extends TestBase {
     Assert.assertNotNull(state);
     Assert.assertNotNull(state.getStartMode());
     Assert.assertNotNull(state.getEndMode());
-    Assert.assertNotNull(state.getMode());
+    Assert.assertNotNull(state.getIterationMode());
     Assert.assertTrue(state.getSourceMatrixCount() > 0);
     this.checkX(step, state.getX());
     this.checkY(step, state.getY());

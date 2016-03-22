@@ -89,7 +89,7 @@ abstract class _MatrixIteration2DBase {
    *
    * @return the source matrices
    */
-  public final ArrayListView<IMatrix> getSourceMatrices() {
+  public final ArrayListView<IMatrix> getMatrices() {
     ArrayListView<IMatrix> list;
 
     list = this.m_sourceMatrixList;
@@ -98,26 +98,6 @@ abstract class _MatrixIteration2DBase {
           this.m_matrices);
     }
     return list;
-  }
-
-  /**
-   * Get the number of source matrices
-   *
-   * @return the number of source matrices
-   */
-  public final int getSourceMatrixCount() {
-    return ((this.m_matrices != null) ? this.m_matrices.length : 0);
-  }
-
-  /**
-   * Get the source matrix at the given index
-   *
-   * @param index
-   *          the index
-   * @return the source matrix at that index
-   */
-  public final IMatrix getSourceMatrix(final int index) {
-    return this.m_matrices[index];
   }
 
   /**
@@ -145,7 +125,7 @@ abstract class _MatrixIteration2DBase {
    *
    * @return the iteration mode
    */
-  public final EIterationMode getMode() {
+  public final EIterationMode getIterationMode() {
     return this.m_iterationMode;
   }
 

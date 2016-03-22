@@ -8,6 +8,7 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIte
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIterationMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EMissingValueMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DBuilder;
+import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DState;
 
 /** A test for the matrix iteration */
 public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip4
@@ -30,37 +31,97 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip4
 
     builder.setMatrices(//
         new LongMatrix1D(new long[] { //
-            3, 10, //
-            2, 20, //
-            1, 30, //
-            0, 40,//
+            3L, 10L, //
+            2L, 20L, //
+            1L, 30L, //
+            0L, 40L,//
     }, 4, 2), //
         new LongMatrix1D(new long[] { //
-            4, 100, //
-            3, 200, //
-            2, 300, //
-            1, 400, //
-            0, 500, //
-            -1, 600,//
+            4L, 100L, //
+            3L, 200L, //
+            2L, 300L, //
+            1L, 400L, //
+            0L, 500L, //
+            -1L, 600L,//
     }, 6, 2), //
         new LongMatrix1D(new long[] { //
-            Long.MAX_VALUE, 999999, //
-            3, 99999, //
-            2, 9999, //
-            1, 999, //
-            0, 99, //
-            Long.MIN_VALUE, 9//
+            Long.MAX_VALUE, 999999L, //
+            3L, 99999L, //
+            2L, 9999L, //
+            1L, 999L, //
+            0L, 99L, //
+            Long.MIN_VALUE, 9L,//
     }, 6, 2), //
         new LongMatrix1D(new long[] { //
-            Long.MAX_VALUE - 1L, 888888, //
-            3, 88888, //
-            2, 8888, //
-            1, 888, //
-            0, 88, //
-            Long.MIN_VALUE + 1L, 8//
+            Long.MAX_VALUE - 1L, 888888L, //
+            3L, 88888L, //
+            2L, 8888L, //
+            1L, 888L, //
+            0L, 88L, //
+            Long.MIN_VALUE + 1L, 8L,//
     }, 6, 2)
 
     );
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected void checkState(final int step,
+      final MatrixIteration2DState state) {
+    super.checkState(step, state);
+
+    switch (step) {
+      case 0: {
+        Assert.assertEquals(1, state.getSourceMatrixCount());
+        Assert.assertEquals(2, state.getSourceMatrixIndex(0));
+        return;
+      }
+      case 1: {
+        Assert.assertEquals(2, state.getSourceMatrixCount());
+        Assert.assertEquals(2, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(3, state.getSourceMatrixIndex(1));
+        return;
+      }
+      case 2: {
+        Assert.assertEquals(3, state.getSourceMatrixCount());
+        Assert.assertEquals(1, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(2, state.getSourceMatrixIndex(1));
+        Assert.assertEquals(3, state.getSourceMatrixIndex(2));
+        return;
+      }
+      case 3:
+      case 4:
+      case 5:
+      case 6: {
+        Assert.assertEquals(4, state.getSourceMatrixCount());
+        Assert.assertEquals(0, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(1, state.getSourceMatrixIndex(1));
+        Assert.assertEquals(2, state.getSourceMatrixIndex(2));
+        Assert.assertEquals(3, state.getSourceMatrixIndex(3));
+        return;
+      }
+      case 7: {
+        Assert.assertEquals(3, state.getSourceMatrixCount());
+        Assert.assertEquals(1, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(2, state.getSourceMatrixIndex(1));
+        Assert.assertEquals(3, state.getSourceMatrixIndex(2));
+        return;
+      }
+      case 8: {
+        Assert.assertEquals(2, state.getSourceMatrixCount());
+        Assert.assertEquals(2, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(3, state.getSourceMatrixIndex(1));
+        return;
+      }
+      case 9: {
+        Assert.assertEquals(1, state.getSourceMatrixCount());
+        Assert.assertEquals(2, state.getSourceMatrixIndex(0));
+        return;
+      }
+      default: {
+        throw new AssertionError("Only ten steps allowed."); //$NON-NLS-1$
+      }
+    }
   }
 
   /** {@inheritDoc} */
@@ -84,7 +145,7 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip4
         return;
       }
       case 1: {
-        Assert.assertEquals(Long.MAX_VALUE - 1, x.longValue());
+        Assert.assertEquals(Long.MAX_VALUE - 1L, x.longValue());
         return;
       }
       case 2: {

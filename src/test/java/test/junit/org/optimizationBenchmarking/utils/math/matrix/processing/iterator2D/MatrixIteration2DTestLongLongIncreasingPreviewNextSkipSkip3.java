@@ -8,6 +8,7 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIte
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIterationMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EMissingValueMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DBuilder;
+import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DState;
 
 /** A test for the matrix iteration */
 public class MatrixIteration2DTestLongLongIncreasingPreviewNextSkipSkip3
@@ -30,20 +31,47 @@ public class MatrixIteration2DTestLongLongIncreasingPreviewNextSkipSkip3
 
     builder.setMatrices(//
         new LongMatrix1D(new long[] { //
-            0, 10, //
-            1, 20, //
-            2, 30, //
-            3, 40,//
+            0L, 10L, //
+            1L, 20L, //
+            2L, 30L, //
+            3L, 40L,//
     }, 4, 2), //
         new LongMatrix1D(new long[] { //
-            0, 100, //
-            1, 200, //
-            2, 300, //
-            3, 400, //
-            4, 500,//
+            0L, 100L, //
+            1L, 200L, //
+            2L, 300L, //
+            3L, 400L, //
+            4L, 500L,//
     }, 5, 2)
 
     );
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected void checkState(final int step,
+      final MatrixIteration2DState state) {
+    super.checkState(step, state);
+
+    switch (step) {
+      case 0:
+      case 1:
+      case 2:
+      case 3: {
+        Assert.assertEquals(2, state.getSourceMatrixCount());
+        Assert.assertEquals(0, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(1, state.getSourceMatrixIndex(1));
+        return;
+      }
+      case 4: {
+        Assert.assertEquals(1, state.getSourceMatrixCount());
+        Assert.assertEquals(1, state.getSourceMatrixIndex(0));
+        return;
+      }
+      default: {
+        throw new AssertionError("Only five steps allowed."); //$NON-NLS-1$
+      }
+    }
   }
 
   /** {@inheritDoc} */
