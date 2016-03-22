@@ -10,7 +10,7 @@ final class _Double extends _Number {
   private static final long serialVersionUID = 1L;
 
   /** the value */
-  private double m_value;
+  double m_value;
 
   /** create */
   _Double() {

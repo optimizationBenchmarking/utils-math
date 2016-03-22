@@ -8,7 +8,7 @@ final class _Long extends _Number {
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
   /** the value */
-  private long m_value;
+  long m_value;
 
   /** create */
   _Long() {
