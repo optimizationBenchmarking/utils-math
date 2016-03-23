@@ -34,7 +34,7 @@ public enum EIterationMode {
    * coordinate, the iteration should simply return the {@code y} value of
    * the previous {@code x} coordinate.</li>
    * <li>If a matrix has multiple {@code y} values for a given {@code x}
-   * coordinate, we take the last (latest) one.</li></li>
+   * coordinate, we take the last (latest) one.</li>
    * </ul>
    * Imagine something like iterating over time values as {@code x} and
    * corresponding objective values as {@code y} in an optimization
