@@ -1,14 +1,18 @@
 package org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D;
 
 import org.optimizationBenchmarking.utils.collections.visitors.IVisitor;
-import org.optimizationBenchmarking.utils.tools.spec.IRunnableToolJob;
 
-/** The builder for the matrix iterations. */
-public class MatrixIteration2DBuilder
-    extends _MatrixIteration2DBuilderBase<MatrixIteration2DBuilder> {
+/**
+ * The builder for the matrix iterations.
+ *
+ * @param <R>
+ *          the result type
+ */
+public class CallableMatrixIteration2DBuilder<R> extends
+    _MatrixIteration2DBuilderBase<CallableMatrixIteration2DBuilder<R>> {
 
   /** create */
-  public MatrixIteration2DBuilder() {
+  public CallableMatrixIteration2DBuilder() {
     super();
   }
 
@@ -19,7 +23,7 @@ public class MatrixIteration2DBuilder
    *          the visitor to receive the iteration data
    * @return this builder
    */
-  public final MatrixIteration2DBuilder setVisitor(
+  public final CallableMatrixIteration2DBuilder<R> setVisitor(
       final IVisitor<MatrixIteration2DState> visitor) {
     MatrixIteration2DSpec._checkVisitor(visitor);
     this.m_visitor = visitor;
@@ -28,7 +32,7 @@ public class MatrixIteration2DBuilder
 
   /** {@inheritDoc} */
   @Override
-  public final IRunnableToolJob create() {
-    return new _MatrixIteration2D(this);
+  public final CallableMatrixIteration2D<R> create() {
+    return new CallableMatrixIteration2D<>(this);
   }
 }

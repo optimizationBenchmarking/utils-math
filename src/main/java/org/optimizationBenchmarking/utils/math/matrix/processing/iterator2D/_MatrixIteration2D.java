@@ -5,7 +5,7 @@ import org.optimizationBenchmarking.utils.math.matrix.IMatrix;
 import org.optimizationBenchmarking.utils.tools.spec.IRunnableToolJob;
 
 /** The matrix iteration 2d. */
-final class _MatrixIteration2D extends _MatrixIteration2DBase
+final class _MatrixIteration2D extends MatrixIteration2DSpec
     implements IRunnableToolJob {
 
   /**
@@ -14,22 +14,22 @@ final class _MatrixIteration2D extends _MatrixIteration2DBase
    * @param builder
    *          the builder
    */
-  _MatrixIteration2D(final _MatrixIteration2DBase builder) {
+  _MatrixIteration2D(final MatrixIteration2DSpec builder) {
     super(builder);
-    _MatrixIteration2DBase._checkVisitor(this.m_visitor);
-    _MatrixIteration2DBase._checkXDimension(this.m_xDimension);
-    _MatrixIteration2DBase._checkXDirection(this.m_xDirection);
-    _MatrixIteration2DBase._checkYDimension(this.m_yDimension);
-    _MatrixIteration2DBase._checkMatrices(//
+    MatrixIteration2DSpec._checkVisitor(this.m_visitor);
+    MatrixIteration2DSpec._checkXDimension(this.m_xDimension);
+    MatrixIteration2DSpec._checkXDirection(this.m_xDirection);
+    MatrixIteration2DSpec._checkYDimension(this.m_yDimension);
+    MatrixIteration2DSpec._checkMatrices(//
         this.m_matrices, //
         this.m_xDimension, //
         this.m_xDirection, //
         this.m_yDimension);
-    _MatrixIteration2DBase._checkStart(//
+    MatrixIteration2DSpec._checkStart(//
         this.m_iterationMode, //
         this.m_startMode, //
         this.m_startReplacement);
-    _MatrixIteration2DBase._checkEnd(this.m_iterationMode, //
+    MatrixIteration2DSpec._checkEnd(this.m_iterationMode, //
         this.m_endMode, //
         this.m_endReplacement);
   }

@@ -5,7 +5,7 @@ import org.optimizationBenchmarking.utils.math.matrix.AbstractMatrix;
 import org.optimizationBenchmarking.utils.math.matrix.IMatrix;
 
 /** The state of a 2-dimensional matrix iteration */
-public final class MatrixIteration2DState extends _MatrixIteration2DBase {
+public final class MatrixIteration2DState extends MatrixIteration2DSpec {
   /** the indexes */
   final int[] m_indexes;
   /** the sources */
@@ -29,7 +29,7 @@ public final class MatrixIteration2DState extends _MatrixIteration2DBase {
    * @param yIsInteger
    *          are the {@code y}-coordinates integers?
    */
-  MatrixIteration2DState(final _MatrixIteration2DBase iteration,
+  MatrixIteration2DState(final MatrixIteration2DSpec iteration,
       final boolean xIsInteger, final boolean yIsInteger) {
     super(iteration);
     final int length;

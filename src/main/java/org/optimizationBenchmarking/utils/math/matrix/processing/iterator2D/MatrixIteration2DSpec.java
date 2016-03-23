@@ -7,7 +7,7 @@ import org.optimizationBenchmarking.utils.collections.visitors.IVisitor;
 import org.optimizationBenchmarking.utils.math.matrix.IMatrix;
 
 /** The matrix iteration 2d. */
-abstract class _MatrixIteration2DBase {
+public abstract class MatrixIteration2DSpec {
 
   /** the logger */
   Logger m_logger;
@@ -43,7 +43,7 @@ abstract class _MatrixIteration2DBase {
   Number m_endReplacement;
 
   /** create the iteration */
-  _MatrixIteration2DBase() {
+  MatrixIteration2DSpec() {
     super();
     this.m_yDimension = 1;
     this.m_iterationMode = EIterationMode.DEFAULT;
@@ -58,7 +58,7 @@ abstract class _MatrixIteration2DBase {
    * @param other
    *          the iteration
    */
-  _MatrixIteration2DBase(final _MatrixIteration2DBase other) {
+  MatrixIteration2DSpec(final MatrixIteration2DSpec other) {
     super();
 
     this.m_logger = other.m_logger;
@@ -242,7 +242,7 @@ abstract class _MatrixIteration2DBase {
     final int maxDim;
     int m;
 
-    _MatrixIteration2DBase._checkMatricesNotNull(matrices);
+    MatrixIteration2DSpec._checkMatricesNotNull(matrices);
 
     maxDim = (Math.max(xDimension, yDimension) + 1);
     if (matrices.length <= 0) {
@@ -329,8 +329,8 @@ abstract class _MatrixIteration2DBase {
    */
   static final void _checkStart(final EIterationMode iterationMode,
       final EMissingValueMode startMode, final Number startReplacement) {
-    _MatrixIteration2DBase._checkIterationMode(iterationMode);
-    _MatrixIteration2DBase._checkStartMode(startMode);
+    MatrixIteration2DSpec._checkIterationMode(iterationMode);
+    MatrixIteration2DSpec._checkStartMode(startMode);
 
     switch (startMode) {
       case SET_TO_VALUE: {
@@ -386,8 +386,8 @@ abstract class _MatrixIteration2DBase {
    */
   static final void _checkEnd(final EIterationMode iterationMode,
       final EMissingValueMode endMode, final Number endReplacement) {
-    _MatrixIteration2DBase._checkIterationMode(iterationMode);
-    _MatrixIteration2DBase._checkEndMode(endMode);
+    MatrixIteration2DSpec._checkIterationMode(iterationMode);
+    MatrixIteration2DSpec._checkEndMode(endMode);
 
     switch (endMode) {
       case SET_TO_VALUE: {
