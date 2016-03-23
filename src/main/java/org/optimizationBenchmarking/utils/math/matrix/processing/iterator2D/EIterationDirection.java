@@ -35,7 +35,7 @@ public enum EIterationDirection {
    *         visiting elements
    */
   final boolean _setFirstXCoordinateLong(
-      final _MatrixIteration2DImpl impl) {
+      final MatrixIteration2DState impl) {
     final boolean increasing;
     boolean hasNot;
     long start, current;
@@ -69,7 +69,7 @@ public enum EIterationDirection {
    *         visiting elements
    */
   final boolean _setFirstXCoordinateDouble(
-      final _MatrixIteration2DImpl impl) {
+      final MatrixIteration2DState impl) {
     final boolean increasing;
     boolean hasNot;
     double start, current;
@@ -80,7 +80,7 @@ public enum EIterationDirection {
     hasNot = true;
     for (final IMatrix matrix : impl.m_matrices) {
       if (matrix.m() > 0) {
-        current = _MatrixIteration2DImpl
+        current = MatrixIteration2DState
             ._d(matrix.getDouble(0, impl.m_xDimension));
         if (hasNot
             || (increasing ? (current < start) : (current > start))) {
@@ -144,7 +144,7 @@ public enum EIterationDirection {
    *         nothing was set
    */
   boolean _setXCoordinateForMatrixLong(final int index, final long goalX,
-      final _MatrixIteration2DImpl impl) {
+      final MatrixIteration2DState impl) {
     final IMatrix matrix;
     final int origPosition, max;
     final boolean isXIncreasing, checkExactFit;
@@ -255,7 +255,7 @@ public enum EIterationDirection {
    *         visiting elements
    */
   final boolean _setNextXCoordinateLong(
-      final _MatrixIteration2DImpl impl) {
+      final MatrixIteration2DState impl) {
     final boolean increasing;
     IMatrix matrix;
     boolean hasNot;
@@ -296,7 +296,7 @@ public enum EIterationDirection {
    *         visiting elements
    */
   final boolean _setNextXCoordinateDouble(
-      final _MatrixIteration2DImpl impl) {
+      final MatrixIteration2DState impl) {
     final boolean increasing;
     IMatrix matrix;
     boolean hasNot;
@@ -310,7 +310,7 @@ public enum EIterationDirection {
       matrix = impl.m_matrices[index];
       max = matrix.m();
       for (position = impl.m_indexes[index]; position < max; position++) {
-        current = _MatrixIteration2DImpl._d(//
+        current = MatrixIteration2DState._d(//
             matrix.getDouble(position, impl.m_xDimension));
         if (increasing ? (current > forbidden) : (current < forbidden)) {
           if (hasNot || //
@@ -342,7 +342,7 @@ public enum EIterationDirection {
    *         nothing was set
    */
   boolean _setXCoordinateForMatrixDouble(final int index,
-      final double goalX, final _MatrixIteration2DImpl impl) {
+      final double goalX, final MatrixIteration2DState impl) {
     final IMatrix matrix;
     final int origPosition, max;
     final boolean isXIncreasing, checkExactFit;
@@ -376,7 +376,7 @@ public enum EIterationDirection {
     // find the largest x value <= goalX
     if (position < max) {
       loop: for (;;) {
-        currentX = _MatrixIteration2DImpl
+        currentX = MatrixIteration2DState
             ._d(matrix.getDouble(position, impl.m_xDimension));
         if (isXIncreasing ? (currentX > goalX) : (currentX < goalX)) {
           // we arrived at an element greater than goalX

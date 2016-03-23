@@ -23,7 +23,7 @@ public enum EIterationMode {
     /** {@inheritDoc} */
     @Override
     final void _handleGoalXBetweenTwoValues(final int index,
-        final int positionOfSmallerX, final _MatrixIteration2DImpl impl) {
+        final int positionOfSmallerX, final MatrixIteration2DState impl) {
       impl._setYCoordinateFromMatrix(index, positionOfSmallerX + 1);
     }
   },
@@ -48,7 +48,7 @@ public enum EIterationMode {
     /** {@inheritDoc} */
     @Override
     final void _handleGoalXBetweenTwoValues(final int index,
-        final int positionOfSmallerX, final _MatrixIteration2DImpl impl) {
+        final int positionOfSmallerX, final MatrixIteration2DState impl) {
       impl._setYCoordinateFromMatrix(index, positionOfSmallerX);
     }
   };
@@ -84,5 +84,5 @@ public enum EIterationMode {
    *          the iteration implementation
    */
   abstract void _handleGoalXBetweenTwoValues(final int index,
-      final int positionOfSmallerX, final _MatrixIteration2DImpl impl);
+      final int positionOfSmallerX, final MatrixIteration2DState impl);
 }

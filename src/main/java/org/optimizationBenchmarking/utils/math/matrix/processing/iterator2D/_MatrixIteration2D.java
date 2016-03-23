@@ -2,11 +2,11 @@ package org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D;
 
 import org.optimizationBenchmarking.utils.math.NumericalTypes;
 import org.optimizationBenchmarking.utils.math.matrix.IMatrix;
-import org.optimizationBenchmarking.utils.tools.spec.IToolJob;
+import org.optimizationBenchmarking.utils.tools.spec.IRunnableToolJob;
 
 /** The matrix iteration 2d. */
-public final class MatrixIteration2D extends _MatrixIteration2DBase
-    implements IToolJob, Runnable {
+final class _MatrixIteration2D extends _MatrixIteration2DBase
+    implements IRunnableToolJob {
 
   /**
    * create the matrix iteration 2d
@@ -14,7 +14,7 @@ public final class MatrixIteration2D extends _MatrixIteration2DBase
    * @param builder
    *          the builder
    */
-  MatrixIteration2D(final _MatrixIteration2DBase builder) {
+  _MatrixIteration2D(final _MatrixIteration2DBase builder) {
     super(builder);
     _MatrixIteration2DBase._checkVisitor(this.m_visitor);
     _MatrixIteration2DBase._checkXDimension(this.m_xDimension);
@@ -70,6 +70,6 @@ public final class MatrixIteration2D extends _MatrixIteration2DBase
       }
     }
 
-    new _MatrixIteration2DImpl(this, isXInteger, isYInteger)._run();
+    new MatrixIteration2DState(this, isXInteger, isYInteger)._run();
   }
 }

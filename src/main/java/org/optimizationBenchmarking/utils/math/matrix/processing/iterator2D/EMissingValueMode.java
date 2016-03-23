@@ -13,14 +13,14 @@ public enum EMissingValueMode {
     /** {@inheritDoc} */
     @Override
     final boolean _handleMissingStart(final int index,
-        final _MatrixIteration2DImpl impl) {
+        final MatrixIteration2DState impl) {
       return false;
     }
 
     /** {@inheritDoc} */
     @Override
     final boolean _handleMissingEnd(final int index,
-        final _MatrixIteration2DImpl impl) {
+        final MatrixIteration2DState impl) {
       return false;
     }
   },
@@ -34,7 +34,7 @@ public enum EMissingValueMode {
     /** {@inheritDoc} */
     @Override
     final boolean _handleMissingStart(final int index,
-        final _MatrixIteration2DImpl impl) {
+        final MatrixIteration2DState impl) {
       impl._setYCoordinateFromMatrix(index, 0);// must be preview next
       return true;
     }
@@ -42,7 +42,7 @@ public enum EMissingValueMode {
     /** {@inheritDoc} */
     @Override
     final boolean _handleMissingEnd(final int index,
-        final _MatrixIteration2DImpl impl) {
+        final MatrixIteration2DState impl) {
       impl._setYCoordinateFromMatrix(index, //
           impl.m_matrices[index].m() - 1);// must be keep previous
       return true;
@@ -54,7 +54,7 @@ public enum EMissingValueMode {
     /** {@inheritDoc} */
     @Override
     final boolean _handleMissingStart(final int index,
-        final _MatrixIteration2DImpl impl) {
+        final MatrixIteration2DState impl) {
       impl._setYCoordinateFromNumber(index, impl.m_startReplacement);
       return true;
     }
@@ -62,7 +62,7 @@ public enum EMissingValueMode {
     /** {@inheritDoc} */
     @Override
     final boolean _handleMissingEnd(final int index,
-        final _MatrixIteration2DImpl impl) {
+        final MatrixIteration2DState impl) {
       impl._setYCoordinateFromNumber(index, impl.m_endReplacement);
       return true;
     }
@@ -85,7 +85,7 @@ public enum EMissingValueMode {
    *         {@code false} otherwise
    */
   abstract boolean _handleMissingStart(final int index,
-      final _MatrixIteration2DImpl impl);
+      final MatrixIteration2DState impl);
 
   /**
    * Handle the situation where all {@code x} elements are smaller than the
@@ -99,5 +99,5 @@ public enum EMissingValueMode {
    *         {@code false} otherwise
    */
   abstract boolean _handleMissingEnd(final int index,
-      final _MatrixIteration2DImpl impl);
+      final MatrixIteration2DState impl);
 }

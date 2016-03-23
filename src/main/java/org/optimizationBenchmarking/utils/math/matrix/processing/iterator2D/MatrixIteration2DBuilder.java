@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.optimizationBenchmarking.utils.collections.lists.ArrayListView;
 import org.optimizationBenchmarking.utils.collections.visitors.IVisitor;
 import org.optimizationBenchmarking.utils.math.matrix.IMatrix;
+import org.optimizationBenchmarking.utils.tools.spec.IRunnableToolJob;
 import org.optimizationBenchmarking.utils.tools.spec.IToolJobBuilder;
 
 /** The builder for the matrix iterations. */
@@ -237,8 +238,8 @@ public class MatrixIteration2DBuilder extends _MatrixIteration2DBase
 
   /** {@inheritDoc} */
   @Override
-  public final MatrixIteration2D create() {
-    return new MatrixIteration2D(this);
+  public final IRunnableToolJob create() {
+    return new _MatrixIteration2D(this);
   }
 
   /** {@inheritDoc} */
