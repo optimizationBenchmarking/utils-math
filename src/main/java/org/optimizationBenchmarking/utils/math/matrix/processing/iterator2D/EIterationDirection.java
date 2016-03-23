@@ -147,9 +147,9 @@ public enum EIterationDirection {
       final _MatrixIteration2DImpl impl) {
     final IMatrix matrix;
     final int origPosition, max;
-    final boolean isXIncreasing;
+    final boolean isXIncreasing, checkExactFit;
     long previousX, currentX;
-    boolean hadXBefore, returnValue;
+    boolean hadXBefore, returnValue, noExactFit;
     int position;
 
     matrix = impl.m_matrices[index];
@@ -163,6 +163,8 @@ public enum EIterationDirection {
     isXIncreasing = this.m_increasing;
     previousX = (isXIncreasing ? Long.MAX_VALUE : Long.MIN_VALUE);
     hadXBefore = false;
+    checkExactFit = impl.m_iterationMode.m_useFirstEntry;
+    noExactFit = true;
 
     // Comments here are based on the assumption that direction=increasing
     // There are 4 possible situations:
@@ -170,6 +172,7 @@ public enum EIterationDirection {
     // 2. the matrix has an x element < goalX and an x element > goalX
     // 3. all matrix elements are > goalX (can only happen at start)
     // 4. the matrix has no x element >= goalX (can only happen at end)
+    // 5. we have an exact fit and need to stop at the first exact fit
 
     // find the largest x value <= goalX
     if (position < max) {
@@ -187,6 +190,10 @@ public enum EIterationDirection {
         }
         previousX = currentX;
         hadXBefore = true;
+        if (checkExactFit && (currentX == goalX)) {// case 5
+          noExactFit = false;
+          break loop;
+        }
         if ((++position) >= max) {
           break loop;
         }
@@ -200,12 +207,15 @@ public enum EIterationDirection {
     // position is 1 too high, position<max
     // case 3: position==oldPosition==0, hadXBefore=false
     // case 4: otherwise: position>=max
+    // case 5: noExactFit=false
 
     findXValue: {
       if (hadXBefore) {
 
-        if (previousX == goalX) {// case 1
-          --position;
+        if (previousX == goalX) {// case 1 and 5
+          if (noExactFit) {
+            --position;
+          }
           impl._setYCoordinateFromMatrix(index, position);
           returnValue = true;
           break findXValue;
@@ -335,9 +345,9 @@ public enum EIterationDirection {
       final double goalX, final _MatrixIteration2DImpl impl) {
     final IMatrix matrix;
     final int origPosition, max;
-    final boolean isXIncreasing;
+    final boolean isXIncreasing, checkExactFit;
     double previousX, currentX;
-    boolean hadXBefore, returnValue;
+    boolean hadXBefore, returnValue, noExactFit;
     int position;
 
     matrix = impl.m_matrices[index];
@@ -352,6 +362,8 @@ public enum EIterationDirection {
     previousX = (isXIncreasing ? Double.POSITIVE_INFINITY
         : Double.NEGATIVE_INFINITY);
     hadXBefore = false;
+    checkExactFit = impl.m_iterationMode.m_useFirstEntry;
+    noExactFit = true;
 
     // Comments here are based on the assumption that direction=increasing
     // There are 4 possible situations:
@@ -359,6 +371,7 @@ public enum EIterationDirection {
     // 2. the matrix has an x element < goalX and an x element > goalX
     // 3. all matrix elements are > goalX (can only happen at start)
     // 4. the matrix has no x element >= goalX (can only happen at end)
+    // 5. we have an exact fit and need to stop at the first exact fit
 
     // find the largest x value <= goalX
     if (position < max) {
@@ -377,6 +390,10 @@ public enum EIterationDirection {
         }
         previousX = currentX;
         hadXBefore = true;
+        if (checkExactFit && (currentX == goalX)) {// case 5
+          noExactFit = false;
+          break loop;
+        }
         if ((++position) >= max) {
           break loop;
         }
@@ -390,12 +407,15 @@ public enum EIterationDirection {
     // position is 1 too high, position<max
     // case 3: position==oldPosition==0, hadXBefore=false
     // case 4: otherwise: position>=max
+    // case 5: noExactFit=false
 
     findXValue: {
       if (hadXBefore) {
 
-        if (previousX == goalX) {// case 1
-          --position;
+        if (previousX == goalX) {// case 1 and 5
+          if (noExactFit) {
+            --position;
+          }
           impl._setYCoordinateFromMatrix(index, position);
           returnValue = true;
           break findXValue;
