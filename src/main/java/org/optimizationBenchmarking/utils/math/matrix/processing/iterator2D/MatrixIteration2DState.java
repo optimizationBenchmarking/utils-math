@@ -177,7 +177,7 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
     int index;
 
     has = false;
-    for (index = 0; index < this.m_matrices.length; index++) {
+    for (index = 0; index < this.m_matrices.length; ++index) {
       if (this.m_xDirection._setXCoordinateForMatrixLong(index, value,
           this)) {
         has = true;
@@ -275,7 +275,7 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
     int index;
 
     has = false;
-    for (index = this.m_matrices.length; (--index) >= 0;) {
+    for (index = 0; index < this.m_matrices.length; ++index) {
       if (this.m_xDirection._setXCoordinateForMatrixDouble(index, value,
           this)) {
         has = true;

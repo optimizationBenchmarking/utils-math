@@ -3,7 +3,7 @@ package test.junit.org.optimizationBenchmarking.utils.math.matrix.processing.ite
 import org.junit.Assert;
 import org.optimizationBenchmarking.utils.math.BasicNumber;
 import org.optimizationBenchmarking.utils.math.matrix.AbstractMatrix;
-import org.optimizationBenchmarking.utils.math.matrix.impl.LongMatrix1D;
+import org.optimizationBenchmarking.utils.math.matrix.impl.DoubleMatrix1D;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIterationDirection;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EIterationMode;
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.EMissingValueMode;
@@ -11,11 +11,11 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.Matr
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DState;
 
 /** A test for the matrix iteration */
-public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
+public class MatrixIteration2DTestDoubleDoubleIncreasingPreviewNextSkipSkip3
     extends MatrixIteration2DTest {
 
   /** create */
-  public MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6() {
+  public MatrixIteration2DTestDoubleDoubleIncreasingPreviewNextSkipSkip3() {
     super();
   }
 
@@ -25,30 +25,26 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
     builder.setEndMode(EMissingValueMode.SKIP);
     builder.setStartMode(EMissingValueMode.SKIP);
     builder.setIterationMode(EIterationMode.PREVIEW_NEXT);
-    builder.setXDirection(EIterationDirection.DECREASING);
+    builder.setXDirection(EIterationDirection.INCREASING);
     builder.setXDimension(0);
     builder.setYDimension(1);
 
     builder.setMatrices(//
-        new LongMatrix1D(new long[] { //
-            -0L, 10L, //
-            -0L, 20L, //
-            -2L, 31L, //
-            -2L, 41L, //
-            -2L, 42L, //
-            -2L, 53L, //
-            -2L, 30L, //
-            -4L, 33L,//
-    }, 8, 2), //
-        new LongMatrix1D(new long[] { //
-            -0L, 100L, //
-            -1L, 200L, //
-            -2L, 300L, //
-            -2L, 400L, //
-            -3L, 500L, //
-            -3L, 600L, //
-            -3L, 700L,//
-    }, 7, 2));
+        new DoubleMatrix1D(new double[] { //
+            0.5d, 10.5d, //
+            1.5d, 20.5d, //
+            2.5d, 30.5d, //
+            3.5d, 40.5d,//
+    }, 4, 2), //
+        new DoubleMatrix1D(new double[] { //
+            0.5d, 100.5d, //
+            1.5d, 200.5d, //
+            2.5d, 300.5d, //
+            3.5d, 400.5d, //
+            4.5d, 500.5d,//
+    }, 5, 2)
+
+    );
   }
 
   /** {@inheritDoc} */
@@ -69,7 +65,7 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
       }
       case 4: {
         Assert.assertEquals(1, state.getSourceMatrixCount());
-        Assert.assertEquals(0, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(1, state.getSourceMatrixIndex(0));
         return;
       }
       default: {
@@ -91,8 +87,33 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
 
     super.checkX(step, x);
 
-    Assert.assertTrue(x.isInteger());
-    Assert.assertEquals(-step, x.longValue());
+    Assert.assertFalse(x.isInteger());
+
+    switch (step) {
+      case 0: {
+        Assert.assertEquals(0.5d, x.doubleValue(), Double.MIN_VALUE);
+        return;
+      }
+      case 1: {
+        Assert.assertEquals(1.5d, x.doubleValue(), Double.MIN_VALUE);
+        return;
+      }
+      case 2: {
+        Assert.assertEquals(2.5d, x.doubleValue(), Double.MIN_VALUE);
+        return;
+      }
+      case 3: {
+        Assert.assertEquals(3.5d, x.doubleValue(), Double.MIN_VALUE);
+        return;
+      }
+      case 4: {
+        Assert.assertEquals(4.5d, x.doubleValue(), Double.MIN_VALUE);
+        return;
+      }
+      default: {
+        throw new AssertionError("Only five steps allowed."); //$NON-NLS-1$
+      }
+    }
   }
 
   /** {@inheritDoc} */
@@ -100,36 +121,36 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
   protected void checkY(final int step, final AbstractMatrix y) {
     super.checkY(step, y);
 
-    Assert.assertTrue(y.isIntegerMatrix());
+    Assert.assertFalse(y.isIntegerMatrix());
 
     switch (step) {
       case 0: {
         Assert.assertEquals(y.n(), 2);
-        Assert.assertEquals(10L, y.getLong(0, 0));
-        Assert.assertEquals(100L, y.getLong(0, 1));
+        Assert.assertEquals(10.5d, y.getDouble(0, 0), Double.MIN_VALUE);
+        Assert.assertEquals(100.5d, y.getDouble(0, 1), Double.MIN_VALUE);
         return;
       }
       case 1: {
         Assert.assertEquals(y.n(), 2);
-        Assert.assertEquals(31L, y.getLong(0, 0));
-        Assert.assertEquals(200L, y.getLong(0, 1));
+        Assert.assertEquals(20.5d, y.getDouble(0, 0), Double.MIN_VALUE);
+        Assert.assertEquals(200.5d, y.getDouble(0, 1), Double.MIN_VALUE);
         return;
       }
       case 2: {
         Assert.assertEquals(y.n(), 2);
-        Assert.assertEquals(31L, y.getLong(0, 0));
-        Assert.assertEquals(300L, y.getLong(0, 1));
+        Assert.assertEquals(30.5d, y.getDouble(0, 0), Double.MIN_VALUE);
+        Assert.assertEquals(300.5d, y.getDouble(0, 1), Double.MIN_VALUE);
         return;
       }
       case 3: {
         Assert.assertEquals(y.n(), 2);
-        Assert.assertEquals(33L, y.getLong(0, 0));
-        Assert.assertEquals(500L, y.getLong(0, 1));
+        Assert.assertEquals(40.5d, y.getDouble(0, 0), Double.MIN_VALUE);
+        Assert.assertEquals(400.5d, y.getDouble(0, 1), Double.MIN_VALUE);
         return;
       }
       case 4: {
         Assert.assertEquals(y.n(), 1);
-        Assert.assertEquals(33L, y.getLong(0, 0));
+        Assert.assertEquals(500.5d, y.getDouble(0, 0), Double.MIN_VALUE);
         return;
       }
       default: {

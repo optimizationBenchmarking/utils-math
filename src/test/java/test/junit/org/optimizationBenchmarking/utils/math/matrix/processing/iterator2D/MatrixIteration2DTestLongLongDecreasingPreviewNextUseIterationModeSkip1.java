@@ -11,11 +11,11 @@ import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.Matr
 import org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D.MatrixIteration2DState;
 
 /** A test for the matrix iteration */
-public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
+public class MatrixIteration2DTestLongLongDecreasingPreviewNextUseIterationModeSkip1
     extends MatrixIteration2DTest {
 
   /** create */
-  public MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6() {
+  public MatrixIteration2DTestLongLongDecreasingPreviewNextUseIterationModeSkip1() {
     super();
   }
 
@@ -23,7 +23,7 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
   @Override
   protected void setup(final MatrixIteration2DBuilder builder) {
     builder.setEndMode(EMissingValueMode.SKIP);
-    builder.setStartMode(EMissingValueMode.SKIP);
+    builder.setStartMode(EMissingValueMode.USE_ITERATION_MODE);
     builder.setIterationMode(EIterationMode.PREVIEW_NEXT);
     builder.setXDirection(EIterationDirection.DECREASING);
     builder.setXDimension(0);
@@ -31,24 +31,19 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
 
     builder.setMatrices(//
         new LongMatrix1D(new long[] { //
-            -0L, 10L, //
-            -0L, 20L, //
-            -2L, 31L, //
-            -2L, 41L, //
-            -2L, 42L, //
-            -2L, 53L, //
-            -2L, 30L, //
-            -4L, 33L,//
-    }, 8, 2), //
+            Long.MAX_VALUE, 10L, //
+            1000L, 20L, //
+            200L, 30L, //
+            30L, 40L,//
+    }, 4, 2), //
         new LongMatrix1D(new long[] { //
-            -0L, 100L, //
-            -1L, 200L, //
-            -2L, 300L, //
-            -2L, 400L, //
-            -3L, 500L, //
-            -3L, 600L, //
-            -3L, 700L,//
-    }, 7, 2));
+            1000L, 100L, //
+            200L, 200L, //
+            30L, 300L, //
+            Long.MIN_VALUE, 400L,//
+    }, 4, 2)
+
+    );
   }
 
   /** {@inheritDoc} */
@@ -69,7 +64,7 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
       }
       case 4: {
         Assert.assertEquals(1, state.getSourceMatrixCount());
-        Assert.assertEquals(0, state.getSourceMatrixIndex(0));
+        Assert.assertEquals(1, state.getSourceMatrixIndex(0));
         return;
       }
       default: {
@@ -92,7 +87,32 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
     super.checkX(step, x);
 
     Assert.assertTrue(x.isInteger());
-    Assert.assertEquals(-step, x.longValue());
+
+    switch (step) {
+      case 0: {
+        Assert.assertEquals(Long.MAX_VALUE, x.longValue());
+        return;
+      }
+      case 1: {
+        Assert.assertEquals(1000L, x.longValue());
+        return;
+      }
+      case 2: {
+        Assert.assertEquals(200L, x.longValue());
+        return;
+      }
+      case 3: {
+        Assert.assertEquals(30L, x.longValue());
+        return;
+      }
+      case 4: {
+        Assert.assertEquals(Long.MIN_VALUE, x.longValue());
+        return;
+      }
+      default: {
+        throw new AssertionError("Only five steps allowed."); //$NON-NLS-1$
+      }
+    }
   }
 
   /** {@inheritDoc} */
@@ -111,25 +131,25 @@ public class MatrixIteration2DTestLongLongDecreasingPreviewNextSkipSkip6
       }
       case 1: {
         Assert.assertEquals(y.n(), 2);
-        Assert.assertEquals(31L, y.getLong(0, 0));
-        Assert.assertEquals(200L, y.getLong(0, 1));
+        Assert.assertEquals(20L, y.getLong(0, 0));
+        Assert.assertEquals(100L, y.getLong(0, 1));
         return;
       }
       case 2: {
         Assert.assertEquals(y.n(), 2);
-        Assert.assertEquals(31L, y.getLong(0, 0));
-        Assert.assertEquals(300L, y.getLong(0, 1));
+        Assert.assertEquals(30L, y.getLong(0, 0));
+        Assert.assertEquals(200L, y.getLong(0, 1));
         return;
       }
       case 3: {
         Assert.assertEquals(y.n(), 2);
-        Assert.assertEquals(33L, y.getLong(0, 0));
-        Assert.assertEquals(500L, y.getLong(0, 1));
+        Assert.assertEquals(40L, y.getLong(0, 0));
+        Assert.assertEquals(300L, y.getLong(0, 1));
         return;
       }
       case 4: {
         Assert.assertEquals(y.n(), 1);
-        Assert.assertEquals(33L, y.getLong(0, 0));
+        Assert.assertEquals(400L, y.getLong(0, 0));
         return;
       }
       default: {

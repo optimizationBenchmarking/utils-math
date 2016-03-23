@@ -34,19 +34,19 @@ public class MatrixIteration2DTestLongLongIncreasingKeepPreviousSkipSkip6
             0L, 10L, //
             0L, 20L, //
             2L, 31L, //
-            2L, 41L,//
-            2L, 42L,//
-            2L, 53L,//
-            2L, 30L,//
+            2L, 41L, //
+            2L, 42L, //
+            2L, 53L, //
+            2L, 30L, //
             4L, 33L,//
     }, 8, 2), //
         new LongMatrix1D(new long[] { //
             0L, 100L, //
-            1L, 200L, //            
+            1L, 200L, //
             2L, 300L, //
-            2L, 400L, //            
-            3L, 500L,//
-            3L, 600L,//
+            2L, 400L, //
+            3L, 500L, //
+            3L, 600L, //
             3L, 700L,//
     }, 7, 2));
   }
@@ -61,13 +61,13 @@ public class MatrixIteration2DTestLongLongIncreasingKeepPreviousSkipSkip6
       case 0:
       case 1:
       case 2:
-      case 3:{
+      case 3: {
         Assert.assertEquals(2, state.getSourceMatrixCount());
         Assert.assertEquals(0, state.getSourceMatrixIndex(0));
         Assert.assertEquals(1, state.getSourceMatrixIndex(1));
         return;
       }
-      case 4:{
+      case 4: {
         Assert.assertEquals(1, state.getSourceMatrixCount());
         Assert.assertEquals(0, state.getSourceMatrixIndex(0));
         return;
@@ -92,7 +92,7 @@ public class MatrixIteration2DTestLongLongIncreasingKeepPreviousSkipSkip6
     super.checkX(step, x);
 
     Assert.assertTrue(x.isInteger());
-    Assert.assertEquals(step,x.longValue());
+    Assert.assertEquals(step, x.longValue());
   }
 
   /** {@inheritDoc} */
