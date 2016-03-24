@@ -29,6 +29,7 @@ public final class MatrixFunctionBuilder {
    * <li>0: beginning</li>
    * <li>1: last point was added to the function</li>
    * <li>2: last point was not added to the function</li>
+   * </ul>
    */
   private int m_state;
 
