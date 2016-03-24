@@ -55,7 +55,8 @@ abstract class _MatrixIteration2DBuilderBase<X extends _MatrixIteration2DBuilder
    * @return this builder
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public final X setMatrices(final Collection<IMatrix> matrices) {
+  public final X setMatrices(
+      final Collection<? extends IMatrix> matrices) {
     final X ret;
 
     if (matrices == null) {

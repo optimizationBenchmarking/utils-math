@@ -88,6 +88,23 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
   }
 
   /**
+   * Is the backing array currently an integer array (i.e., either
+   * {@code byte[]}, {@code short[]}, {@code int[]}, or {@code long[]})? If
+   * the backing array is not integer, all integer-type numbers will be
+   * converted to floating point numbers automatically. If the backing
+   * array is integer, adding a floating point number may cause it to
+   * switch to become a floating point array.
+   *
+   * @return {@code true} if the internal backing array is an integer array
+   *         (i.e., either {@code byte[]}, {@code short[]}, {@code int[]},
+   *         or {@code long[]}), {@code false} otherwise (i.e., either
+   *         {@code float[]} or {@code double[]}).
+   */
+  protected final boolean isBackingStoreInteger() {
+    return this.m_array._isInteger();
+  }
+
+  /**
    * create the array-based matrix builder
    *
    * @param expectedType
@@ -423,6 +440,14 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
      *          the maximum size
      */
     abstract void _setMaxSize(final int curSize, final int maxSize);
+
+    /**
+     * Is the array an integer array?
+     *
+     * @return {@code true} if the array is an integer array, {@code false}
+     *         otherwise
+     */
+    abstract boolean _isInteger();
   }
 
   /** the internal growable double array */
@@ -508,6 +533,12 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
         System.arraycopy(this.m_data, 0, data, 0, size);
       }
       return ArrayBasedMatrixBuilder.this.make(data);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    final boolean _isInteger() {
+      return false;
     }
   }
 
@@ -658,6 +689,12 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
       }
       return ArrayBasedMatrixBuilder.this.make(data);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    final boolean _isInteger() {
+      return true;
+    }
   }
 
   /** the internal growable long array */
@@ -773,6 +810,12 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
         System.arraycopy(this.m_data, 0, data, 0, size);
       }
       return ArrayBasedMatrixBuilder.this.make(data);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    final boolean _isInteger() {
+      return false;
     }
   }
 
@@ -946,6 +989,12 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
         System.arraycopy(this.m_data, 0, data, 0, size);
       }
       return ArrayBasedMatrixBuilder.this.make(data);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    final boolean _isInteger() {
+      return true;
     }
   }
 
@@ -1129,6 +1178,12 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
         System.arraycopy(this.m_data, 0, data, 0, size);
       }
       return ArrayBasedMatrixBuilder.this.make(data);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    final boolean _isInteger() {
+      return true;
     }
   }
 
@@ -1341,6 +1396,12 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
         System.arraycopy(this.m_data, 0, data, 0, size);
       }
       return ArrayBasedMatrixBuilder.this.make(data);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    final boolean _isInteger() {
+      return true;
     }
   }
 }
