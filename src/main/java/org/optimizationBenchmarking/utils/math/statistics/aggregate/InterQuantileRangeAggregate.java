@@ -298,6 +298,18 @@ public final class InterQuantileRangeAggregate
         break findLow;
       }
 
+      if (lower <= Double.NEGATIVE_INFINITY) {
+        if (upper >= Double.POSITIVE_INFINITY) {
+          this._setNaN();
+          return;
+        }
+        lowRes = Double.NEGATIVE_INFINITY;
+        break findLow;
+      }
+      if (upper >= Double.POSITIVE_INFINITY) {
+        lowRes = Double.POSITIVE_INFINITY;
+        break findLow;
+      }
       lowRes = Math.max(lower,
           Math.min(upper, //
               Add.INSTANCE.computeAsDouble(lower, //
@@ -345,13 +357,34 @@ public final class InterQuantileRangeAggregate
         break findUp;
       }
 
+      if (lower <= Double.NEGATIVE_INFINITY) {
+        if (upper >= Double.POSITIVE_INFINITY) {
+          this._setNaN();
+          return;
+        }
+        upRes = Double.NEGATIVE_INFINITY;
+        break findUp;
+      }
+      if (upper >= Double.POSITIVE_INFINITY) {
+        upRes = Double.POSITIVE_INFINITY;
+        break findUp;
+      }
       upRes = Math.max(lower,
           Math.min(upper, //
               Add.INSTANCE.computeAsDouble(lower, //
                   Mul.INSTANCE.computeAsDouble(v, (upper - lower)))));
     }
 
-    // make the result
-    this._setDoubleFully(upRes - lowRes);
+    // now compute quantile range
+    if ((lowRes <= Double.NEGATIVE_INFINITY)
+        || (upRes >= Double.POSITIVE_INFINITY)) {
+      if (lowRes != upRes) {
+        this._setPositiveInfinity();
+      } else {
+        this._setNaN();
+      }
+    } else {
+      this._setDoubleFully(upRes - lowRes);
+    }
   }
 }

@@ -172,11 +172,22 @@ public final class QuantileAggregate extends _QuantileBasedAggregate {
       return;
     }
 
-    this._setDoubleFully(//
-        Math.max(lower,
-            Math.min(upper, //
+    if (lower <= Double.NEGATIVE_INFINITY) {
+      if (upper >= Double.POSITIVE_INFINITY) {
+        this._setNaN();
+      } else {
+        this._setNegativeInfinity();
+      }
+    } else {
+      if (upper >= Double.POSITIVE_INFINITY) {
+        this._setPositiveInfinity();
+      } else {
+        this._setDoubleFully(//
+            Math.max(lower, Math.min(upper, //
                 Add.INSTANCE.computeAsDouble(lower, //
                     Mul.INSTANCE.computeAsDouble(v, (upper - lower))))));
+      }
+    }
   }
 
 }
