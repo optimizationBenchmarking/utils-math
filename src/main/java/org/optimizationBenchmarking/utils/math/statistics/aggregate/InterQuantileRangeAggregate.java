@@ -378,11 +378,7 @@ public final class InterQuantileRangeAggregate
     // now compute quantile range
     if ((lowRes <= Double.NEGATIVE_INFINITY)
         || (upRes >= Double.POSITIVE_INFINITY)) {
-      if (lowRes != upRes) {
-        this._setPositiveInfinity();
-      } else {
-        this._setNaN();
-      }
+      this._setPositiveInfinity();
     } else {
       this._setDoubleFully(upRes - lowRes);
     }
