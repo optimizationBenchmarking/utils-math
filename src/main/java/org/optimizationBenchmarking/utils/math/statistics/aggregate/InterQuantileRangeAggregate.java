@@ -298,17 +298,10 @@ public final class InterQuantileRangeAggregate
         break findLow;
       }
 
-      if (lower <= Double.NEGATIVE_INFINITY) {
-        if (upper >= Double.POSITIVE_INFINITY) {
-          this._setNaN();
-          return;
-        }
-        lowRes = Double.NEGATIVE_INFINITY;
-        break findLow;
-      }
-      if (upper >= Double.POSITIVE_INFINITY) {
-        lowRes = Double.POSITIVE_INFINITY;
-        break findLow;
+      if ((lower <= Double.NEGATIVE_INFINITY)
+          || (upper >= Double.POSITIVE_INFINITY)) {
+        this._setPositiveInfinity();
+        return;
       }
       lowRes = Math.max(lower,
           Math.min(upper, //
@@ -357,17 +350,10 @@ public final class InterQuantileRangeAggregate
         break findUp;
       }
 
-      if (lower <= Double.NEGATIVE_INFINITY) {
-        if (upper >= Double.POSITIVE_INFINITY) {
-          this._setNaN();
-          return;
-        }
-        upRes = Double.NEGATIVE_INFINITY;
-        break findUp;
-      }
-      if (upper >= Double.POSITIVE_INFINITY) {
-        upRes = Double.POSITIVE_INFINITY;
-        break findUp;
+      if ((lower <= Double.NEGATIVE_INFINITY)
+          || (upper >= Double.POSITIVE_INFINITY)) {
+        this._setPositiveInfinity();
+        return;
       }
       upRes = Math.max(lower,
           Math.min(upper, //
@@ -379,8 +365,8 @@ public final class InterQuantileRangeAggregate
     if ((lowRes <= Double.NEGATIVE_INFINITY)
         || (upRes >= Double.POSITIVE_INFINITY)) {
       this._setPositiveInfinity();
-    } else {
-      this._setDoubleFully(upRes - lowRes);
+      return;
     }
+    this._setDoubleFully(upRes - lowRes);
   }
 }
