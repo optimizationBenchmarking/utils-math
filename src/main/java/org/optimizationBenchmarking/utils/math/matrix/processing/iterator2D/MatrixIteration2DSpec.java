@@ -184,7 +184,7 @@ public abstract class MatrixIteration2DSpec {
   }
 
   /**
-   * Are leading and trailing {@link Double#NaN}s along the {@codex} axis
+   * Are leading and trailing {@link Double#NaN}s along the {@code x} axis
    * skipped? If {@code true}, this mode takes precedence over
    * {@link #getStartMode()} and {@link #getEndMode()}. Notice that
    * {@link Double#NaN}s will lead to exceptions if they are neither
