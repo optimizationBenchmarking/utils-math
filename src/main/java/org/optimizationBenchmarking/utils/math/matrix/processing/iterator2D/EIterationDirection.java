@@ -320,11 +320,9 @@ public enum EIterationDirection {
       for (position = impl.m_indexes[index]; position < max; position++) {
         current = matrix.getDouble(position, impl.m_xDimension);
         if (Double.isNaN(current)) {
-          if (Double.isNaN(current)) {
-            throw new IllegalStateException(//
-                "Encountered unexpected NaN on x axis during matrix iteration in matrix "//$NON-NLS-1$
-                    + index + " in row " + position + '.'); //$NON-NLS-1$
-          }
+          throw new IllegalStateException(//
+              "Encountered unexpected NaN on x axis during matrix iteration in matrix "//$NON-NLS-1$
+                  + index + " in row " + position + '.'); //$NON-NLS-1$
         }
         if (increasing ? (current > forbidden) : (current < forbidden)) {
           if (hasNot || //

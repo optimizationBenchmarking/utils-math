@@ -1,5 +1,7 @@
 package org.optimizationBenchmarking.utils.math.matrix.processing.iterator2D;
 
+import java.util.logging.Level;
+
 import org.optimizationBenchmarking.utils.math.BasicNumber;
 import org.optimizationBenchmarking.utils.math.matrix.AbstractMatrix;
 import org.optimizationBenchmarking.utils.math.matrix.IMatrix;
@@ -144,6 +146,7 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
     final IMatrix[] matrices;
     IMatrix matrix;
     int index, useStart, useEnd;
+    boolean changedStart, changedEnd;
 
     matrices = this.m_matrices;
     start = this.m_start;
@@ -152,6 +155,7 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
       matrix = matrices[index];
       useStart = 0;
       useEnd = matrix.m();
+      changedStart = changedEnd = false;
 
       while ((useStart < useEnd) && //
           ((this.m_skipLeadingAndTrailingXNaNs
@@ -161,6 +165,7 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
                   && (Double.isNaN(matrix.getDouble(//
                       useStart, this.m_yDimension)))))) {
         useStart++;
+        changedStart = true;
       }
 
       while ((useEnd > useStart) && //
@@ -171,6 +176,18 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
                   && (Double.isNaN(matrix.getDouble(//
                       useEnd - 1, this.m_yDimension)))))) {
         useEnd--;
+        changedEnd = true;
+      }
+
+      if ((changedStart || changedEnd) && //
+          (this.m_logger != null)
+          && this.m_logger.isLoggable(Level.WARNING)) {
+        this.m_logger.warning(
+            "Encountered NaN values in data during matrix iteration at " //$NON-NLS-1$
+                + ((changedStart && changedEnd) ? "start and end" //$NON-NLS-1$
+                    : (changedStart ? "start" : "end")) //$NON-NLS-1$ //$NON-NLS-2$
+                + " in matrix at index " + index + //$NON-NLS-1$
+                " and silently skipped them."); //$NON-NLS-1$
       }
 
       start[index] = useStart;
@@ -289,6 +306,15 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
       if (Double.isNaN(value)) {
         if (this.m_useYNaNReplacement) {
           value = this.m_yNaNReplacement;
+          if ((this.m_logger != null)
+              && this.m_logger.isLoggable(Level.WARNING)) {
+            this.m_logger.warning(
+                "Encountered NaN in y dimension during matrix iteration in matrix " //$NON-NLS-1$
+                    + index + " in row " + position + //$NON-NLS-1$
+                    " for x value " //$NON-NLS-1$
+                    + sourceMatrix.getDouble(position, this.m_xDimension)
+                    + " and replaced it with " + value + '.');//$NON-NLS-1$
+          }
         } else {
           throw new IllegalStateException(//
               "Encountered unexpected NaN in y dimension during matrix iteration in matrix " //$NON-NLS-1$
