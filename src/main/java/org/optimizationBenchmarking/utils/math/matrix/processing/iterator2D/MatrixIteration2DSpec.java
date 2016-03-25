@@ -74,7 +74,7 @@ public abstract class MatrixIteration2DSpec {
     this.m_endMode = EMissingValueMode.DEFAULT_END_MODE;
     this.m_xDirection = EIterationDirection.INCREASING;
     this.m_skipLeadingAndTrailingXNaNs = false;
-    this.m_skipLeadingAndTrailingYNaNs = true;
+    this.m_skipLeadingAndTrailingYNaNs = false;
   }
 
   /**
@@ -100,7 +100,7 @@ public abstract class MatrixIteration2DSpec {
     this.m_endReplacement = other.m_endReplacement;
     this.m_yNaNReplacement = other.m_yNaNReplacement;
     this.m_useYNaNReplacement = other.m_useYNaNReplacement;
-    this.m_skipLeadingAndTrailingXNaNs = false;
+    this.m_skipLeadingAndTrailingXNaNs = other.m_skipLeadingAndTrailingXNaNs;
     this.m_skipLeadingAndTrailingYNaNs = other.m_skipLeadingAndTrailingYNaNs;
   }
 
@@ -331,6 +331,7 @@ public abstract class MatrixIteration2DSpec {
       final int yDimension) {
     final int maxDim;
     int m;
+    double a, b;
 
     MatrixIteration2DSpec._checkMatricesNotNull(matrices);
 
@@ -354,9 +355,10 @@ public abstract class MatrixIteration2DSpec {
       }
       m = matrix.m();
       if (m > 1) {
-        if (direction._strictlyBeforeDouble(
-            matrix.getDouble(m - 1, xDimension), //
-            matrix.getDouble(0, xDimension))) {
+        a = matrix.getDouble(m - 1, xDimension);
+        b = matrix.getDouble(0, xDimension);
+        if ((!(Double.isNaN(a) || Double.isNaN(b)))
+            && direction._strictlyBeforeDouble(a, b)) {
           throw new IllegalArgumentException("X coordinates should be " //$NON-NLS-1$
               + direction
               + " but are actually not, as the (double) x-coordinate at the matrix start is "//$NON-NLS-1$
