@@ -183,6 +183,79 @@ abstract class _MatrixIteration2DBuilderBase<X extends _MatrixIteration2DBuilder
   }
 
   /**
+   * Set whether leading and trailing {@link Double#NaN}s along the
+   * {@code x} axis should be skipped? if {@code true}, this mode takes
+   * precedence over {@link #getStartMode()} and {@link #getEndMode()}.
+   *
+   * @param skip
+   *          {@code true} to skip the {@link Double#NaN}s, {@code false}
+   *          to not skip them
+   * @return this builder
+   * @see #areLeadingAndTrailingNaNsOnXAxisSkipped()
+   */
+  @SuppressWarnings("unchecked")
+  public final X setSkipLeadingAndTrailingNaNsOnXAxis(final boolean skip) {
+    this.m_skipLeadingAndTrailingXNaNs = skip;
+    return ((X) this);
+  }
+
+  /**
+   * Set whether leading and trailing {@link Double#NaN}s along the
+   * {@code y} axis should be skipped? if {@code true}, this mode takes
+   * precedence over {@link #getStartMode()}, {@link #getEndMode()}, and,
+   * most notably, {@link #isNaNReplacementForYAxisUsed()} and
+   * {@link #getNaNReplacementForYAxis()}.
+   *
+   * @param skip
+   *          {@code true} to skip the {@link Double#NaN}s, {@code false}
+   *          to not skip them
+   * @return this builder
+   * @see #areLeadingAndTrailingNaNsOnYAxisSkipped()
+   */
+  @SuppressWarnings("unchecked")
+  public final X setSkipLeadingAndTrailingNaNsOnYAxis(final boolean skip) {
+    this.m_skipLeadingAndTrailingYNaNs = skip;
+    return ((X) this);
+  }
+
+  /**
+   * Set the replacement for {@link Double#NaN} values along the {@code y}
+   * axis.
+   *
+   * @param replacement
+   *          the replacement
+   * @return this builder
+   * @see #areLeadingAndTrailingNaNsOnYAxisSkipped()
+   * @see #unsetNaNReplacementForYAxis()
+   * @see #getNaNReplacementForYAxis()
+   * @see #isNaNReplacementForYAxisUsed()
+   * @see #setSkipLeadingAndTrailingNaNsOnYAxis(boolean)
+   */
+  @SuppressWarnings("unchecked")
+  public final X setNaNReplacementForYAxis(final double replacement) {
+    this.m_yNaNReplacement = replacement;
+    this.m_useYNaNReplacement = true;
+    return ((X) this);
+  }
+
+  /**
+   * Unset, i.e., remove the replacement for {@link Double#NaN} values
+   * along the {@code y} axis.
+   *
+   * @return this builder
+   * @see #areLeadingAndTrailingNaNsOnYAxisSkipped()
+   * @see #setNaNReplacementForYAxis(double)
+   * @see #getNaNReplacementForYAxis()
+   * @see #isNaNReplacementForYAxisUsed()
+   * @see #setSkipLeadingAndTrailingNaNsOnYAxis(boolean)
+   */
+  @SuppressWarnings("unchecked")
+  public final X unsetNaNReplacementForYAxis() {
+    this.m_useYNaNReplacement = false;
+    return ((X) this);
+  }
+
+  /**
    * Set the {@code x}-dimension
    *
    * @param xDimension

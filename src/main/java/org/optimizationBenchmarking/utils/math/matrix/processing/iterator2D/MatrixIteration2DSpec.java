@@ -42,6 +42,29 @@ public abstract class MatrixIteration2DSpec {
    */
   Number m_endReplacement;
 
+  /**
+   * the replacement value for {@link Double#NaN} values along the
+   * {@code y} axis
+   */
+  double m_yNaNReplacement;
+
+  /**
+   * should we use the replacement for {@link Double#NaN} values along the
+   * {@code y} axis, or throw an exception?
+   */
+  boolean m_useYNaNReplacement;
+
+  /**
+   * should we skip leading and trailing {@link Double#NaN} values along
+   * the {@code x} axis?
+   */
+  boolean m_skipLeadingAndTrailingXNaNs;
+  /**
+   * should we skip leading and trailing {@link Double#NaN} values along
+   * the {@code y} axis?
+   */
+  boolean m_skipLeadingAndTrailingYNaNs;
+
   /** create the iteration */
   MatrixIteration2DSpec() {
     super();
@@ -50,6 +73,8 @@ public abstract class MatrixIteration2DSpec {
     this.m_startMode = EMissingValueMode.DEFAULT_START_MODE;
     this.m_endMode = EMissingValueMode.DEFAULT_END_MODE;
     this.m_xDirection = EIterationDirection.INCREASING;
+    this.m_skipLeadingAndTrailingXNaNs = false;
+    this.m_skipLeadingAndTrailingYNaNs = true;
   }
 
   /**
@@ -73,6 +98,10 @@ public abstract class MatrixIteration2DSpec {
     this.m_xDirection = other.m_xDirection;
     this.m_startReplacement = other.m_startReplacement;
     this.m_endReplacement = other.m_endReplacement;
+    this.m_yNaNReplacement = other.m_yNaNReplacement;
+    this.m_useYNaNReplacement = other.m_useYNaNReplacement;
+    this.m_skipLeadingAndTrailingXNaNs = false;
+    this.m_skipLeadingAndTrailingYNaNs = other.m_skipLeadingAndTrailingYNaNs;
   }
 
   /**
@@ -152,6 +181,67 @@ public abstract class MatrixIteration2DSpec {
    */
   public final EMissingValueMode getEndMode() {
     return this.m_endMode;
+  }
+
+  /**
+   * Are leading and trailing {@link Double#NaN}s along the {@codex} axis
+   * skipped? If {@code true}, this mode takes precedence over
+   * {@link #getStartMode()} and {@link #getEndMode()}. Notice that
+   * {@link Double#NaN}s will lead to exceptions if they are neither
+   * skipped.
+   *
+   * @return {@code true} if leading and trailing {@link Double#NaN}s along
+   *         the {@code x} axis, {@code false} otherwise.
+   */
+  public final boolean areLeadingAndTrailingNaNsOnXAxisSkipped() {
+    return this.m_skipLeadingAndTrailingXNaNs;
+  }
+
+  /**
+   * Are leading and trailing {@link Double#NaN}s along the {@code y} axis
+   * skipped? If {@code true}, this mode takes precedence over
+   * {@link #getStartMode()}, {@link #getEndMode()}, and, most notably,
+   * {@link #isNaNReplacementForYAxisUsed()} and
+   * {@link #getNaNReplacementForYAxis()}. Notice that {@link Double#NaN}s
+   * will lead to exceptions if they are neither skipped nor replaced.
+   *
+   * @return {@code true} if leading and trailing {@link Double#NaN}s along
+   *         the {@code y} axis, {@code false} otherwise.
+   * @see #isNaNReplacementForYAxisUsed()
+   * @see #getNaNReplacementForYAxis()
+   */
+  public final boolean areLeadingAndTrailingNaNsOnYAxisSkipped() {
+    return this.m_skipLeadingAndTrailingYNaNs;
+  }
+
+  /**
+   * Are {@link Double#NaN} values along the {@code y} axis replaced with a
+   * constant?
+   *
+   * @return {@code true} if {@link Double#NaN} values along the {@code y}
+   *         axis replaced with a constant, {@code false} otherwise.
+   * @see #getNaNReplacementForYAxis()
+   * @see #areLeadingAndTrailingNaNsOnYAxisSkipped()
+   */
+  public final boolean isNaNReplacementForYAxisUsed() {
+    return this.m_useYNaNReplacement;
+  }
+
+  /**
+   * Get the value with which {@link Double#NaN} values along the {@code y}
+   * axis are replaced. This value is only defined and used if
+   * <code>{@link #isNaNReplacementForYAxisUsed()}==true</code>. If
+   * {@link #areLeadingAndTrailingNaNsOnYAxisSkipped()} is {@code true},
+   * leading and trailing {@link Double#NaN} values are not replaced but
+   * skipped in the iteration.
+   *
+   * @return the value with which {@link Double#NaN} values along the
+   *         {@code y} axis are replaced
+   * @see #isNaNReplacementForYAxisUsed()
+   * @see #areLeadingAndTrailingNaNsOnYAxisSkipped()
+   */
+  public final double getNaNReplacementForYAxis() {
+    return this.m_yNaNReplacement;
   }
 
   /**

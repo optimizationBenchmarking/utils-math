@@ -39,13 +39,14 @@ public enum EIterationDirection {
     final boolean increasing;
     boolean hasNot;
     long start, current;
+    int index, first;
 
     increasing = this.m_increasing;
     start = (increasing ? Long.MAX_VALUE : Long.MIN_VALUE);
     hasNot = true;
-    for (final IMatrix matrix : impl.m_matrices) {
-      if (matrix.m() > 0) {
-        current = matrix.getLong(0, impl.m_xDimension);
+    for (index = impl.m_matrices.length; (--index) >= 0;) {
+      if ((first = impl.m_indexes[index]) < impl.m_end[index]) {
+        current = impl.m_matrices[index].getLong(first, impl.m_xDimension);
         if (hasNot
             || (increasing ? (current < start) : (current > start))) {
           start = current;
@@ -73,15 +74,22 @@ public enum EIterationDirection {
     final boolean increasing;
     boolean hasNot;
     double start, current;
+    int index, first;
 
     increasing = this.m_increasing;
     start = (increasing ? Double.POSITIVE_INFINITY
         : Double.NEGATIVE_INFINITY);
     hasNot = true;
-    for (final IMatrix matrix : impl.m_matrices) {
-      if (matrix.m() > 0) {
-        current = MatrixIteration2DState
-            ._d(matrix.getDouble(0, impl.m_xDimension));
+    for (index = impl.m_matrices.length; (--index) >= 0;) {
+      if ((first = impl.m_indexes[index]) < impl.m_end[index]) {
+        current = impl.m_matrices[index].getDouble(first,
+            impl.m_xDimension);
+        if (Double.isNaN(current)) {
+          throw new IllegalStateException(//
+              "Encountered unexpected NaN on x axis during matrix iteration when trying to find first x value in matrix "//$NON-NLS-1$
+                  + index + " in row " + first + //$NON-NLS-1$
+                  ". Maybe set skipping leading NaNs to true?");//$NON-NLS-1$
+        }
         if (hasNot
             || (increasing ? (current < start) : (current > start))) {
           start = current;
@@ -153,9 +161,9 @@ public enum EIterationDirection {
     int position;
 
     matrix = impl.m_matrices[index];
-    max = matrix.m();
+    max = impl.m_end[index];
 
-    if (max <= 0) {
+    if (max <= impl.m_start[index]) {
       return false;
     }
 
@@ -231,7 +239,7 @@ public enum EIterationDirection {
 
       }
 
-      if (position <= 0) {
+      if (position <= impl.m_start[index]) {
         returnValue = impl.m_startMode._handleMissingStart(index, impl);
         break findXValue;
       }
@@ -267,7 +275,7 @@ public enum EIterationDirection {
     hasNot = true;
     outer: for (index = impl.m_matrices.length; (--index) >= 0;) {
       matrix = impl.m_matrices[index];
-      max = matrix.m();
+      max = impl.m_end[index];
       for (position = impl.m_indexes[index]; position < max; position++) {
         current = matrix.getLong(position, impl.m_xDimension);
         if (increasing ? (current > forbidden) : (current < forbidden)) {
@@ -308,10 +316,16 @@ public enum EIterationDirection {
     hasNot = true;
     outer: for (index = impl.m_matrices.length; (--index) >= 0;) {
       matrix = impl.m_matrices[index];
-      max = matrix.m();
+      max = impl.m_end[index];
       for (position = impl.m_indexes[index]; position < max; position++) {
-        current = MatrixIteration2DState._d(//
-            matrix.getDouble(position, impl.m_xDimension));
+        current = matrix.getDouble(position, impl.m_xDimension);
+        if (Double.isNaN(current)) {
+          if (Double.isNaN(current)) {
+            throw new IllegalStateException(//
+                "Encountered unexpected NaN on x axis during matrix iteration in matrix "//$NON-NLS-1$
+                    + index + " in row " + position + '.'); //$NON-NLS-1$
+          }
+        }
         if (increasing ? (current > forbidden) : (current < forbidden)) {
           if (hasNot || //
               (increasing ? (current < start) : (current > start))) {
@@ -351,9 +365,9 @@ public enum EIterationDirection {
     int position;
 
     matrix = impl.m_matrices[index];
-    max = matrix.m();
+    max = impl.m_end[index];
 
-    if (max <= 0) {
+    if (max <= impl.m_start[index]) {
       return false;
     }
 
@@ -376,8 +390,13 @@ public enum EIterationDirection {
     // find the largest x value <= goalX
     if (position < max) {
       loop: for (;;) {
-        currentX = MatrixIteration2DState
-            ._d(matrix.getDouble(position, impl.m_xDimension));
+        currentX = matrix.getDouble(position, impl.m_xDimension);
+        if (Double.isNaN(currentX)) {
+          throw new IllegalStateException(//
+              "Encountered a (very!) unexpected NaN on x axis during matrix iteration in matrix "//$NON-NLS-1$
+                  + index + " in row " + position + '.'); //$NON-NLS-1$
+        }
+
         if (isXIncreasing ? (currentX > goalX) : (currentX < goalX)) {
           // we arrived at an element greater than goalX
           // this can either be case 1, 2, or 3
@@ -431,7 +450,7 @@ public enum EIterationDirection {
 
       }
 
-      if (position <= 0) {
+      if (position <= impl.m_start[index]) {
         returnValue = impl.m_startMode._handleMissingStart(index, impl);
         break findXValue;
       }

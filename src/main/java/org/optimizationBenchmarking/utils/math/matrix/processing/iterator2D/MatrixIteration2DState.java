@@ -18,6 +18,10 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
   final boolean m_xIsInteger;
   /** the {@code y}-coordinates are integers */
   final boolean m_yIsInteger;
+  /** the inclusive start indices */
+  final int[] m_start;
+  /** the exclusive end indices */
+  final int[] m_end;
 
   /**
    * create the matrix iteration 2d
@@ -42,6 +46,16 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
     this.m_yIsInteger = yIsInteger;
     this.m_y = (this.m_yIsInteger ? new _Longs(length)
         : new _Doubles(length));
+
+    if (xIsInteger) {
+      this.m_skipLeadingAndTrailingXNaNs = false;
+    }
+    if (yIsInteger) {
+      this.m_skipLeadingAndTrailingYNaNs = false;
+      this.m_useYNaNReplacement = false;
+    }
+    this.m_start = new int[length];
+    this.m_end = new int[length];
   }
 
   /**
@@ -124,8 +138,54 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
             " is invalid."); //$NON-NLS-1$
   }
 
+  /** setup the start and end indices */
+  private final void __setupStartAndEnd() {
+    final int[] start, end;
+    final IMatrix[] matrices;
+    IMatrix matrix;
+    int index, useStart, useEnd;
+
+    matrices = this.m_matrices;
+    start = this.m_start;
+    end = this.m_end;
+    for (index = matrices.length; (--index) >= 0;) {
+      matrix = matrices[index];
+      useStart = 0;
+      useEnd = matrix.m();
+
+      while ((useStart < useEnd) && //
+          ((this.m_skipLeadingAndTrailingXNaNs
+              && (Double.isNaN(matrix.getDouble(//
+                  useStart, this.m_xDimension))))
+              || (this.m_skipLeadingAndTrailingYNaNs
+                  && (Double.isNaN(matrix.getDouble(//
+                      useStart, this.m_yDimension)))))) {
+        useStart++;
+      }
+
+      while ((useEnd > useStart) && //
+          ((this.m_skipLeadingAndTrailingXNaNs
+              && (Double.isNaN(matrix.getDouble(//
+                  useEnd - 1, this.m_xDimension))))
+              || (this.m_skipLeadingAndTrailingYNaNs
+                  && (Double.isNaN(matrix.getDouble(//
+                      useEnd - 1, this.m_yDimension)))))) {
+        useEnd--;
+      }
+
+      start[index] = useStart;
+      end[index] = useEnd;
+    }
+
+    if (this.m_skipLeadingAndTrailingXNaNs
+        || this.m_skipLeadingAndTrailingYNaNs) {
+      System.arraycopy(start, 0, this.m_indexes, 0, matrices.length);
+    }
+  }
+
   /** run! */
   final void _run() {
+    this.__setupStartAndEnd();
     this.m_y._reset();
 
     if (this.m_xIsInteger) {
@@ -148,20 +208,6 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
         }
       }
     }
-  }
-
-  /**
-   * Check a {@code double} and throw an exception if we encounter NaN
-   *
-   * @param d
-   *          the double
-   * @return {@code d}
-   */
-  static final double _d(final double d) {
-    if (d != d) {
-      throw new IllegalArgumentException("Encountered nan!"); //$NON-NLS-1$
-    }
-    return d;
   }
 
   /**
@@ -232,14 +278,27 @@ public final class MatrixIteration2DState extends MatrixIteration2DSpec {
   final void _setYCoordinateFromMatrix(final int index,
       final int position) {
     final IMatrix sourceMatrix;
+    double value;
 
     sourceMatrix = this.m_matrices[index];
     if (this.m_yIsInteger) {
       this.__setYCoordinateLong(index, //
           sourceMatrix.getLong(position, this.m_yDimension));
     } else {
-      this.__setYCoordinateDouble(index, MatrixIteration2DState._d(//
-          sourceMatrix.getDouble(position, this.m_yDimension)));
+      value = sourceMatrix.getDouble(position, this.m_yDimension);
+      if (Double.isNaN(value)) {
+        if (this.m_useYNaNReplacement) {
+          value = this.m_yNaNReplacement;
+        } else {
+          throw new IllegalStateException(//
+              "Encountered unexpected NaN in y dimension during matrix iteration in matrix " //$NON-NLS-1$
+                  + index + " in row " + position + //$NON-NLS-1$
+                  " for x value " //$NON-NLS-1$
+                  + sourceMatrix.getDouble(position, this.m_xDimension)
+                  + ". Maybe set a replacement for NaNs?");//$NON-NLS-1$
+        }
+      }
+      this.__setYCoordinateDouble(index, value);
     }
   }
 
