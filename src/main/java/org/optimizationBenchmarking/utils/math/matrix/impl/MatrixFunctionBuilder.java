@@ -47,16 +47,32 @@ public final class MatrixFunctionBuilder {
    * Create the function builder, i.e., an object that can help you
    * represent a mathematical function as 2D matrix.
    *
+   * @param expectedSize
+   *          the expected size of the resulting matrix
+   * @param onlyOnePointPerYCoordinate
+   *          print only one point per {@code y} coordinate and omit all
+   *          following points with the same {@code y} value (except the
+   *          very last point added to the function)
+   */
+  public MatrixFunctionBuilder(final int expectedSize,
+      final boolean onlyOnePointPerYCoordinate) {
+    super();
+    this.m_builder = new MatrixBuilder(expectedSize * 2);
+    this.m_builder.setN(2);
+    this.m_onlyOnePointPerYCoordinate = onlyOnePointPerYCoordinate;
+  }
+
+  /**
+   * Create the function builder, i.e., an object that can help you
+   * represent a mathematical function as 2D matrix.
+   *
    * @param onlyOnePointPerYCoordinate
    *          print only one point per {@code y} coordinate and omit all
    *          following points with the same {@code y} value (except the
    *          very last point added to the function)
    */
   public MatrixFunctionBuilder(final boolean onlyOnePointPerYCoordinate) {
-    super();
-    this.m_builder = new MatrixBuilder();
-    this.m_builder.setN(2);
-    this.m_onlyOnePointPerYCoordinate = onlyOnePointPerYCoordinate;
+    this(-1, onlyOnePointPerYCoordinate);
   }
 
   /**
