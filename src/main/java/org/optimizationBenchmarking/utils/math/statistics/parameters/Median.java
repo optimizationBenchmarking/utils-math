@@ -21,7 +21,7 @@ public final class Median extends StatisticalParameter {
 
   /** create the median aggregate */
   private Median() {
-    super(Median.SHORT, Median.LONG);
+    super(Median.SHORT, Median.LONG, true, false);
   }
 
   /** {@inheritDoc} */

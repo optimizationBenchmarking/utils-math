@@ -20,7 +20,7 @@ public final class StandardDeviation extends StatisticalParameter {
 
   /** create the standard deviation parameter */
   private StandardDeviation() {
-    super(StandardDeviation.SHORT, StandardDeviation.LONG);
+    super(StandardDeviation.SHORT, StandardDeviation.LONG, false, true);
   }
 
   /** {@inheritDoc} */

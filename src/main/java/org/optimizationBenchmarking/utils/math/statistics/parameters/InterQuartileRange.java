@@ -23,7 +23,7 @@ public final class InterQuartileRange extends StatisticalParameter {
 
   /** create the median aggregate */
   private InterQuartileRange() {
-    super(InterQuartileRange.SHORT, InterQuartileRange.LONG);
+    super(InterQuartileRange.SHORT, InterQuartileRange.LONG, false, true);
   }
 
   /** {@inheritDoc} */

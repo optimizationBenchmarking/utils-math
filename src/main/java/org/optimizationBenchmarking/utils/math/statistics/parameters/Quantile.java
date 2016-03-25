@@ -26,7 +26,8 @@ public final class Quantile extends StatisticalParameter {
    *          the quantile name
    */
   private Quantile(final double p, final String qString) {
-    super((Quantile.SHORT + qString), (qString + Quantile.LONG));
+    super((Quantile.SHORT + qString), (qString + Quantile.LONG), true,
+        false);
 
     if ((p < 0d) || (p > 1d) || (p != p)) {
       throw new IllegalArgumentException(//

@@ -47,6 +47,11 @@ public abstract class StatisticalParameter
   /** the long name */
   private final String m_longName;
 
+  /** does this parameter represent some value from a sample? */
+  private final boolean m_isRepresentativeValueStatistic;
+  /** is this parameter a measure of dispersion? */
+  private final boolean m_isDispersionStatistic;
+
   /**
    * create
    *
@@ -54,12 +59,20 @@ public abstract class StatisticalParameter
    *          the short name
    * @param longName
    *          the long name
+   * @param isRepresentativeValueStatistic
+   *          does this parameter represent some value from a sample?
+   * @param isDispersionStatistic
+   *          is this parameter a measure of dispersion?
    */
-  StatisticalParameter(final String shortName, final String longName) {
+  StatisticalParameter(final String shortName, final String longName,
+      final boolean isRepresentativeValueStatistic,
+      final boolean isDispersionStatistic) {
     super();
 
     this.m_shortName = TextUtils.prepare(shortName);
     this.m_longName = TextUtils.prepare(longName);
+    this.m_isDispersionStatistic = isDispersionStatistic;
+    this.m_isRepresentativeValueStatistic = isRepresentativeValueStatistic;
   }
 
   /** {@inheritDoc} */
@@ -129,6 +142,28 @@ public abstract class StatisticalParameter
    *         sample
    */
   public abstract ScalarAggregate createSampleAggregate();
+
+  /**
+   * Does this statistic represent some value from a sample in any way,
+   * like a mean or median?
+   *
+   * @return {@code true} if this statistic represents values,
+   *         {@code false} otherwise
+   */
+  public final boolean isRepresentativeValueStatistic() {
+    return this.m_isRepresentativeValueStatistic;
+  }
+
+  /**
+   * Does this statistic represent a measure of dispersion or spread, like
+   * a variance or inter-quartile range
+   *
+   * @return {@code true} if this statistic represents dispersions,
+   *         {@code false} otherwise
+   */
+  public final boolean isDispersionStatistic() {
+    return this.m_isDispersionStatistic;
+  }
 
   /** {@inheritDoc} */
   @Override

@@ -20,7 +20,7 @@ public final class Variance extends StatisticalParameter {
 
   /** create the variance parameter */
   private Variance() {
-    super(Variance.SHORT, Variance.LONG);
+    super(Variance.SHORT, Variance.LONG, false, true);
   }
 
   /** {@inheritDoc} */

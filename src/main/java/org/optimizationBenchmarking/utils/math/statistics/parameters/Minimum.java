@@ -20,7 +20,7 @@ public final class Minimum extends StatisticalParameter {
 
   /** create the minimum parameter */
   private Minimum() {
-    super(Minimum.SHORT, Minimum.LONG);
+    super(Minimum.SHORT, Minimum.LONG, true, false);
   }
 
   /** {@inheritDoc} */

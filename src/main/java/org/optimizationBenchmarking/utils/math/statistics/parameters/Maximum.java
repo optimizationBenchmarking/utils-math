@@ -20,7 +20,7 @@ public final class Maximum extends StatisticalParameter {
 
   /** create the maximum parameter */
   private Maximum() {
-    super(Maximum.SHORT, Maximum.LONG);
+    super(Maximum.SHORT, Maximum.LONG, true, false);
   }
 
   /** {@inheritDoc} */

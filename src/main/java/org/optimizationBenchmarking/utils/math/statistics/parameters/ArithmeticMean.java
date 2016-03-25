@@ -22,7 +22,7 @@ public final class ArithmeticMean extends StatisticalParameter {
 
   /** create the mean parameter */
   private ArithmeticMean() {
-    super(ArithmeticMean.SHORT, ArithmeticMean.LONG);
+    super(ArithmeticMean.SHORT, ArithmeticMean.LONG, true, false);
   }
 
   /** {@inheritDoc} */
