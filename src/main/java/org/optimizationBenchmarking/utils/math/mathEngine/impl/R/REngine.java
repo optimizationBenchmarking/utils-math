@@ -197,7 +197,8 @@ public final class REngine extends MathEngine {
       index = line.indexOf(' ');
       if ((index <= 0) || (index >= (line.length() - 1))) {
         throw new IllegalStateException((((//
-        "Dimension line of matrix from R Engine " //$NON-NLS-1$
+        "Dimension line of matrix " + variable//$NON-NLS-1$
+            + " read from R Engine " //$NON-NLS-1$
             + this.m_id) + " is '") + line) //$NON-NLS-1$
             + "' invalid: does not contain a space between two numbers.");//$NON-NLS-1$
       }
@@ -245,11 +246,12 @@ public final class REngine extends MathEngine {
       }
       return mb.make();
     } catch (final Throwable error) {
-      throw new IllegalStateException(((((((((((((//
+      throw new IllegalStateException(((((((((((((((//
       "Error while reading the element at row " + //$NON-NLS-1$
           i) + " and column ") + //$NON-NLS-1$
           j) + " of") + m) + 'x') + n + //$NON-NLS-1$
-          " matrix from R Engine ") //$NON-NLS-1$
+          " matrix ") + variable) + //$NON-NLS-1$
+          " from R Engine ") //$NON-NLS-1$
           + this.m_id) + ", encountered line '")//$NON-NLS-1$
           + line) + '\'') + '.'), error);
     }
@@ -276,15 +278,17 @@ public final class REngine extends MathEngine {
       out.newLine();
       out.flush();
     } catch (final Throwable error) {
-      throw new IllegalStateException((((//
-      "Error while writing request to read scalar value from R Engine ") //$NON-NLS-1$
+      throw new IllegalStateException(((((//
+      "Error while writing request to read scalar value "//$NON-NLS-1$
+          + variable) + "from R Engine ") //$NON-NLS-1$
           + this.m_id) + '.'), error);
     }
     try {
       return this.__nextLine();
     } catch (final Throwable error) {
-      throw new IllegalStateException((((//
-      "Error while reading scalar value from R Engine ") //$NON-NLS-1$
+      throw new IllegalStateException(((((//
+      "Error while reading scalar value "//$NON-NLS-1$
+          + variable) + " from R Engine ") //$NON-NLS-1$
           + this.m_id) + '.'), error);
     }
   }
@@ -313,8 +317,9 @@ public final class REngine extends MathEngine {
     try {
       return LooseDoubleParser.INSTANCE.parseDouble(token);
     } catch (final Throwable error) {
-      throw new IllegalStateException(((((((//
-      "Error while reading double from R Engine ") //$NON-NLS-1$
+      throw new IllegalStateException((((((((//
+      "Error while reading double " + variable)//$NON-NLS-1$
+          + " from R Engine ") //$NON-NLS-1$
           + this.m_id) + ": encountered text '") + //$NON-NLS-1$
           token) + '\'') + '.'), error);
     }
@@ -340,8 +345,9 @@ public final class REngine extends MathEngine {
       try {
         return ((long) (LooseDoubleParser.INSTANCE.parseDouble(token)));
       } catch (final Throwable error2) {
-        throw new IllegalStateException(((((((//
-        "Error while reading long from R Engine ") //$NON-NLS-1$
+        throw new IllegalStateException((((((((//
+        "Error while reading long "//$NON-NLS-1$
+            + variable) + " from R Engine ") //$NON-NLS-1$
             + this.m_id) + ": encountered text '") + //$NON-NLS-1$
             token) + '\'') + '.'), error);
       }
@@ -363,8 +369,9 @@ public final class REngine extends MathEngine {
     try {
       return LooseBooleanParser.INSTANCE.parseBoolean(token);
     } catch (final Throwable error) {
-      throw new IllegalStateException(((((((//
-      "Error while reading boolean from R Engine ") //$NON-NLS-1$
+      throw new IllegalStateException((((((((//
+      "Error while reading boolean " + //$NON-NLS-1$
+          variable) + " from R Engine ") //$NON-NLS-1$
           + this.m_id) + ": encountered text '") + //$NON-NLS-1$
           token) + '\'') + '.'), error);
     }
@@ -379,11 +386,11 @@ public final class REngine extends MathEngine {
     if ((res.n() == 1) || (res.m() == 1)) {
       return res;
     }
-    throw new IllegalStateException(//
-        "Error while communicating with R Engine " //$NON-NLS-1$
-            + this.m_id + //
-            " Vector must have either one column or one row, but " //$NON-NLS-1$
-            + res + " has not.");//$NON-NLS-1$
+    throw new IllegalStateException((((((((//
+    "Error reading vector " + variable) //$NON-NLS-1$
+        + " from R Engine") + this.m_id) + //$NON-NLS-1$
+        ": vector must have either one column or one row, but we encountered a") //$NON-NLS-1$
+        + res.m()) + 'x') + res.n()) + " matrix instead.");//$NON-NLS-1$
   }
 
   /** {@inheritDoc} */
@@ -451,9 +458,10 @@ public final class REngine extends MathEngine {
           value ? REngine.TRUE : REngine.FALSE);
       this.__assignmentEnd(variable);
     } catch (final Throwable error) {
-      throw new IllegalStateException(((((//
-      "Error while sending boolean value " //$NON-NLS-1$
-          + variable) + " to R Engine ") //$NON-NLS-1$
+      throw new IllegalStateException(((((((//
+      "Error while sending boolean " //$NON-NLS-1$
+          + variable) + " with value ") + //$NON-NLS-1$
+          value) + " to R Engine ") //$NON-NLS-1$
           + this.m_id) + '.'), error);
     }
   }
@@ -467,9 +475,10 @@ public final class REngine extends MathEngine {
       REngine.__writeLong(value, this.m_process.getStdIn());
       this.__assignmentEnd(variable);
     } catch (final Throwable error) {
-      throw new IllegalStateException(((((//
-      "Error while sending long value " //$NON-NLS-1$
-          + variable) + " to R Engine. ") //$NON-NLS-1$
+      throw new IllegalStateException(((((((//
+      "Error while sending long " //$NON-NLS-1$
+          + variable) + " with value ")//$NON-NLS-1$
+          + value) + " to R Engine. ") //$NON-NLS-1$
           + this.m_id) + '.'), error);
     }
   }
@@ -532,9 +541,10 @@ public final class REngine extends MathEngine {
       REngine.__writeDouble(value, this.m_process.getStdIn());
       this.__assignmentEnd(variable);
     } catch (final Throwable error) {
-      throw new IllegalStateException(((((//
-      "Error while sending double value " //$NON-NLS-1$
-          + variable) + " to R Engine ") //$NON-NLS-1$
+      throw new IllegalStateException(((((((//
+      "Error while sending double " //$NON-NLS-1$
+          + variable) + " with value ") + //$NON-NLS-1$
+          value) + " to R Engine ") //$NON-NLS-1$
           + this.m_id) + '.'), error);
     }
   }
@@ -560,15 +570,17 @@ public final class REngine extends MathEngine {
     boolean first;
 
     if (value == null) {
-      throw new IllegalArgumentException(((//
-      "Cannot load send null matrix to R Engine ") //$NON-NLS-1$
+      throw new IllegalArgumentException((((//
+      "Cannot load send null matrix " + variable) + //$NON-NLS-1$
+          " to R Engine ") //$NON-NLS-1$
           + this.m_id) + '.');
     }
     m = value.m();
     n = value.n();
     if (isVector && ((m != 1) && (n != 1))) {
-      throw new IllegalArgumentException((((((//
-      "A vector to be sent to the R Engine " //$NON-NLS-1$
+      throw new IllegalArgumentException((((((((//
+      "A vector " + variable) + //$NON-NLS-1$
+          " to be sent to the R Engine ") //$NON-NLS-1$
           + this.m_id) + //
           " must be a matrix with either only one row or only one column, but you passed in a ")//$NON-NLS-1$
           + m) + 'x') + n) + " matrix.");//$NON-NLS-1$
@@ -622,10 +634,11 @@ public final class REngine extends MathEngine {
       this.__assignmentEnd(variable);
 
     } catch (final Throwable error) {
-      throw new IllegalStateException(((((((((((//
+      throw new IllegalStateException(((((((((((((//
       "Error appeared while while sending "//$NON-NLS-1$
           + m) + 'x') + n) + //
-          " matrix to R Engine ") //$NON-NLS-1$
+          " matrix ") + variable) + //$NON-NLS-1$
+          " to R Engine ") //$NON-NLS-1$
           + this.m_id) + " at row ") + i) //$NON-NLS-1$
           + " and column ") + j) + '.'), error);//$NON-NLS-1$
     }
@@ -648,7 +661,7 @@ public final class REngine extends MathEngine {
   @Override
   public final void execute(final Iterable<String> script) {
     final BufferedWriter bw;
-    String last;
+    String last, errorStr;
     int lineCount;
 
     bw = this.m_process.getStdIn();
@@ -664,19 +677,13 @@ public final class REngine extends MathEngine {
       bw.newLine();
       bw.flush();
     } catch (final Throwable error) {
-      if (last == null) {
-        throw new IllegalStateException((((((//
-        "Error while execuring script in R Engine ") //$NON-NLS-1$
-            + this.m_id) + //
-            " around script line ") + lineCount) //$NON-NLS-1$
-            + '.'), error);
-      }
-      throw new IllegalStateException((((((//
-      "Error while execuring script in R Engine " //$NON-NLS-1$
-          + this.m_id + //
-          " around script line ") + lineCount) //$NON-NLS-1$
-          + ", last transmitted line was '" //$NON-NLS-1$
-          + last) + '\'') + '.'), error);
+      errorStr = (((("Error while execuring script in R Engine ") //$NON-NLS-1$
+          + this.m_id) + " around script line ") + lineCount); //$NON-NLS-1$
+      throw new IllegalStateException(//
+          ((last == null) ? (errorStr + '.')
+              : ((((errorStr + ", last transmitted line was '") //$NON-NLS-1$
+                  + last) + '\'') + '.')),
+          error);
     }
   }
 }
