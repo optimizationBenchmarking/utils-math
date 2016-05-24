@@ -173,13 +173,14 @@ public final class REngine extends MathEngine {
   public IMatrix getMatrix(final String variable) {
     final BufferedWriter out;
     final BufferedReader in;
-    final int m, n;
+    int m, n;
     String line, token;
     MatrixBuilder mb;
     int i, j, index, last;
 
     this.__checkState();
     line = null;
+    i = j = m = n = -1;
     try {
       out = this.m_process.getStdIn();
       out.write(REngine.PRINT_FUNCTION_NAME);
@@ -206,12 +207,12 @@ public final class REngine extends MathEngine {
       mb.setN(n);
       in = this.m_process.getStdOut();
 
-      for (i = m; (--i) >= 0;) {
+      for (i = 0; i < m; i++) {
         line = in.readLine();
         index = -1;
-        iterateTokens: for (j = n; (--j) >= 0;) {
+        iterateTokens: for (j = 0; j < n; j++) {
           last = (index + 1);
-          if (j <= 0) {
+          if (j >= (n - 1)) {
             index = line.length();
           } else {
             index = line.indexOf(' ', last);
@@ -244,13 +245,11 @@ public final class REngine extends MathEngine {
       }
       return mb.make();
     } catch (final Throwable error) {
-      if (line == null) {
-        throw new IllegalStateException((((//
-        "Error while reading matrix from R Engine ") //$NON-NLS-1$
-            + this.m_id) + '.'), error);
-      }
-      throw new IllegalStateException(((((((//
-      "Error while reading matrix from R Engine ") //$NON-NLS-1$
+      throw new IllegalStateException(((((((((((((//
+      "Error while reading the element at row " + //$NON-NLS-1$
+          i) + " and column ") + //$NON-NLS-1$
+          j) + " of") + m) + 'x') + n + //$NON-NLS-1$
+          " matrix from R Engine ") //$NON-NLS-1$
           + this.m_id) + ", encountered line '")//$NON-NLS-1$
           + line) + '\'') + '.'), error);
     }
@@ -276,6 +275,12 @@ public final class REngine extends MathEngine {
       out.write(");cat('\n');"); //$NON-NLS-1$
       out.newLine();
       out.flush();
+    } catch (final Throwable error) {
+      throw new IllegalStateException((((//
+      "Error while writing request to read scalar value from R Engine ") //$NON-NLS-1$
+          + this.m_id) + '.'), error);
+    }
+    try {
       return this.__nextLine();
     } catch (final Throwable error) {
       throw new IllegalStateException((((//
@@ -570,6 +575,7 @@ public final class REngine extends MathEngine {
     }
 
     out = this.m_process.getStdIn();
+    i = j = (-1);
     try {
       this.__assignmentBegin(variable);
       out.write("matrix(c("); //$NON-NLS-1$
@@ -616,10 +622,12 @@ public final class REngine extends MathEngine {
       this.__assignmentEnd(variable);
 
     } catch (final Throwable error) {
-      throw new IllegalStateException(((((((//
-      "Error while sending " + m) + 'x') + n) + //$NON-NLS-1$
-          " matrix  to R Engine ") //$NON-NLS-1$
-          + this.m_id) + '.'), error);
+      throw new IllegalStateException(((((((((((//
+      "Error appeared while while sending "//$NON-NLS-1$
+          + m) + 'x') + n) + //
+          " matrix to R Engine ") //$NON-NLS-1$
+          + this.m_id) + " at row ") + i) //$NON-NLS-1$
+          + " and column ") + j) + '.'), error);//$NON-NLS-1$
     }
   }
 
@@ -641,11 +649,14 @@ public final class REngine extends MathEngine {
   public final void execute(final Iterable<String> script) {
     final BufferedWriter bw;
     String last;
+    int lineCount;
 
     bw = this.m_process.getStdIn();
     last = null;
+    lineCount = 0;
     try {
       bw.newLine();
+      ++lineCount;
       for (final String line : script) {
         bw.write(last = line);
         bw.newLine();
@@ -654,14 +665,17 @@ public final class REngine extends MathEngine {
       bw.flush();
     } catch (final Throwable error) {
       if (last == null) {
-        throw new IllegalStateException((((//
+        throw new IllegalStateException((((((//
         "Error while execuring script in R Engine ") //$NON-NLS-1$
-            + this.m_id) + '.'), error);
+            + this.m_id) + //
+            " around script line ") + lineCount) //$NON-NLS-1$
+            + '.'), error);
       }
-      throw new IllegalStateException((((//
+      throw new IllegalStateException((((((//
       "Error while execuring script in R Engine " //$NON-NLS-1$
           + this.m_id + //
-          ", last transmitted line was '" //$NON-NLS-1$
+          " around script line ") + lineCount) //$NON-NLS-1$
+          + ", last transmitted line was '" //$NON-NLS-1$
           + last) + '\'') + '.'), error);
     }
   }
