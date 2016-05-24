@@ -244,6 +244,11 @@ public final class REngine extends MathEngine {
       }
       return mb.make();
     } catch (final Throwable error) {
+      if (line == null) {
+        throw new IllegalStateException((((//
+        "Error while reading matrix from R Engine ") //$NON-NLS-1$
+            + this.m_id) + '.'), error);
+      }
       throw new IllegalStateException(((((((//
       "Error while reading matrix from R Engine ") //$NON-NLS-1$
           + this.m_id) + ", encountered line '")//$NON-NLS-1$
@@ -638,7 +643,7 @@ public final class REngine extends MathEngine {
     String last;
 
     bw = this.m_process.getStdIn();
-    last = ""; //$NON-NLS-1$
+    last = null;
     try {
       bw.newLine();
       for (final String line : script) {
@@ -648,10 +653,16 @@ public final class REngine extends MathEngine {
       bw.newLine();
       bw.flush();
     } catch (final Throwable error) {
-      throw new IllegalStateException(((((//
-      "Error while execuring script in R Engine, last transmitted line was '" //$NON-NLS-1$
-          + last) + "' in R Engine ") //$NON-NLS-1$
-          + this.m_id) + '.'), error);
+      if (last == null) {
+        throw new IllegalStateException((((//
+        "Error while execuring script in R Engine ") //$NON-NLS-1$
+            + this.m_id) + '.'), error);
+      }
+      throw new IllegalStateException((((//
+      "Error while execuring script in R Engine " //$NON-NLS-1$
+          + this.m_id + //
+          ", last transmitted line was '" //$NON-NLS-1$
+          + last) + '\'') + '.'), error);
     }
   }
 }
