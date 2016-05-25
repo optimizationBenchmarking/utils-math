@@ -154,7 +154,7 @@ public final class REngine extends MathEngine {
       line = reader.readLine();
       if (line == null) {
         throw new IOException(((//
-        "Prematurely Reached end of output stream of the REngine ") //$NON-NLS-1$
+        "Prematurely reached end of output stream of the REngine ") //$NON-NLS-1$
             + this.m_id) + '.');
       }
 
@@ -170,7 +170,7 @@ public final class REngine extends MathEngine {
   /** {@inheritDoc} */
   @SuppressWarnings("resource")
   @Override
-  public IMatrix getMatrix(final String variable) {
+  public final IMatrix getMatrix(final String variable) {
     final BufferedWriter out;
     final BufferedReader in;
     int m, n;
@@ -571,7 +571,7 @@ public final class REngine extends MathEngine {
 
     if (value == null) {
       throw new IllegalArgumentException((((//
-      "Cannot load send null matrix " + variable) + //$NON-NLS-1$
+      "Cannot send null matrix " + variable) + //$NON-NLS-1$
           " to R Engine ") //$NON-NLS-1$
           + this.m_id) + '.');
     }
@@ -601,7 +601,7 @@ public final class REngine extends MathEngine {
               first = false;
             } else {
               out.write(',');
-              if (((++q) % 20) == 0) {
+              if (((++q) % 17) == 0) {
                 out.newLine();
               }
             }
@@ -615,7 +615,7 @@ public final class REngine extends MathEngine {
               first = false;
             } else {
               out.write(',');
-              if (((++q) % 20) == 0) {
+              if (((++q) % 17) == 0) {
                 out.newLine();
               }
             }
@@ -632,7 +632,6 @@ public final class REngine extends MathEngine {
       out.write(REngine.FALSE);
       out.write(')');
       this.__assignmentEnd(variable);
-
     } catch (final Throwable error) {
       throw new IllegalStateException(((((((((((((//
       "Error appeared while while sending "//$NON-NLS-1$
