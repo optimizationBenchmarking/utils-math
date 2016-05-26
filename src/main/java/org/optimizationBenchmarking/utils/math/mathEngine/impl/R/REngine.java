@@ -21,18 +21,6 @@ import org.optimizationBenchmarking.utils.tools.impl.process.TextProcess;
 /** The {@code R} Engine */
 public final class REngine extends MathEngine {
 
-  /** the engine ID */
-  private static final AtomicLong ENGINE_ID = new AtomicLong();
-
-  /** the instance of {@code R} */
-  private TextProcess m_process;
-
-  /** the id of the engine */
-  private final String m_id;
-
-  /** have we been closed? */
-  private boolean m_closed;
-
   /** the {@code false} */
   private static final String FALSE = "FALSE"; //$NON-NLS-1$
 
@@ -50,6 +38,18 @@ public final class REngine extends MathEngine {
 
   /** the function to print a matrix */
   private static final String PRINT_FUNCTION_NAME = "safePrintMatrix";//$NON-NLS-1$
+
+  /** the engine ID */
+  private static final AtomicLong ENGINE_ID = new AtomicLong();
+
+  /** the instance of {@code R} */
+  private TextProcess m_process;
+
+  /** the id of the engine */
+  private final String m_id;
+
+  /** have we been closed? */
+  private boolean m_closed;
 
   /**
    * create
