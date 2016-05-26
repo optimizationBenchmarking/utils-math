@@ -274,7 +274,7 @@ public final class REngine extends MathEngine {
       out = this.m_process.getStdIn();
       out.write("cat("); //$NON-NLS-1$
       out.write(variable);
-      out.write(");cat('\n');"); //$NON-NLS-1$
+      out.write(");cat('\\n');"); //$NON-NLS-1$
       out.newLine();
       out.flush();
     } catch (final Throwable error) {
