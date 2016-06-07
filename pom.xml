@@ -45,7 +45,7 @@
 		<junit.version>4.11</junit.version>
 		<utils-base.version>${project.version}</utils-base.version>
 		<commons.math.majorVersion>3</commons.math.majorVersion>
-		<commons.math.version>${commons.math.majorVersion}.5</commons.math.version>
+		<commons.math.version>${commons.math.majorVersion}.6.1</commons.math.version>
 	</properties>
 
 	<licenses>
