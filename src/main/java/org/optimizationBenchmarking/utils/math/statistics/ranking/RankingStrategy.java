@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.optimizationBenchmarking.utils.config.Configuration;
 import org.optimizationBenchmarking.utils.document.spec.ISemanticComponent;
 import org.optimizationBenchmarking.utils.math.matrix.IMatrix;
+import org.optimizationBenchmarking.utils.math.statistics.aggregate.IAggregate;
 import org.optimizationBenchmarking.utils.text.ETextCase;
 import org.optimizationBenchmarking.utils.text.TextUtils;
 import org.optimizationBenchmarking.utils.text.textOutput.ITextOutput;
@@ -68,6 +69,34 @@ public final class RankingStrategy implements ISemanticComponent {
   }
 
   /**
+   * perform the ranking after the ranked elements have been created
+   *
+   * @param elements
+   *          the ranked elements
+   */
+  private final void __rank(final _RankedElement[] elements) {
+    Arrays.sort(elements);
+    this.m_ties._rank(elements);
+    this.m_nan._refine(elements);
+  }
+
+  /**
+   * perform the ranking after the ranked elements have been created
+   *
+   * @param elements
+   *          the ranked elements
+   * @param dest
+   *          the destination {@code double} array
+   */
+  private final void __rank(final _RankedElement[] elements,
+      final double[] dest) {
+    this.__rank(elements);
+    for (final _RankedElement e : elements) {
+      dest[e.m_index] = e.m_rank;
+    }
+  }
+
+  /**
    * Rank all elements in the {@code data} array and store the resulting
    * ranks in the destination array.
    *
@@ -83,15 +112,10 @@ public final class RankingStrategy implements ISemanticComponent {
     elements = new _RankedElement[data.length];
     i = 0;
     for (final double d : data) {
-      elements[i] = this.m_nan._element(i, 0, d);
+      elements[i] = this.m_nan._element(i, d);
       ++i;
     }
-    Arrays.sort(elements);
-    this.m_ties._rank(elements);
-    this.m_nan._refine(elements);
-    for (final _RankedElement e : elements) {
-      dest[e.m_index1] = e.m_rank;
-    }
+    this.__rank(elements, dest);
   }
 
   /**
@@ -110,15 +134,10 @@ public final class RankingStrategy implements ISemanticComponent {
     elements = new _RankedElement[data.length];
     i = 0;
     for (final double d : data) {
-      elements[i] = this.m_nan._element(i, 0, d);
+      elements[i] = this.m_nan._element(i, d);
       ++i;
     }
-    Arrays.sort(elements);
-    this.m_ties._rank(elements);
-    this.m_nan._refine(elements);
-    for (final _RankedElement e : elements) {
-      dest[e.m_index1] = e.m_rank;
-    }
+    this.__rank(elements, dest);
   }
 
   /**
@@ -139,14 +158,61 @@ public final class RankingStrategy implements ISemanticComponent {
 
     elements = new _RankedElement[matrix.n()];
     for (i = elements.length; (--i) >= 0;) {
-      elements[i] = this.m_nan._element(i, 0, matrix.getDouble(row, i));
+      elements[i] = this.m_nan._element(i, matrix.getDouble(row, i));
     }
-    Arrays.sort(elements);
-    this.m_ties._rank(elements);
-    this.m_nan._refine(elements);
+    this.__rank(elements, dest);
+  }
+
+  /**
+   * perform the ranking after the ranked elements have been created
+   *
+   * @param elements
+   *          the ranked elements
+   * @param dest
+   *          the destination aggregates
+   */
+  private final void __rank(final _RankedElement[] elements,
+      final IAggregate[] dest) {
+    this.__rank(elements);
     for (final _RankedElement e : elements) {
-      dest[e.m_index1] = e.m_rank;
+      dest[e.m_index].append(e.m_rank);
     }
+  }
+
+  /**
+   * Rank all elements in the {@code data} arrays and append the ranks to
+   * the corresponding destination aggregates
+   *
+   * @param data
+   *          the data array, containing the elements to be ranked
+   * @param dest
+   *          the destination aggregates: The aggregate at index {@code i}
+   *          will receive the ranks of the elements in the
+   *          {@code double[]} array in {@code data} at index {@code i}
+   */
+  public final void rank(final double[][] data, final IAggregate[] dest) {
+    final _RankedElement[] elements;
+    int index, size, arrayIndex;
+
+    if (dest.length != data.length) {
+      throw new IllegalArgumentException(//
+          "Destination aggregate array must have same length as data array for ranking."); //$NON-NLS-1$
+    }
+
+    size = 0;
+    for (final double[] array : data) {
+      size += array.length;
+    }
+
+    elements = new _RankedElement[size];
+    arrayIndex = index = (-1);
+    for (final double[] array : data) {
+      ++arrayIndex;
+      for (final double d : array) {
+        elements[++index] = this.m_nan._element(arrayIndex, d);
+      }
+    }
+    this.__rank(elements, dest);
   }
 
   /**

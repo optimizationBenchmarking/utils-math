@@ -213,34 +213,28 @@ public enum ENaNStrategy {
   /**
    * Get the ranked element for a {@code long} value
    *
-   * @param index1
-   *          the first index of the original value
-   * @param index2
-   *          the second index of the original value
+   * @param index
+   *          the index of the original value
    * @param value
    *          the value
    * @return the ranked element
    */
-  final _RankedElement _element(final int index1, final int index2,
-      final long value) {
-    return new _RankedLong(index1, index2, value);
+  final _RankedElement _element(final int index, final long value) {
+    return new _RankedLong(index, value);
   }
 
   /**
    * Get the ranked element for a {@code double} value
    *
-   * @param index1
-   *          the first index of the original value
-   * @param index2
-   *          the second index of the original value
+   * @param index
+   *          the index of the original value
    * @param value
    *          the value
    * @return the ranked element
    */
-  final _RankedElement _element(final int index1, final int index2,
-      final double value) {
+  final _RankedElement _element(final int index, final double value) {
     if (NumericalTypes.isLong(value)) {
-      return this._element(index1, index2, ((long) value));
+      return this._element(index, ((long) value));
     }
     if (value != value) {
       if (this == ENaNStrategy.ERROR) {
@@ -248,9 +242,9 @@ public enum ENaNStrategy {
             "NaN not permitted with NaN Strategy " //$NON-NLS-1$
                 + this);
       }
-      return new _RankedNaN(index1, index2, this);
+      return new _RankedNaN(index, this);
     }
-    return new _RankedDouble(index1, index2, value);
+    return new _RankedDouble(index, value);
   }
 
   /**

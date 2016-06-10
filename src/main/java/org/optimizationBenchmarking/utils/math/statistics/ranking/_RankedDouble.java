@@ -11,15 +11,13 @@ final class _RankedDouble extends _RankedElement {
   /**
    * create the ranked {@code double}
    *
-   * @param index1
+   * @param index
    *          the first index of the original value
-   * @param index2
-   *          the second index of the original value
    * @param value
    *          the {@code double} value
    */
-  _RankedDouble(final int index1, final int index2, final double value) {
-    super(index1, index2);
+  _RankedDouble(final int index, final double value) {
+    super(index);
     this.m_value = value;
   }
 

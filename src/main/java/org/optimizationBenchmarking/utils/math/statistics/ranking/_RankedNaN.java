@@ -9,16 +9,13 @@ final class _RankedNaN extends _RankedElement {
   /**
    * create the ranked {@code long}
    *
-   * @param index1
-   *          the first index of the original value
-   * @param index2
-   *          the second index of the original value
+   * @param index
+   *          the index of the original value
    * @param strategy
    *          the strategy
    */
-  _RankedNaN(final int index1, final int index2,
-      final ENaNStrategy strategy) {
-    super(index1, index2);
+  _RankedNaN(final int index, final ENaNStrategy strategy) {
+    super(index);
     this.m_strategy = strategy;
   }
 
