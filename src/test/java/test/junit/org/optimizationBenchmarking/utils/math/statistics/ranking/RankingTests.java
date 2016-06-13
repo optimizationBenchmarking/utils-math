@@ -102,6 +102,48 @@ public class RankingTests {
 
   };
 
+  /** the double cases */
+  public static final _MultiDoubleCase[] MULTI_CASES = { //
+      //
+      new _MultiDoubleCase(//
+          new RankingStrategy(ENaNStrategy.ERROR, ETieStrategy.MINIMUM), //
+          new double[][] { { 1 }, { 2 }, { 3 }, { 4 }, { 4 }, { 5 } }, //
+          new double[] { 1, 2, 3, 4, 4, 6 }), //
+      //
+      //
+      new _MultiDoubleCase(//
+          new RankingStrategy(ENaNStrategy.ERROR,
+              ETieStrategy.MINIMUM_TIGHT), //
+          new double[][] { { 1 }, { 2 }, { 3 }, { 4 }, { 4 }, { 5 } }, //
+          new double[] { 1, 2, 3, 4, 4, 5 }), //
+      //
+      //
+      new _MultiDoubleCase(//
+          new RankingStrategy(ENaNStrategy.ERROR, ETieStrategy.AVERAGE), //
+          new double[][] { { 1 }, { 2 }, { 3 }, { 4 }, { 4 }, { 5 } }, //
+          new double[] { 1, 2, 3, 4.5, 4.5, 6 }), //
+      //
+      new _MultiDoubleCase(//
+          new RankingStrategy(ENaNStrategy.ERROR, ETieStrategy.MINIMUM), //
+          new double[][] { { 1, 4, 4 }, { 2 }, { 3 }, { 4 }, { 4 },
+              { 5 } }, //
+          new double[] { 3, 2, 3, 4, 4, 8 }), //
+      //
+      new _MultiDoubleCase(//
+          new RankingStrategy(ENaNStrategy.ERROR,
+              ETieStrategy.MINIMUM_TIGHT), //
+          new double[][] { { 1, 4, 4 }, { 2 }, { 3 }, { 4 }, { 4 },
+              { 5 } }, //
+          new double[] { 3, 2, 3, 4, 4, 5 }), //
+      //
+      new _MultiDoubleCase(//
+          new RankingStrategy(ENaNStrategy.ERROR, ETieStrategy.AVERAGE), //
+          new double[][] { { 1, 4, 4 }, { 2 }, { 3 }, { 4 }, { 4 },
+              { 5 } }, //
+          new double[] { 4, 2, 3, 5.5, 5.5, 8 }), //
+      //
+  };
+
   /** Test the {@code double} cases */
   @Test(timeout = 3600000)
   public void testDoubleCases() {
@@ -119,6 +161,16 @@ public class RankingTests {
     rand = new Random();
     for (final _DoubleCase cas : RankingTests.CASES) {
       cas._assertLongs(rand);
+    }
+  }
+
+  /** Test the {@code double} cases */
+  @Test(timeout = 3600000)
+  public void testMultiDoubleCases() {
+    final Random rand;
+    rand = new Random();
+    for (final _MultiDoubleCase cas : RankingTests.MULTI_CASES) {
+      cas._assertDoubles(rand);
     }
   }
 
