@@ -26,8 +26,8 @@ public final class Quantile extends StatisticalParameter {
    *          the quantile name
    */
   private Quantile(final double p, final String qString) {
-    super((Quantile.SHORT + qString), (qString + Quantile.LONG), true,
-        false);
+    super(Quantile.__createShortName(qString), (qString + Quantile.LONG),
+        true, false);
 
     if ((p < 0d) || (p > 1d) || (p != p)) {
       throw new IllegalArgumentException(//
@@ -44,6 +44,29 @@ public final class Quantile extends StatisticalParameter {
    */
   private Quantile(final double p) {
     this(p,
+        SimpleNumberAppender.INSTANCE.toString(p, ETextCase.IN_SENTENCE));
+  }
+
+  /**
+   * create the quantile name
+   *
+   * @param p
+   *          the quantile string
+   * @return the return value
+   */
+  private static final String __createShortName(final String p) {
+    return (Quantile.SHORT + p);
+  }
+
+  /**
+   * create the short name
+   *
+   * @param p
+   *          the p-value
+   * @return the short name
+   */
+  public static final String createShortName(final double p) {
+    return Quantile.__createShortName(
         SimpleNumberAppender.INSTANCE.toString(p, ETextCase.IN_SENTENCE));
   }
 
