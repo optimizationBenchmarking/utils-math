@@ -21,7 +21,7 @@ public final class QuantileAggregate extends _QuantileBasedAggregate {
    * @param store
    *          the quantile data store
    */
-  QuantileAggregate(final double p, final QuantileDataStore store) {
+  public QuantileAggregate(final double p, final QuantileDataStore store) {
     super(store);
 
     if ((p >= 0d) && (p <= 1d)) {

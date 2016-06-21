@@ -29,7 +29,7 @@ public final class InterQuantileRangeAggregate
    * @param store
    *          the quantile data store
    */
-  InterQuantileRangeAggregate(final double pLow, final double pUp,
+  public InterQuantileRangeAggregate(final double pLow, final double pUp,
       final QuantileDataStore store) {
     super(store);
 
