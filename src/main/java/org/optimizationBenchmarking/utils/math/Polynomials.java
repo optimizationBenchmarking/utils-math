@@ -30,6 +30,20 @@ public final class Polynomials {
   }
 
   /**
+   * Compute the gradient at the given position {@code x} of a constant
+   * function.
+   *
+   * @param x
+   *          the {@code x} coordinate
+   * @param gradient
+   *          the gradient destination array (of length 1)
+   */
+  public static final void degree0Gradient(final double x,
+      final double[] gradient) {
+    gradient[0] = 1d;// a
+  }
+
+  /**
    * Find the two coefficients of a polynomial of degree 1, i.e.,
    * {@code y = f(x) = a0 + a1*x}.
    *
@@ -90,6 +104,21 @@ public final class Polynomials {
   public static final double degree1Compute(final double x0,
       final double a0, final double a1) {
     return (a0 + (a1 * x0)); //
+  }
+
+  /**
+   * Compute the gradient at the given position {@code x} of a linear
+   * polynome.
+   *
+   * @param x
+   *          the {@code x} coordinate
+   * @param gradient
+   *          the gradient destination array (of length 2)
+   */
+  public static final void degree1Gradient(final double x,
+      final double[] gradient) {
+    gradient[0] = 1d;// a
+    gradient[1] = x;// b
   }
 
   /**
@@ -259,6 +288,22 @@ public final class Polynomials {
   public static final double degree2Compute(final double x0,
       final double a0, final double a1, final double a2) {
     return AddN.destructiveSum(a0, (a1 * x0), (a2 * x0 * x0));
+  }
+
+  /**
+   * Compute the gradient at the given position {@code x} of a quadratic
+   * function.
+   *
+   * @param x
+   *          the {@code x} coordinate
+   * @param gradient
+   *          the gradient destination array (of length 3)
+   */
+  public static final void degree2Gradient(final double x,
+      final double[] gradient) {
+    gradient[0] = 1d;// a
+    gradient[1] = x;// b
+    gradient[2] = x * x;// c
   }
 
   /**
