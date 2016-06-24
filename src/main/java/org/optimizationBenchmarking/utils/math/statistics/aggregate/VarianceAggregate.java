@@ -17,7 +17,7 @@ public final class VarianceAggregate extends MeanBasedAggregate {
   private static final long serialVersionUID = 1L;
 
   /** the internal aggregate for computing the mean */
-  private final ArithmeticMeanAggregate m_mean;
+  final ArithmeticMeanAggregate m_mean;
 
   /** the stable sum for the second moment */
   private final StableSum m_M2;

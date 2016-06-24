@@ -43,6 +43,12 @@ public final class StatisticalParameterParser
       case ArithmeticMean.OTHER: {
         return ArithmeticMean.INSTANCE;
       }
+      case CoefficientOfVariation.SHORT_CMP:
+      case CoefficientOfVariation.LONG:
+      case CoefficientOfVariation.OTHER_SHORT:
+      case CoefficientOfVariation.OTHER_LONG: {
+        return CoefficientOfVariation.INSTANCE;
+      }
       case InterQuartileRange.SHORT_CMP:
       case InterQuartileRange.LONG: {
         return InterQuartileRange.INSTANCE;

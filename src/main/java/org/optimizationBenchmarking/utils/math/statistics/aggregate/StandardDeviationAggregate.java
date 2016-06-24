@@ -13,7 +13,7 @@ public final class StandardDeviationAggregate extends MeanBasedAggregate {
   private static final long serialVersionUID = 1L;
 
   /** the internal aggregate */
-  private final VarianceAggregate m_variance;
+  final VarianceAggregate m_variance;
 
   /** create */
   public StandardDeviationAggregate() {
