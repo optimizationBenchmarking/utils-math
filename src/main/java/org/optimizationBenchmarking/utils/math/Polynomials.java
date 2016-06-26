@@ -16,17 +16,16 @@ public final class Polynomials {
    *          the {@code y}-coordinate of the first point
    * @param dest
    *          the destination array
-   * @return {@code true} if there is a finite, exact solution,
-   *         {@code false} otherwise
+   * @return the error of the fitting
    */
-  public static final boolean degree0FindCoefficients(final double x0,
+  public static final double degree0FindCoefficients(final double x0,
       final double y0, final double[] dest) {
     if (MathUtils.isFinite(y0)) {
-      dest[0] = y0;
-      return true;
+      dest[0] = ((y0 == 0d) ? 0d : y0);
+      return 0d;
     }
     dest[0] = Double.NaN;
-    return false;
+    return Double.POSITIVE_INFINITY;
   }
 
   /**
@@ -57,10 +56,9 @@ public final class Polynomials {
    *          the {@code y}-coordinate of the second point
    * @param dest
    *          the destination array
-   * @return {@code true} if there is a finite, exact solution,
-   *         {@code false} otherwise
+   * @return the error of the fitting
    */
-  public static final boolean degree1FindCoefficients(final double x0,
+  public static final double degree1FindCoefficients(final double x0,
       final double y0, final double x1, final double y1,
       final double[] dest) {
     double bestError;
@@ -69,25 +67,26 @@ public final class Polynomials {
 
       if (x0 == x1) {
         if (y0 == y1) {
-          if (Polynomials.degree0FindCoefficients(x0, y0, dest)) {
+          bestError = Polynomials.degree0FindCoefficients(x0, y0, dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
             dest[1] = 0d;
-            return true;
+            return bestError;
           }
         }
         break compute;
       }
 
-      bestError = Polynomials.__degree1GetCoefficients(x0, y0, x1, y1,
-          dest, Double.POSITIVE_INFINITY);
-      if (MathUtils.isFinite(//
-          Polynomials.__degree1GetCoefficients(x1, y1, x0, y0, dest,
-              bestError))) {
-        return true;
+      bestError = Polynomials.__degree1GetCoefficients(x1, y1, x0, y0,
+          dest, //
+          Polynomials.__degree1GetCoefficients(x0, y0, x1, y1, //
+              dest, Double.POSITIVE_INFINITY));
+      if (bestError < Double.POSITIVE_INFINITY) {
+        return bestError;
       }
     }
 
     dest[0] = dest[1] = Double.NaN;
-    return false;
+    return Double.POSITIVE_INFINITY;
   }
 
   /**
@@ -141,8 +140,11 @@ public final class Polynomials {
   private static final double __degree1GetErrorForCoefficients(
       final double x0, final double y0, final double x1, final double y1,
       final double a0, final double a1) {
-    return Math.abs(AddN.destructiveSum(y0, -a0, -(a1 * x0))) + //
-        Math.abs(AddN.destructiveSum(y1, -a0, -(a1 * x1))); //
+    final double result;
+    result = Math.abs(AddN.destructiveSum(y0, -a0, -(a1 * x0))) + //
+        Math.abs(AddN.destructiveSum(y1, -a0, -(a1 * x1)));
+    return ((result != result) ? Double.POSITIVE_INFINITY
+        : ((result <= 0d) ? 0d : result)); //
   }
 
   /**
@@ -176,24 +178,22 @@ public final class Polynomials {
 
     error1 = Polynomials.__degree1GetErrorForCoefficients(x0, y0, x1, y1,
         a0, a1);
-    if (MathUtils.isFinite(error1)) {
-
+    if (error1 < Double.POSITIVE_INFINITY) {
       if (bestError < Double.POSITIVE_INFINITY) {
         a0t = ((0.5d * a0) + (0.5d * dest[0]));
         a1t = ((0.5d * a1) + (0.5d * dest[1]));
         error2 = Polynomials.__degree1GetErrorForCoefficients(x0, y0, x1,
             y1, a0t, a1t);
-        if (MathUtils.isFinite(error2) && (error2 < bestError)
-            && (error2 < error1)) {
-          dest[0] = a0t;
-          dest[1] = a1t;
+        if ((error2 < bestError) && (error2 < error1)) {
+          dest[0] = ((a0t == 0d) ? 0d : a0t);
+          dest[1] = ((a1t == 0d) ? 0d : a1t);
           return error2;
         }
       }
 
       if (error1 < bestError) {
-        dest[0] = a0;
-        dest[1] = a1;
+        dest[0] = ((a0 == 0d) ? 0d : a0);
+        dest[1] = ((a1 == 0d) ? 0d : a1);
         return error1;
       }
     }
@@ -263,13 +263,16 @@ public final class Polynomials {
       final double x0, final double y0, final double x1, final double y1,
       final double x2, final double y2, final double a0, final double a1,
       final double a2) {
-    return AddN.destructiveSum(//
+    final double result;
+    result = AddN.destructiveSum(//
         Math.abs(
             AddN.destructiveSum(y0, -a0, -(a1 * x0), -(a2 * x0 * x0))), //
         Math.abs(
             AddN.destructiveSum(y1, -a0, -(a1 * x1), -(a2 * x1 * x1))), //
         Math.abs(
             AddN.destructiveSum(y2, -a0, -(a1 * x2), -(a2 * x2 * x2)))); //
+    return ((result != result) ? Double.POSITIVE_INFINITY
+        : ((result <= 0d) ? 0d : result));
   }
 
   /**
@@ -344,25 +347,24 @@ public final class Polynomials {
 
     error1 = Polynomials.__degree2GetErrorForCoefficients(x0, y0, x1, y1,
         x2, y2, a0, a1, a2);
-    if (MathUtils.isFinite(error1)) {
+    if (error1 < Double.POSITIVE_INFINITY) {
       if (bestError < Double.POSITIVE_INFINITY) {
         a0t = ((0.5d * a0) + (0.5d * dest[0]));
         a1t = ((0.5d * a1) + (0.5d * dest[1]));
         a2t = ((0.5d * a2) + (0.5d * dest[2]));
         error2 = Polynomials.__degree2GetErrorForCoefficients(x0, y0, x1,
             y1, x2, y2, a0t, a1t, a2t);
-        if (MathUtils.isFinite(error2) && (error2 < bestError)
-            && (error2 < error1)) {
-          dest[0] = a0t;
-          dest[1] = a1t;
-          dest[2] = a2t;
+        if ((error2 < bestError) && (error2 < error1)) {
+          dest[0] = ((a0t == 0d) ? 0d : a0t);
+          dest[1] = ((a1t == 0d) ? 0d : a1t);
+          dest[2] = ((a2t == 0d) ? 0d : a2t);
           return error2;
         }
       }
       if (error1 < bestError) {
-        dest[0] = a0;
-        dest[1] = a1;
-        dest[2] = a2;
+        dest[0] = ((a0 == 0d) ? 0d : a0);
+        dest[1] = ((a1 == 0d) ? 0d : a1);
+        dest[2] = ((a2 == 0d) ? 0d : a2);
         return error1;
       }
     }
@@ -492,10 +494,9 @@ public final class Polynomials {
    *          the {@code y}-coordinate of the third point
    * @param dest
    *          the destination array
-   * @return {@code true} if there is a finite, exact solution,
-   *         {@code false} otherwise
+   * @return the error of the fitting
    */
-  public static final boolean degree2FindCoefficients(final double x0,
+  public static final double degree2FindCoefficients(final double x0,
       final double y0, final double x1, final double y1, final double x2,
       final double y2, final double[] dest) {
     double bestError;
@@ -505,9 +506,11 @@ public final class Polynomials {
       // or constant function
       if (x0 == x1) {
         if (y0 == y1) {
-          if (Polynomials.degree1FindCoefficients(x0, y0, x2, y2, dest)) {
+          bestError = Polynomials.degree1FindCoefficients(x0, y0, x2, y2,
+              dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
             dest[1] = 0d;
-            return true;
+            return bestError;
           }
         }
         break compute;
@@ -515,9 +518,11 @@ public final class Polynomials {
 
       if (x0 == x2) {
         if (y0 == y2) {
-          if (Polynomials.degree1FindCoefficients(x0, y0, x1, y1, dest)) {
+          bestError = Polynomials.degree1FindCoefficients(x0, y0, x1, y1,
+              dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
             dest[1] = 0d;
-            return true;
+            return bestError;
           }
         }
         break compute;
@@ -525,92 +530,104 @@ public final class Polynomials {
 
       if (x1 == x2) {
         if (y1 == y2) {
-          if (Polynomials.degree1FindCoefficients(x0, y0, x1, y1, dest)) {
+          bestError = Polynomials.degree1FindCoefficients(x0, y0, x1, y1,
+              dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
             dest[1] = 0d;
-            return true;
+            return bestError;
           }
         }
         break compute;
       }
 
       if ((y0 == y1) && (y1 == y2)) {
-        if (Polynomials.degree0FindCoefficients(x0, y0, dest)) {
+        bestError = Polynomials.degree0FindCoefficients(x0, y0, dest);
+        if (bestError < Double.POSITIVE_INFINITY) {
           dest[1] = dest[2] = 0d;
-          return true;
+          return bestError;
         }
         break compute;
       }
 
+      LinearEquations.linearEquationsSolve(//
+          new double[][] { { 1d, x0, x0 * x0 }, //
+              { 1d, x1, x1 * x1 }, //
+              { 1d, x2, x2 * x2 } }, //
+          new double[] { y0, y1, y2 }, //
+          dest);
+      bestError = Polynomials.__degree2GetErrorForCoefficients(x0, y0, x1,
+          y1, x2, y2, dest[0], dest[1], dest[2]);
+
       bestError = Polynomials.__degree2GetCoefficientsA(x0, y0, x1, y1, x2,
-          y2, dest, Double.POSITIVE_INFINITY);
+          y2, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
       bestError = Polynomials.__degree2GetCoefficientsB(x0, y0, x1, y1, x2,
           y2, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
 
       bestError = Polynomials.__degree2GetCoefficientsA(x0, y0, x2, y2, x1,
           y1, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
       bestError = Polynomials.__degree2GetCoefficientsB(x0, y0, x2, y2, x1,
           y1, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
 
       bestError = Polynomials.__degree2GetCoefficientsA(x1, y1, x0, y0, x2,
           y2, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
       bestError = Polynomials.__degree2GetCoefficientsB(x1, y1, x0, y0, x2,
           y2, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
 
       bestError = Polynomials.__degree2GetCoefficientsA(x1, y1, x2, y2, x0,
           y0, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
       bestError = Polynomials.__degree2GetCoefficientsB(x1, y1, x2, y2, x0,
           y0, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
 
       bestError = Polynomials.__degree2GetCoefficientsA(x2, y2, x0, y0, x1,
           y1, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
       bestError = Polynomials.__degree2GetCoefficientsB(x2, y2, x0, y0, x1,
           y1, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
 
       bestError = Polynomials.__degree2GetCoefficientsA(x2, y2, x1, y1, x0,
           y0, dest, bestError);
       if (bestError == 0d) {
-        return true;
+        return bestError;
       }
       bestError = Polynomials.__degree2GetCoefficientsB(x2, y2, x1, y1, x0,
           y0, dest, bestError);
 
-      if (MathUtils.isFinite(bestError)) {
-        return true;
+      if (bestError < Double.POSITIVE_INFINITY) {
+        return bestError;
       }
     }
 
     dest[0] = dest[1] = dest[2] = Double.NaN;
-    return false;
+    return Double.POSITIVE_INFINITY;
   }
 
   /** the forbidden constructor */

@@ -95,7 +95,8 @@ public class LinearEquations {
         sum[--sumIndex] = A[i][j] * x[j];
       }
       sum[--sumIndex] = -b[i];
-      x[i] = -(AddN.destructiveSum(sum) / A[i][i]);
+      t = -(AddN.destructiveSum(sum) / A[i][i]);
+      x[i] = ((t == 0d) ? 0d : t);
     }
   }
 
@@ -119,7 +120,7 @@ public class LinearEquations {
     RealVector solution;
     int index, i;
     double[] currentSolution;
-    double bestError, currentError;
+    double bestError, currentError, t;
     DecompositionSolver solver;
 
     LinearEquations.__gaussianElimination(LinearEquations.__clone(A),
@@ -203,11 +204,15 @@ public class LinearEquations {
           currentSolution);
       if (currentError < bestError) {
         for (i = x.length; (--i) >= 0;) {
-          x[i] = (0.5d * (x[i] + currentSolution[i]));
+          t = (0.5d * (x[i] + currentSolution[i]));
+          x[i] = ((t == 0d) ? 0d : t);
         }
         bestError = LinearEquations.linearEquationsError(A, b, x);
         if (currentError < bestError) {
-          System.arraycopy(currentSolution, 0, x, 0, x.length);
+          for (i = x.length; (--i) >= 0;) {
+            t = currentSolution[i];
+            x[i] = ((t == 0d) ? 0d : t);
+          }
           bestError = currentError;
         }
         if (bestError <= 0d) {
