@@ -107,7 +107,7 @@ public final class Polynomials {
 
   /**
    * Compute the gradient at the given position {@code x} of a linear
-   * polynome.
+   * polynom.
    *
    * @param x
    *          the {@code x} coordinate
@@ -286,7 +286,7 @@ public final class Polynomials {
    *          the second coefficient
    * @param a2
    *          the third coefficient
-   * @return the error
+   * @return the resut
    */
   public static final double degree2Compute(final double x0,
       final double a0, final double a1, final double a2) {
@@ -509,7 +509,7 @@ public final class Polynomials {
           bestError = Polynomials.degree1FindCoefficients(x0, y0, x2, y2,
               dest);
           if (bestError < Double.POSITIVE_INFINITY) {
-            dest[1] = 0d;
+            dest[2] = 0d;
             return bestError;
           }
         }
@@ -521,7 +521,7 @@ public final class Polynomials {
           bestError = Polynomials.degree1FindCoefficients(x0, y0, x1, y1,
               dest);
           if (bestError < Double.POSITIVE_INFINITY) {
-            dest[1] = 0d;
+            dest[2] = 0d;
             return bestError;
           }
         }
@@ -533,7 +533,7 @@ public final class Polynomials {
           bestError = Polynomials.degree1FindCoefficients(x0, y0, x1, y1,
               dest);
           if (bestError < Double.POSITIVE_INFINITY) {
-            dest[1] = 0d;
+            dest[2] = 0d;
             return bestError;
           }
         }
@@ -624,6 +624,166 @@ public final class Polynomials {
       if (bestError < Double.POSITIVE_INFINITY) {
         return bestError;
       }
+    }
+
+    dest[0] = dest[1] = dest[2] = Double.NaN;
+    return Double.POSITIVE_INFINITY;
+  }
+
+  /**
+   * Compute the value of the cubix function
+   *
+   * @param x0
+   *          the {@code x}-coordinate
+   * @param a0
+   *          the first coefficient
+   * @param a1
+   *          the second coefficient
+   * @param a2
+   *          the third coefficient
+   * @param a3
+   *          the fourth coefficient
+   * @return the result
+   */
+  public static final double degree3Compute(final double x0,
+      final double a0, final double a1, final double a2, final double a3) {
+    final double xsqr;
+    xsqr = (x0 * x0);
+    return AddN.destructiveSum(a0, (a1 * x0), (a2 * xsqr),
+        (a3 * xsqr * x0));
+  }
+
+  /**
+   * Compute the gradient at the given position {@code x} of a cubic
+   * function.
+   *
+   * @param x
+   *          the {@code x} coordinate
+   * @param gradient
+   *          the gradient destination array (of length 4)
+   */
+  public static final void degree3Gradient(final double x,
+      final double[] gradient) {
+    final double sqrx;
+    gradient[0] = 1d;// a
+    gradient[1] = x;// b
+    gradient[2] = sqrx = x * x;// c
+    gradient[3] = sqrx * x;// c
+  }
+
+  /**
+   * Find the three coefficients of a polynomial of degree 2, i.e.,
+   * {@code y = f(x) = a0 + a1*x + a2*x^2+a3*x^3}..
+   *
+   * @param x0
+   *          the {@code x}-coordinate of the first point
+   * @param y0
+   *          the {@code y}-coordinate of the first point
+   * @param x1
+   *          the {@code x}-coordinate of the second point
+   * @param y1
+   *          the {@code y}-coordinate of the second point
+   * @param x2
+   *          the {@code x}-coordinate of the third point
+   * @param y2
+   *          the {@code y}-coordinate of the third point
+   * @param x3
+   *          the {@code x}-coordinate of the fourth point
+   * @param y3
+   *          the {@code y}-coordinate of the fourth point
+   * @param dest
+   *          the destination array
+   * @return the error of the fitting
+   */
+  public static final double degree3FindCoefficients(final double x0,
+      final double y0, final double x1, final double y1, final double x2,
+      final double y2, final double x3, final double y3,
+      final double[] dest) {
+    double bestError, t;
+
+    compute: {
+      // catch all special cases: cubic functions can degenerate to
+      // quadratic or linear
+      // or constant function
+      if (x0 == x1) {
+        if (y0 == y1) {
+          bestError = Polynomials.degree2FindCoefficients(x0, y0, x2, y2,
+              x3, y3, dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
+            dest[3] = 0d;
+            return bestError;
+          }
+        }
+        break compute;
+      }
+
+      if (x0 == x2) {
+        if (y0 == y2) {
+          bestError = Polynomials.degree2FindCoefficients(x0, y0, x1, y1,
+              x3, x3, dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
+            dest[3] = 0d;
+            return bestError;
+          }
+        }
+        break compute;
+      }
+
+      if (x0 == x3) {
+        if (y0 == y3) {
+          bestError = Polynomials.degree2FindCoefficients(x0, y0, x1, y1,
+              x2, x2, dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
+            dest[3] = 0d;
+            return bestError;
+          }
+        }
+        break compute;
+      }
+
+      if (x1 == x2) {
+        if (y1 == y2) {
+          bestError = Polynomials.degree2FindCoefficients(x0, y0, x1, y1,
+              x3, y3, dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
+            dest[3] = 0d;
+            return bestError;
+          }
+        }
+        break compute;
+      }
+
+      if (x1 == x3) {
+        if (y1 == y3) {
+          bestError = Polynomials.degree2FindCoefficients(x0, y0, x1, y1,
+              x2, y2, dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
+            dest[3] = 0d;
+            return bestError;
+          }
+        }
+        break compute;
+      }
+
+      if (x2 == x3) {
+        if (y2 == y3) {
+          bestError = Polynomials.degree2FindCoefficients(x0, y0, x1, y1,
+              x2, y2, dest);
+          if (bestError < Double.POSITIVE_INFINITY) {
+            dest[3] = 0d;
+            return bestError;
+          }
+        }
+        break compute;
+      }
+
+      return LinearEquations.linearEquationsSolve(//
+          new double[][] { { 1d, x0, (t = (x0 * x0)), (t * x0) }, //
+              { 1d, x1, (t = (x1 * x1)), (t * x1) }, //
+              { 1d, x2, (t = (x2 * x2)), (t * x2) }, //
+              { 1d, x3, (t = (x3 * x3)), (t * x3) } }, //
+          new double[] { y0, y1, y2, y3 }, //
+          dest);
     }
 
     dest[0] = dest[1] = dest[2] = Double.NaN;
