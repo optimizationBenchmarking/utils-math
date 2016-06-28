@@ -1,5 +1,6 @@
 package org.optimizationBenchmarking.utils.math.functions.compound;
 
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IMathRenderable;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
@@ -32,7 +33,7 @@ final class _Const3 extends TernaryFunction {
    * Create the
    * {@link org.optimizationBenchmarking.utils.math.functions.compound._Const3}
    * , a function which returns a constant value.
-   *
+   * 
    * @param constant
    *          the instance of {@link java.lang.Number} holding the constant
    *          value returned by this function
@@ -149,6 +150,19 @@ final class _Const3 extends TernaryFunction {
         out.append(this.m_const.doubleValue());
       }
     }
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final _Const3 clone() {
+    if (this.m_const instanceof ICloneable) {
+      final Number constant = ((Number) (((ICloneable) (this.m_const))
+          .clone()));
+      if (constant != this.m_const) {
+        return new _Const3(constant);
+      }
+    }
+    return this;
   }
 
   /** {@inheritDoc} */

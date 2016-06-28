@@ -1,5 +1,6 @@
 package org.optimizationBenchmarking.utils.math.functions.compound;
 
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IMathRenderable;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
@@ -32,7 +33,7 @@ final class _Const1 extends UnaryFunction {
    * Create the
    * {@link org.optimizationBenchmarking.utils.math.functions.compound._Const1}
    * , a function which returns a constant value.
-   *
+   * 
    * @param constant
    *          the instance of {@link java.lang.Number} holding the constant
    *          value returned by this function
@@ -142,6 +143,19 @@ final class _Const1 extends UnaryFunction {
         out.append(this.m_const.doubleValue());
       }
     }
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final _Const1 clone() {
+    if (this.m_const instanceof ICloneable) {
+      final Number constant = ((Number) (((ICloneable) (this.m_const))
+          .clone()));
+      if (constant != this.m_const) {
+        return new _Const1(constant);
+      }
+    }
+    return this;
   }
 
   /** {@inheritDoc} */

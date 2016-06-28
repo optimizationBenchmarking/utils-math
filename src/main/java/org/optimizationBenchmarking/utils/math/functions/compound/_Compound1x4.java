@@ -1,5 +1,6 @@
 package org.optimizationBenchmarking.utils.math.functions.compound;
 
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
 import org.optimizationBenchmarking.utils.hash.HashUtils;
@@ -18,7 +19,7 @@ import org.optimizationBenchmarking.utils.text.textOutput.MemoryTextOutput;
  * {@link org.optimizationBenchmarking.utils.math.functions.UnaryFunction
  * 1-ary} function.
  */
-final class _Compound1x4 extends QuaternaryFunction {
+final class _Compound1x4 extends QuaternaryFunction implements ICloneable {
 
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
@@ -48,7 +49,7 @@ final class _Compound1x4 extends QuaternaryFunction {
    * 4-ary} functions by using an
    * {@link org.optimizationBenchmarking.utils.math.functions.UnaryFunction
    * 1-ary} function.
-   *
+   * 
    * @param result
    *          The
    *          {@link org.optimizationBenchmarking.utils.math.functions.UnaryFunction
@@ -216,6 +217,21 @@ final class _Compound1x4 extends QuaternaryFunction {
 
   /** {@inheritDoc} */
   @Override
+  public final _Compound1x4 clone() {
+    final UnaryFunction result = ((this.m_result instanceof ICloneable)
+        ? (((UnaryFunction) (((ICloneable) (this.m_result)).clone())))
+        : this.m_result);
+    final QuaternaryFunction child1 = ((this.m_child1 instanceof ICloneable)
+        ? (((QuaternaryFunction) (((ICloneable) (this.m_child1)).clone())))
+        : this.m_child1);
+    if ((result != this.m_result) || (child1 != this.m_child1)) {
+      return new _Compound1x4(result, child1);
+    }
+    return this;
+  }
+
+  /** {@inheritDoc} */
+  @Override
   public final String toString() {
     final MemoryTextOutput output;
     output = new MemoryTextOutput();
@@ -241,7 +257,7 @@ final class _Compound1x4 extends QuaternaryFunction {
      * Create the
      * {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
      * parameter renderer} of the {@link _Compound1x4}
-     *
+     * 
      * @param renderer
      *          the
      *          {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
@@ -317,7 +333,7 @@ final class _Compound1x4 extends QuaternaryFunction {
 
     /**
      * the internal owner getter
-     *
+     * 
      * @return the owning {@link _Compound1x4} instance
      */
     private final _Compound1x4 __getOwner() {

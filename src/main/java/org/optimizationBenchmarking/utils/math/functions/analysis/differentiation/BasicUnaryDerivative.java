@@ -1,11 +1,13 @@
 package org.optimizationBenchmarking.utils.math.functions.analysis.differentiation;
 
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.math.functions.UnaryFunction;
 
 /**
  * The base class for derivatives of an unary function.
  */
-class BasicUnaryDerivative extends UnaryFunction {
+abstract class BasicUnaryDerivative extends UnaryFunction
+    implements ICloneable {
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
 
@@ -22,4 +24,8 @@ class BasicUnaryDerivative extends UnaryFunction {
     super();
     this.m_f = f;
   }
+
+  /** {@inheritDoc} */
+  @Override
+  public abstract BasicUnaryDerivative clone();
 }

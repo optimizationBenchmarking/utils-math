@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.commons.math3.primes.Primes;
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IMathRenderable;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
@@ -106,6 +107,7 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
             CodeGeneratorBase.importClass(nAryName, bw);
           }
           CodeGeneratorBase.importClass(IParameterRenderer.class, bw);
+          CodeGeneratorBase.importClass(ICloneable.class, bw);
           bw.println();
 
           bw.print(
@@ -126,6 +128,8 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
           bw.print(" extends ");//$NON-NLS-1$
           bw.print(CodeGeneratorBase.getMathematicalFunctionClassOfArity(m)
               .getSimpleName());
+          bw.print(" implements ");//$NON-NLS-1$
+          bw.print(ICloneable.class.getSimpleName());
           bw.println(" {");//$NON-NLS-1$
 
           bw.println();
@@ -156,6 +160,8 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
               n, bw);
           CompoundFunctionCodeGenerator.___compound_makeHashCode(n, bw);
           CompoundFunctionCodeGenerator.___compound_makeEquals(m, n, bw);
+          CompoundFunctionCodeGenerator.___compound_makeClone(m, n, bw);
+
           CompoundFunctionCodeGenerator.__makeToString(bw);
 
           this.__compound_renderer(m, n, bw);
@@ -313,6 +319,86 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
     }
     bw.println(";");//$NON-NLS-1$
     bw.println("}");//$NON-NLS-1$
+  }
+
+  /**
+   * Make the {@link ICloneable#clone()} method
+   *
+   * @param m
+   *          the number of parameters of the top-level function
+   * @param n
+   *          the number of compound functions
+   * @param bw
+   *          the output writer
+   */
+  private static final void ___compound_makeClone(final int m, final int n,
+      final PrintWriter bw) {
+    final String name, childName, resultName, clone;
+
+    int j;
+    bw.println();
+    bw.println();
+    bw.println("/** {@inheritDoc} */");//$NON-NLS-1$
+    bw.println(" @Override");//$NON-NLS-1$
+    bw.print(" public final ");//$NON-NLS-1$
+    name = CompoundFunctionCodeGenerator.__compound_name(m, n);
+    childName = CodeGeneratorBase.getMathematicalFunctionClassOfArity(m)
+        .getSimpleName();
+    resultName = CodeGeneratorBase.getMathematicalFunctionClassOfArity(n)
+        .getSimpleName();
+    clone = ICloneable.class.getSimpleName();
+
+    bw.print(name);
+    bw.println(" clone() { ");//$NON-NLS-1$
+
+    bw.print("final ");//$NON-NLS-1$
+    bw.print(resultName);
+    bw.print(" result=((this.m_result instanceof ");//$NON-NLS-1$
+    bw.print(clone);
+    bw.print(") ? (((");//$NON-NLS-1$
+    bw.print(resultName);
+    bw.print(")(((");//$NON-NLS-1$
+    bw.print(clone);
+    bw.println(")(this.m_result)).clone()))):this.m_result);");//$NON-NLS-1$
+
+    for (j = 1; j <= n; j++) {
+      bw.print("final ");//$NON-NLS-1$
+      bw.print(childName);
+      bw.print(" child");//$NON-NLS-1$
+      bw.print(j);
+      bw.print("=((this.m_child");//$NON-NLS-1$
+      bw.print(j);
+      bw.print(" instanceof ");//$NON-NLS-1$
+      bw.print(clone);
+      bw.print(") ? (((");//$NON-NLS-1$
+      bw.print(childName);
+      bw.print(")(((");//$NON-NLS-1$
+      bw.print(clone);
+      bw.print(")(this.m_child");//$NON-NLS-1$
+      bw.print(j);
+      bw.print(")).clone()))):this.m_child");//$NON-NLS-1$
+      bw.print(j);
+      bw.println(");");//$NON-NLS-1$
+    }
+    bw.print("if((result!=this.m_result)");//$NON-NLS-1$
+    for (j = 1; j <= n; j++) {
+      bw.print("||(child");//$NON-NLS-1$
+      bw.print(j);
+      bw.print("!=this.m_child");//$NON-NLS-1$
+      bw.print(j);
+      bw.print(')');
+    }
+    bw.print(')');
+    bw.println('{');
+    bw.print(" return new ");//$NON-NLS-1$
+    bw.print(name);
+    bw.print("(result");//$NON-NLS-1$
+    for (j = 1; j <= n; j++) {
+      bw.print(',');
+      bw.print("child"); //$NON-NLS-1$
+      bw.print(j);
+    }
+    bw.println("); } return this; }");//$NON-NLS-1$
   }
 
   /**
@@ -1475,6 +1561,7 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
           CodeGeneratorBase.importClass(IParameterRenderer.class, bw);
           CodeGeneratorBase.importClass(IMathRenderable.class, bw);
           CodeGeneratorBase.importClass(NamedConstant.class, bw);
+          CodeGeneratorBase.importClass(ICloneable.class, bw);
 
           bw.print(
               "/** This is the automatically generated code for a {@link ");//$NON-NLS-1$
@@ -1514,6 +1601,7 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
           CompoundFunctionCodeGenerator
               .___const_makePrecedencePriority(bw);
           CompoundFunctionCodeGenerator.___const_makeMathRender(bw);
+          CompoundFunctionCodeGenerator.___const_makeClone(m, bw);
           CompoundFunctionCodeGenerator.___const_makeHashCode(m, bw);
           CompoundFunctionCodeGenerator.___const_makeEquals(m, bw);
           CompoundFunctionCodeGenerator.__makeToString(bw);
@@ -1707,6 +1795,40 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
     bw.print(name);
     bw.println(") o).m_const)));");//$NON-NLS-1$
     bw.println("}");//$NON-NLS-1$
+  }
+
+  /**
+   * Make the {@link ICloneable#clone()} method
+   *
+   * @param m
+   *          the number of parameters of the top-level function
+   * @param bw
+   *          the output writer
+   */
+  private static final void ___const_makeClone(final int m,
+      final PrintWriter bw) {
+    final String name;
+    bw.println();
+    bw.println();
+    bw.println("/** {@inheritDoc} */");//$NON-NLS-1$
+    bw.println(" @Override");//$NON-NLS-1$
+    bw.print(" public final ");//$NON-NLS-1$
+    name = CompoundFunctionCodeGenerator.__const_name(m);
+    bw.print(name);
+    bw.print(" clone() { if(this.m_const instanceof ");//$NON-NLS-1$
+    bw.print(ICloneable.class.getSimpleName());
+    bw.print(") { ");//$NON-NLS-1$
+    bw.print("final ");//$NON-NLS-1$
+    bw.print(Number.class.getSimpleName());
+    bw.print(" constant=");//$NON-NLS-1$
+    bw.print("((");//$NON-NLS-1$
+    bw.print(Number.class.getSimpleName());
+    bw.print(")( ((");//$NON-NLS-1$
+    bw.print(ICloneable.class.getSimpleName());
+    bw.print(")(this.m_const)).clone()));");//$NON-NLS-1$
+    bw.print("if(constant!=this.m_const){return new ");//$NON-NLS-1$
+    bw.print(name);
+    bw.print("(constant);}} return this;}");//$NON-NLS-1$
   }
 
   /**

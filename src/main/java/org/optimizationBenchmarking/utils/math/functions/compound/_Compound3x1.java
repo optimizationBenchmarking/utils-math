@@ -1,5 +1,6 @@
 package org.optimizationBenchmarking.utils.math.functions.compound;
 
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
 import org.optimizationBenchmarking.utils.hash.HashUtils;
@@ -17,7 +18,7 @@ import org.optimizationBenchmarking.utils.text.textOutput.MemoryTextOutput;
  * {@link org.optimizationBenchmarking.utils.math.functions.TernaryFunction
  * 3-ary} function.
  */
-final class _Compound3x1 extends UnaryFunction {
+final class _Compound3x1 extends UnaryFunction implements ICloneable {
 
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
@@ -61,7 +62,7 @@ final class _Compound3x1 extends UnaryFunction {
    * 1-ary} functions by using an
    * {@link org.optimizationBenchmarking.utils.math.functions.TernaryFunction
    * 3-ary} function.
-   *
+   * 
    * @param result
    *          The
    *          {@link org.optimizationBenchmarking.utils.math.functions.TernaryFunction
@@ -243,6 +244,28 @@ final class _Compound3x1 extends UnaryFunction {
 
   /** {@inheritDoc} */
   @Override
+  public final _Compound3x1 clone() {
+    final TernaryFunction result = ((this.m_result instanceof ICloneable)
+        ? (((TernaryFunction) (((ICloneable) (this.m_result)).clone())))
+        : this.m_result);
+    final UnaryFunction child1 = ((this.m_child1 instanceof ICloneable)
+        ? (((UnaryFunction) (((ICloneable) (this.m_child1)).clone())))
+        : this.m_child1);
+    final UnaryFunction child2 = ((this.m_child2 instanceof ICloneable)
+        ? (((UnaryFunction) (((ICloneable) (this.m_child2)).clone())))
+        : this.m_child2);
+    final UnaryFunction child3 = ((this.m_child3 instanceof ICloneable)
+        ? (((UnaryFunction) (((ICloneable) (this.m_child3)).clone())))
+        : this.m_child3);
+    if ((result != this.m_result) || (child1 != this.m_child1)
+        || (child2 != this.m_child2) || (child3 != this.m_child3)) {
+      return new _Compound3x1(result, child1, child2, child3);
+    }
+    return this;
+  }
+
+  /** {@inheritDoc} */
+  @Override
   public final String toString() {
     final MemoryTextOutput output;
     output = new MemoryTextOutput();
@@ -268,7 +291,7 @@ final class _Compound3x1 extends UnaryFunction {
      * Create the
      * {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
      * parameter renderer} of the {@link _Compound3x1}
-     *
+     * 
      * @param renderer
      *          the
      *          {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
@@ -339,7 +362,7 @@ final class _Compound3x1 extends UnaryFunction {
 
     /**
      * the internal owner getter
-     *
+     * 
      * @return the owning {@link _Compound3x1} instance
      */
     private final _Compound3x1 __getOwner() {

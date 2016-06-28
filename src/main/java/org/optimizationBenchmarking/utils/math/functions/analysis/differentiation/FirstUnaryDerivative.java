@@ -1,5 +1,6 @@
 package org.optimizationBenchmarking.utils.math.functions.analysis.differentiation;
 
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.math.functions.UnaryFunction;
 
 /**
@@ -22,6 +23,19 @@ public final class FirstUnaryDerivative extends BasicUnaryDerivative {
    */
   public FirstUnaryDerivative(final UnaryFunction f) {
     super(f);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final FirstUnaryDerivative clone() {
+    final UnaryFunction clone;
+    if (this.m_f instanceof ICloneable) {
+      clone = ((UnaryFunction) (((ICloneable) this.m_f).clone()));
+      if (clone != this.m_f) {
+        return new FirstUnaryDerivative(clone);
+      }
+    }
+    return this;
   }
 
   /** {@inheritDoc} */

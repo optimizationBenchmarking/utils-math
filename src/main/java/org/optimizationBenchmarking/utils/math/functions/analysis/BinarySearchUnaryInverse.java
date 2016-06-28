@@ -1,12 +1,14 @@
 package org.optimizationBenchmarking.utils.math.functions.analysis;
 
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.math.functions.UnaryFunction;
 
 /**
  * A simple unary function inverter based on binary search. Will only work
  * on steady, monotonously rising (or falling functions).
  */
-public final class BinarySearchUnaryInverse extends UnaryFunction {
+public final class BinarySearchUnaryInverse extends UnaryFunction
+    implements ICloneable {
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
 
@@ -68,6 +70,21 @@ public final class BinarySearchUnaryInverse extends UnaryFunction {
     this.m_upperLimitY = upperLimitY;
     this.m_upperLimitYExcess = upperLimitYExcess;
     this.m_falling = falling;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final BinarySearchUnaryInverse clone() {
+    final UnaryFunction clone;
+    if (this.m_f instanceof ICloneable) {
+      clone = ((UnaryFunction) (((ICloneable) this.m_f).clone()));
+      if (clone != this.m_f) {
+        return new BinarySearchUnaryInverse(clone, this.m_minX,
+            this.m_maxX, this.m_lowerLimitY, this.m_lowerLimitYExcess,
+            this.m_upperLimitY, this.m_upperLimitYExcess, this.m_falling);
+      }
+    }
+    return this;
   }
 
   /** {@inheritDoc} */

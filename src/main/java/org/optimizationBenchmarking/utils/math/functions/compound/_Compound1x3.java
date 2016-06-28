@@ -1,5 +1,6 @@
 package org.optimizationBenchmarking.utils.math.functions.compound;
 
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
 import org.optimizationBenchmarking.utils.hash.HashUtils;
@@ -18,7 +19,7 @@ import org.optimizationBenchmarking.utils.text.textOutput.MemoryTextOutput;
  * {@link org.optimizationBenchmarking.utils.math.functions.UnaryFunction
  * 1-ary} function.
  */
-final class _Compound1x3 extends TernaryFunction {
+final class _Compound1x3 extends TernaryFunction implements ICloneable {
 
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
@@ -48,7 +49,7 @@ final class _Compound1x3 extends TernaryFunction {
    * 3-ary} functions by using an
    * {@link org.optimizationBenchmarking.utils.math.functions.UnaryFunction
    * 1-ary} function.
-   *
+   * 
    * @param result
    *          The
    *          {@link org.optimizationBenchmarking.utils.math.functions.UnaryFunction
@@ -214,6 +215,21 @@ final class _Compound1x3 extends TernaryFunction {
 
   /** {@inheritDoc} */
   @Override
+  public final _Compound1x3 clone() {
+    final UnaryFunction result = ((this.m_result instanceof ICloneable)
+        ? (((UnaryFunction) (((ICloneable) (this.m_result)).clone())))
+        : this.m_result);
+    final TernaryFunction child1 = ((this.m_child1 instanceof ICloneable)
+        ? (((TernaryFunction) (((ICloneable) (this.m_child1)).clone())))
+        : this.m_child1);
+    if ((result != this.m_result) || (child1 != this.m_child1)) {
+      return new _Compound1x3(result, child1);
+    }
+    return this;
+  }
+
+  /** {@inheritDoc} */
+  @Override
   public final String toString() {
     final MemoryTextOutput output;
     output = new MemoryTextOutput();
@@ -239,7 +255,7 @@ final class _Compound1x3 extends TernaryFunction {
      * Create the
      * {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
      * parameter renderer} of the {@link _Compound1x3}
-     *
+     * 
      * @param renderer
      *          the
      *          {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
@@ -315,7 +331,7 @@ final class _Compound1x3 extends TernaryFunction {
 
     /**
      * the internal owner getter
-     *
+     * 
      * @return the owning {@link _Compound1x3} instance
      */
     private final _Compound1x3 __getOwner() {

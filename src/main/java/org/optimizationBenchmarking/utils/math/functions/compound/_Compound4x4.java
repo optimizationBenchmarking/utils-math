@@ -1,5 +1,6 @@
 package org.optimizationBenchmarking.utils.math.functions.compound;
 
+import org.optimizationBenchmarking.utils.ICloneable;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
 import org.optimizationBenchmarking.utils.hash.HashUtils;
@@ -16,7 +17,7 @@ import org.optimizationBenchmarking.utils.text.textOutput.MemoryTextOutput;
  * {@link org.optimizationBenchmarking.utils.math.functions.QuaternaryFunction
  * 4-ary} function.
  */
-final class _Compound4x4 extends QuaternaryFunction {
+final class _Compound4x4 extends QuaternaryFunction implements ICloneable {
 
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
@@ -67,7 +68,7 @@ final class _Compound4x4 extends QuaternaryFunction {
    * 4-ary} functions by using an
    * {@link org.optimizationBenchmarking.utils.math.functions.QuaternaryFunction
    * 4-ary} function.
-   *
+   * 
    * @param result
    *          The
    *          {@link org.optimizationBenchmarking.utils.math.functions.QuaternaryFunction
@@ -279,6 +280,32 @@ final class _Compound4x4 extends QuaternaryFunction {
 
   /** {@inheritDoc} */
   @Override
+  public final _Compound4x4 clone() {
+    final QuaternaryFunction result = ((this.m_result instanceof ICloneable)
+        ? (((QuaternaryFunction) (((ICloneable) (this.m_result)).clone())))
+        : this.m_result);
+    final QuaternaryFunction child1 = ((this.m_child1 instanceof ICloneable)
+        ? (((QuaternaryFunction) (((ICloneable) (this.m_child1)).clone())))
+        : this.m_child1);
+    final QuaternaryFunction child2 = ((this.m_child2 instanceof ICloneable)
+        ? (((QuaternaryFunction) (((ICloneable) (this.m_child2)).clone())))
+        : this.m_child2);
+    final QuaternaryFunction child3 = ((this.m_child3 instanceof ICloneable)
+        ? (((QuaternaryFunction) (((ICloneable) (this.m_child3)).clone())))
+        : this.m_child3);
+    final QuaternaryFunction child4 = ((this.m_child4 instanceof ICloneable)
+        ? (((QuaternaryFunction) (((ICloneable) (this.m_child4)).clone())))
+        : this.m_child4);
+    if ((result != this.m_result) || (child1 != this.m_child1)
+        || (child2 != this.m_child2) || (child3 != this.m_child3)
+        || (child4 != this.m_child4)) {
+      return new _Compound4x4(result, child1, child2, child3, child4);
+    }
+    return this;
+  }
+
+  /** {@inheritDoc} */
+  @Override
   public final String toString() {
     final MemoryTextOutput output;
     output = new MemoryTextOutput();
@@ -304,7 +331,7 @@ final class _Compound4x4 extends QuaternaryFunction {
      * Create the
      * {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
      * parameter renderer} of the {@link _Compound4x4}
-     *
+     * 
      * @param renderer
      *          the
      *          {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
@@ -383,7 +410,7 @@ final class _Compound4x4 extends QuaternaryFunction {
 
     /**
      * the internal owner getter
-     *
+     * 
      * @return the owning {@link _Compound4x4} instance
      */
     private final _Compound4x4 __getOwner() {
