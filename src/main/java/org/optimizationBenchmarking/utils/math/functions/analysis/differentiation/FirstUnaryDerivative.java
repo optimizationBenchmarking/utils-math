@@ -29,9 +29,9 @@ public final class FirstUnaryDerivative extends BasicUnaryDerivative {
   @Override
   public final FirstUnaryDerivative clone() {
     final UnaryFunction clone;
-    if (this.m_f instanceof ICloneable) {
-      clone = ((UnaryFunction) (((ICloneable) this.m_f).clone()));
-      if (clone != this.m_f) {
+    if (this.m_function instanceof ICloneable) {
+      clone = ((UnaryFunction) (((ICloneable) this.m_function).clone()));
+      if (clone != this.m_function) {
         return new FirstUnaryDerivative(clone);
       }
     }
@@ -41,7 +41,7 @@ public final class FirstUnaryDerivative extends BasicUnaryDerivative {
   /** {@inheritDoc} */
   @Override
   public final String toString() {
-    return ('(' + this.m_f.toString() + ")'"); //$NON-NLS-1$
+    return ('(' + this.m_function.toString() + ")'"); //$NON-NLS-1$
   }
 
   /** {@inheritDoc} */
@@ -53,7 +53,7 @@ public final class FirstUnaryDerivative extends BasicUnaryDerivative {
     h = (FirstUnaryDerivative.EPSILON * x1);
     xi = (x1 + h);
     h = (xi - h);
-    f = this.m_f;
+    f = this.m_function;
     th = (2d * h);
 
     return (((((-f.computeAsDouble(x1 + th))

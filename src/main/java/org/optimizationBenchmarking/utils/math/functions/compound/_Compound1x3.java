@@ -1,6 +1,7 @@
 package org.optimizationBenchmarking.utils.math.functions.compound;
 
 import org.optimizationBenchmarking.utils.ICloneable;
+import org.optimizationBenchmarking.utils.collections.iterators.BasicIterator;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
 import org.optimizationBenchmarking.utils.hash.HashUtils;
@@ -19,7 +20,8 @@ import org.optimizationBenchmarking.utils.text.textOutput.MemoryTextOutput;
  * {@link org.optimizationBenchmarking.utils.math.functions.UnaryFunction
  * 1-ary} function.
  */
-final class _Compound1x3 extends TernaryFunction implements ICloneable {
+final class _Compound1x3 extends TernaryFunction
+    implements ICloneable, Iterable<Object> {
 
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
@@ -49,7 +51,7 @@ final class _Compound1x3 extends TernaryFunction implements ICloneable {
    * 3-ary} functions by using an
    * {@link org.optimizationBenchmarking.utils.math.functions.UnaryFunction
    * 1-ary} function.
-   * 
+   *
    * @param result
    *          The
    *          {@link org.optimizationBenchmarking.utils.math.functions.UnaryFunction
@@ -237,6 +239,12 @@ final class _Compound1x3 extends TernaryFunction implements ICloneable {
     return output.toString();
   }
 
+  /** {@inheritDoc} */
+  @Override
+  public final __Compound1x3Iterator iterator() {
+    return new __Compound1x3Iterator();
+  }
+
   /**
    * This is the automatically generated code of the
    * {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
@@ -255,7 +263,7 @@ final class _Compound1x3 extends TernaryFunction implements ICloneable {
      * Create the
      * {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
      * parameter renderer} of the {@link _Compound1x3}
-     * 
+     *
      * @param renderer
      *          the
      *          {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
@@ -331,7 +339,7 @@ final class _Compound1x3 extends TernaryFunction implements ICloneable {
 
     /**
      * the internal owner getter
-     * 
+     *
      * @return the owning {@link _Compound1x3} instance
      */
     private final _Compound1x3 __getOwner() {
@@ -351,6 +359,39 @@ final class _Compound1x3 extends TernaryFunction implements ICloneable {
             && (_Compound1x3.this.equals(other.__getOwner())));
       }
       return false;
+    }
+  }
+
+  /** the internal iterator implementation */
+  private final class __Compound1x3Iterator extends BasicIterator<Object> {
+    /** the index */
+    private int m_index;
+
+    /** create */
+    __Compound1x3Iterator() {
+      super();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public final boolean hasNext() {
+      return (this.m_index <= 1);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public final Object next() {
+      switch (this.m_index++) {
+        case 0: {
+          return _Compound1x3.this.m_result;
+        }
+        case 1: {
+          return _Compound1x3.this.m_child1;
+        }
+        default: {
+          return super.next();
+        }
+      }
     }
   }
 }

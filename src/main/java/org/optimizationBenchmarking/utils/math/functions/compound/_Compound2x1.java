@@ -1,6 +1,7 @@
 package org.optimizationBenchmarking.utils.math.functions.compound;
 
 import org.optimizationBenchmarking.utils.ICloneable;
+import org.optimizationBenchmarking.utils.collections.iterators.BasicIterator;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
 import org.optimizationBenchmarking.utils.hash.HashUtils;
@@ -18,7 +19,8 @@ import org.optimizationBenchmarking.utils.text.textOutput.MemoryTextOutput;
  * {@link org.optimizationBenchmarking.utils.math.functions.BinaryFunction
  * 2-ary} function.
  */
-final class _Compound2x1 extends UnaryFunction implements ICloneable {
+final class _Compound2x1 extends UnaryFunction
+    implements ICloneable, Iterable<Object> {
 
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
@@ -55,7 +57,7 @@ final class _Compound2x1 extends UnaryFunction implements ICloneable {
    * 1-ary} functions by using an
    * {@link org.optimizationBenchmarking.utils.math.functions.BinaryFunction
    * 2-ary} function.
-   * 
+   *
    * @param result
    *          The
    *          {@link org.optimizationBenchmarking.utils.math.functions.BinaryFunction
@@ -245,6 +247,12 @@ final class _Compound2x1 extends UnaryFunction implements ICloneable {
     return output.toString();
   }
 
+  /** {@inheritDoc} */
+  @Override
+  public final __Compound2x1Iterator iterator() {
+    return new __Compound2x1Iterator();
+  }
+
   /**
    * This is the automatically generated code of the
    * {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
@@ -263,7 +271,7 @@ final class _Compound2x1 extends UnaryFunction implements ICloneable {
      * Create the
      * {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
      * parameter renderer} of the {@link _Compound2x1}
-     * 
+     *
      * @param renderer
      *          the
      *          {@link org.optimizationBenchmarking.utils.document.spec.IParameterRenderer
@@ -361,7 +369,7 @@ final class _Compound2x1 extends UnaryFunction implements ICloneable {
 
     /**
      * the internal owner getter
-     * 
+     *
      * @return the owning {@link _Compound2x1} instance
      */
     private final _Compound2x1 __getOwner() {
@@ -381,6 +389,42 @@ final class _Compound2x1 extends UnaryFunction implements ICloneable {
             && (_Compound2x1.this.equals(other.__getOwner())));
       }
       return false;
+    }
+  }
+
+  /** the internal iterator implementation */
+  private final class __Compound2x1Iterator extends BasicIterator<Object> {
+    /** the index */
+    private int m_index;
+
+    /** create */
+    __Compound2x1Iterator() {
+      super();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public final boolean hasNext() {
+      return (this.m_index <= 2);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public final Object next() {
+      switch (this.m_index++) {
+        case 0: {
+          return _Compound2x1.this.m_result;
+        }
+        case 1: {
+          return _Compound2x1.this.m_child1;
+        }
+        case 2: {
+          return _Compound2x1.this.m_child2;
+        }
+        default: {
+          return super.next();
+        }
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 package org.optimizationBenchmarking.utils.math.functions.compound;
 
 import org.optimizationBenchmarking.utils.ICloneable;
+import org.optimizationBenchmarking.utils.collections.iterators.InstanceIterator;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IMathRenderable;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
@@ -18,7 +19,8 @@ import org.optimizationBenchmarking.utils.text.textOutput.MemoryTextOutput;
  * {@link org.optimizationBenchmarking.utils.math.functions.QuaternaryFunction
  * 4-ary} which returns a constant value.
  */
-final class _Const4 extends QuaternaryFunction {
+final class _Const4 extends QuaternaryFunction
+    implements Iterable<Object> {
 
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
@@ -33,7 +35,7 @@ final class _Const4 extends QuaternaryFunction {
    * Create the
    * {@link org.optimizationBenchmarking.utils.math.functions.compound._Const4}
    * , a function which returns a constant value.
-   * 
+   *
    * @param constant
    *          the instance of {@link java.lang.Number} holding the constant
    *          value returned by this function
@@ -186,5 +188,11 @@ final class _Const4 extends QuaternaryFunction {
     output = new MemoryTextOutput();
     this.mathRender(output, DefaultParameterRenderer.INSTANCE);
     return output.toString();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final InstanceIterator<Object> iterator() {
+    return new InstanceIterator<Object>(this.m_const);
   }
 }

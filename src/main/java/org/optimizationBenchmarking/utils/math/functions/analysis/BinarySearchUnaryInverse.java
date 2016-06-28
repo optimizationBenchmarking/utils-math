@@ -1,6 +1,7 @@
 package org.optimizationBenchmarking.utils.math.functions.analysis;
 
 import org.optimizationBenchmarking.utils.ICloneable;
+import org.optimizationBenchmarking.utils.collections.iterators.InstanceIterator;
 import org.optimizationBenchmarking.utils.math.functions.UnaryFunction;
 
 /**
@@ -8,12 +9,12 @@ import org.optimizationBenchmarking.utils.math.functions.UnaryFunction;
  * on steady, monotonously rising (or falling functions).
  */
 public final class BinarySearchUnaryInverse extends UnaryFunction
-    implements ICloneable {
+    implements ICloneable, Iterable<Object> {
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
 
   /** @serial the function */
-  private final UnaryFunction m_f;
+  private final UnaryFunction m_function;
 
   /** @serial the maximum x value */
   private final double m_maxX;
@@ -39,7 +40,7 @@ public final class BinarySearchUnaryInverse extends UnaryFunction
   /**
    * Create the inverse
    *
-   * @param f
+   * @param function
    *          the function
    * @param minX
    *          the minimum x value
@@ -56,12 +57,12 @@ public final class BinarySearchUnaryInverse extends UnaryFunction
    * @param falling
    *          is the function falling or rising?
    */
-  public BinarySearchUnaryInverse(final UnaryFunction f, final double minX,
-      final double maxX, final double lowerLimitY,
+  public BinarySearchUnaryInverse(final UnaryFunction function,
+      final double minX, final double maxX, final double lowerLimitY,
       final double lowerLimitYExcess, final double upperLimitY,
       final double upperLimitYExcess, final boolean falling) {
     super();
-    this.m_f = f;
+    this.m_function = function;
 
     this.m_minX = minX;
     this.m_maxX = maxX;
@@ -76,9 +77,9 @@ public final class BinarySearchUnaryInverse extends UnaryFunction
   @Override
   public final BinarySearchUnaryInverse clone() {
     final UnaryFunction clone;
-    if (this.m_f instanceof ICloneable) {
-      clone = ((UnaryFunction) (((ICloneable) this.m_f).clone()));
-      if (clone != this.m_f) {
+    if (this.m_function instanceof ICloneable) {
+      clone = ((UnaryFunction) (((ICloneable) this.m_function).clone()));
+      if (clone != this.m_function) {
         return new BinarySearchUnaryInverse(clone, this.m_minX,
             this.m_maxX, this.m_lowerLimitY, this.m_lowerLimitYExcess,
             this.m_upperLimitY, this.m_upperLimitYExcess, this.m_falling);
@@ -90,7 +91,7 @@ public final class BinarySearchUnaryInverse extends UnaryFunction
   /** {@inheritDoc} */
   @Override
   public final String toString() {
-    return ('(' + this.m_f.toString() + ")^-1"); //$NON-NLS-1$
+    return ('(' + this.m_function.toString() + ")^-1"); //$NON-NLS-1$
   }
 
   /** {@inheritDoc} */
@@ -98,7 +99,7 @@ public final class BinarySearchUnaryInverse extends UnaryFunction
   public final double computeAsDouble(final double x1) {
     double lower, upper, mid, midVal, testA, testB, testC, testD;
     final double lowerY, upperY;
-    final UnaryFunction f;
+    final UnaryFunction function;
     final boolean falling;
     final long keyBits;
     long midBits;
@@ -123,11 +124,11 @@ public final class BinarySearchUnaryInverse extends UnaryFunction
       return this.m_upperLimitYExcess;
     }
 
-    f = this.m_f;
+    function = this.m_function;
     keyBits = Double.doubleToLongBits(x1);
     while (lower < upper) {
       mid = (0.5d * (lower + upper));
-      midVal = f.computeAsDouble(mid);
+      midVal = function.computeAsDouble(mid);
       hasRes = false;
       if (midVal < x1) {
         setLower = (!(falling));
@@ -157,23 +158,24 @@ public final class BinarySearchUnaryInverse extends UnaryFunction
       if (hasRes) {
         testA = Math.rint(mid);
         if ((testA > lower) && (testA < upper)
-            && (f.computeAsDouble(testA) == x1)) {
+            && (function.computeAsDouble(testA) == x1)) {
           return testA;
         }
         testB = Math.ceil(mid);
         if ((testB != testA) && (testB > lower) && (testB < upper)
-            && (f.computeAsDouble(testB) == x1)) {
+            && (function.computeAsDouble(testB) == x1)) {
           return testB;
         }
         testC = Math.floor(mid);
         if ((testC != testA) && (testC != testB) && (testC > lower)
-            && (testC < upper) && (f.computeAsDouble(testC) == x1)) {
+            && (testC < upper)
+            && (function.computeAsDouble(testC) == x1)) {
           return testC;
         }
         testD = (0.5d * (testB + testC));
         if ((testD != testA) && (testD != testB) && (testD != testA)
             && (testD > lower) && (testD < upper)
-            && (f.computeAsDouble(testD) == x1)) {
+            && (function.computeAsDouble(testD) == x1)) {
           return testD;
         }
         return mid;
@@ -199,6 +201,12 @@ public final class BinarySearchUnaryInverse extends UnaryFunction
   /** {@inheritDoc} */
   @Override
   public final UnaryFunction invertFor(final int index) {
-    return this.m_f;
+    return this.m_function;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final InstanceIterator<Object> iterator() {
+    return new InstanceIterator<Object>(this.m_function);
   }
 }

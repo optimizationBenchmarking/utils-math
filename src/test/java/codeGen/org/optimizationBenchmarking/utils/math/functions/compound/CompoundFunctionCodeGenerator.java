@@ -9,6 +9,8 @@ import java.nio.file.Path;
 
 import org.apache.commons.math3.primes.Primes;
 import org.optimizationBenchmarking.utils.ICloneable;
+import org.optimizationBenchmarking.utils.collections.iterators.BasicIterator;
+import org.optimizationBenchmarking.utils.collections.iterators.InstanceIterator;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IMathRenderable;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
@@ -108,6 +110,8 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
           }
           CodeGeneratorBase.importClass(IParameterRenderer.class, bw);
           CodeGeneratorBase.importClass(ICloneable.class, bw);
+          CodeGeneratorBase.importClass(Iterable.class, bw);
+          CodeGeneratorBase.importClass(BasicIterator.class, bw);
           bw.println();
 
           bw.print(
@@ -130,7 +134,9 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
               .getSimpleName());
           bw.print(" implements ");//$NON-NLS-1$
           bw.print(ICloneable.class.getSimpleName());
-          bw.println(" {");//$NON-NLS-1$
+          bw.print(',');
+          bw.print(Iterable.class.getSimpleName());
+          bw.println("<Object> {");//$NON-NLS-1$
 
           bw.println();
           bw.println("/** the serial version uid */");//$NON-NLS-1$
@@ -164,7 +170,12 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
 
           CompoundFunctionCodeGenerator.__makeToString(bw);
 
+          CompoundFunctionCodeGenerator.___compound_makeIterator(m, n, bw);
+
           this.__compound_renderer(m, n, bw);
+
+          CompoundFunctionCodeGenerator.___compound_makeIteratorClass(m, n,
+              bw);
 
           bw.println('}');
         }
@@ -399,6 +410,114 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
       bw.print(j);
     }
     bw.println("); } return this; }");//$NON-NLS-1$
+  }
+
+  /**
+   * Make the {@link Iterable#iterator()} class name
+   *
+   * @param m
+   *          the number of parameters of the top-level function
+   * @param n
+   *          the number of compound functions
+   * @return the class name
+   */
+  private static final String ___compound_makeIteratorClassName(
+      final int m, final int n) {
+    return (('_' + CompoundFunctionCodeGenerator.__compound_name(m, n))
+        + "Iterator");//$NON-NLS-1$
+  }
+
+  /**
+   * Make the {@link Iterable#iterator()} method
+   *
+   * @param m
+   *          the number of parameters of the top-level function
+   * @param n
+   *          the number of compound functions
+   * @param bw
+   *          the output writer
+   */
+  private static final void ___compound_makeIterator(final int m,
+      final int n, final PrintWriter bw) {
+    final String iterator;
+
+    bw.println();
+    bw.println();
+    bw.println("/** {@inheritDoc} */");//$NON-NLS-1$
+    bw.println(" @Override");//$NON-NLS-1$
+    bw.print(" public final ");//$NON-NLS-1$
+
+    iterator = CompoundFunctionCodeGenerator
+        .___compound_makeIteratorClassName(m, n);
+
+    bw.print(iterator);
+    bw.print(" iterator() { return new ");//$NON-NLS-1$
+    bw.print(iterator);
+    bw.println("(); }");//$NON-NLS-1$
+  }
+
+  /**
+   * Make the {@link Iterable#iterator()} method
+   *
+   * @param m
+   *          the number of parameters of the top-level function
+   * @param n
+   *          the number of compound functions
+   * @param bw
+   *          the output writer
+   */
+  private static final void ___compound_makeIteratorClass(final int m,
+      final int n, final PrintWriter bw) {
+    final String iterator, name;
+    int j;
+
+    name = CompoundFunctionCodeGenerator.__compound_name(m, n);
+    iterator = CompoundFunctionCodeGenerator
+        .___compound_makeIteratorClassName(m, n);
+
+    bw.println("/** the internal iterator implementation */");//$NON-NLS-1$
+    bw.println("private final class ");//$NON-NLS-1$
+    bw.print(iterator);
+    bw.print(" extends ");//$NON-NLS-1$
+    bw.print(BasicIterator.class.getSimpleName());
+    bw.println("<Object> {");//$NON-NLS-1$
+    bw.println("/** the index */");//$NON-NLS-1$
+    bw.println("private int m_index;");//$NON-NLS-1$
+    bw.println();
+    bw.println("/** create */");//$NON-NLS-1$
+    bw.println(iterator);
+    bw.println("() { super(); }");//$NON-NLS-1$
+
+    bw.println();
+    bw.println("/** {@inheritDoc} */");//$NON-NLS-1$
+    bw.println("@Override");//$NON-NLS-1$
+    bw.print("public final boolean hasNext() { return (this.m_index <= ");//$NON-NLS-1$
+    bw.print(n);
+    bw.println("); }");//$NON-NLS-1$
+
+    bw.println();
+    bw.println("/** {@inheritDoc} */");//$NON-NLS-1$
+    bw.println("@Override");//$NON-NLS-1$
+    bw.println("public final Object next() { switch(this.m_index++) {");//$NON-NLS-1$
+
+    for (j = 0; j <= n; j++) {
+      bw.print("case ");//$NON-NLS-1$
+      bw.print(j);
+      bw.print(": { return ");//$NON-NLS-1$
+      bw.print(name);
+      bw.print(".this.m_");//$NON-NLS-1$
+      if (j <= 0) {
+        bw.print("result");//$NON-NLS-1$
+      } else {
+        bw.print("child");//$NON-NLS-1$
+        bw.print(j);
+      }
+      bw.println("; }");//$NON-NLS-1$
+    }
+
+    bw.println("default: { return super.next(); } } }");//$NON-NLS-1$
+
+    bw.println('}');
   }
 
   /**
@@ -1563,6 +1682,9 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
           CodeGeneratorBase.importClass(NamedConstant.class, bw);
           CodeGeneratorBase.importClass(ICloneable.class, bw);
 
+          CodeGeneratorBase.importClass(Iterable.class, bw);
+          CodeGeneratorBase.importClass(InstanceIterator.class, bw);
+
           bw.print(
               "/** This is the automatically generated code for a {@link ");//$NON-NLS-1$
           bw.print(mAryName);
@@ -1575,7 +1697,9 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
           bw.print(" extends ");//$NON-NLS-1$
           bw.print(CodeGeneratorBase.getMathematicalFunctionClassOfArity(m)
               .getSimpleName());
-          bw.println(" {");//$NON-NLS-1$
+          bw.print(" implements ");//$NON-NLS-1$
+          bw.print(Iterable.class.getSimpleName());
+          bw.println("<Object> {");//$NON-NLS-1$
 
           bw.println();
           bw.println("/** the serial version uid */");//$NON-NLS-1$
@@ -1605,6 +1729,8 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
           CompoundFunctionCodeGenerator.___const_makeHashCode(m, bw);
           CompoundFunctionCodeGenerator.___const_makeEquals(m, bw);
           CompoundFunctionCodeGenerator.__makeToString(bw);
+          CompoundFunctionCodeGenerator.___const_makeIterator(m, bw);
+
           bw.println('}');
         }
       }
@@ -1795,6 +1921,30 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
     bw.print(name);
     bw.println(") o).m_const)));");//$NON-NLS-1$
     bw.println("}");//$NON-NLS-1$
+  }
+
+  /**
+   * Make the {@link Iterable#iterator()} method
+   *
+   * @param m
+   *          the number of parameters of the top-level function
+   * @param bw
+   *          the output writer
+   */
+  private static final void ___const_makeIterator(final int m,
+      final PrintWriter bw) {
+    final String iterator;
+
+    bw.println();
+    bw.println();
+    bw.println("/** {@inheritDoc} */");//$NON-NLS-1$
+    bw.println(" @Override");//$NON-NLS-1$
+    bw.print(" public final ");//$NON-NLS-1$
+    iterator = InstanceIterator.class.getSimpleName();
+    bw.print(iterator);
+    bw.print("<Object> iterator() { return new ");//$NON-NLS-1$
+    bw.print(iterator);
+    bw.println("<Object>(this.m_const); }");//$NON-NLS-1$
   }
 
   /**
