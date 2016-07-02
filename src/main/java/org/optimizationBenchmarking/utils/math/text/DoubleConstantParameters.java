@@ -9,8 +9,8 @@ import org.optimizationBenchmarking.utils.text.textOutput.ITextOutput;
 /**
  * A parameter renderer which prints constant double values as parameters.
  */
-public final class DoubleConstantParameters
-    extends AbstractParameterRenderer {
+public final class DoubleConstantParameters extends
+    AbstractParameterRenderer implements INegatableParameterRenderer {
 
   /** the number appender to use */
   private final NumberAppender m_appender;
@@ -72,6 +72,57 @@ public final class DoubleConstantParameters
           text.append(this.m_parameters[index]);
         } else {
           this.m_appender.appendTo(this.m_parameters[index],
+              ETextCase.IN_SENTENCE, text);
+        }
+      }
+    } else {
+      AbstractParameterRenderer.throwInvalidParameterIndex(index,
+          this.m_parameters.length);
+    }
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final boolean isNegative(final int index) {
+    if ((index >= 0) && (index < this.m_parameters.length)) {
+      return (this.m_parameters[index] < 0);
+    }
+    AbstractParameterRenderer.throwInvalidParameterIndex(index,
+        this.m_parameters.length);
+    return false;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final void renderNegatedParameter(final int index,
+      final ITextOutput out) {
+    final double value;
+    if ((index >= 0) && (index < this.m_parameters.length)) {
+      value = (-this.m_parameters[index]);
+      if (this.m_appender == null) {
+        out.append((value == 0d) ? 0d : value);
+      } else {
+        this.m_appender.appendTo(((value == 0d) ? 0d : value),
+            ETextCase.IN_SENTENCE, out);
+      }
+    } else {
+      AbstractParameterRenderer.throwInvalidParameterIndex(index,
+          this.m_parameters.length);
+    }
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public final void renderNegatedParameter(final int index,
+      final IMath out) {
+    final double value;
+    if ((index >= 0) && (index < this.m_parameters.length)) {
+      value = (-this.m_parameters[index]);
+      try (final IText text = out.number()) {
+        if (this.m_appender == null) {
+          text.append((value == 0d) ? 0d : value);
+        } else {
+          this.m_appender.appendTo(((value == 0d) ? 0d : value),
               ETextCase.IN_SENTENCE, text);
         }
       }
