@@ -117,17 +117,20 @@ public class FunctionSamplingJob
     final double[] result;
     double[] segments;
     int totalSegments, processedSegments;
-    double xStart, yStart, xEnd, yEnd, xMid, yMid, multiplier;
+    double xStart, yStart, xEnd, yEnd, xMid, yMid,
+        minDeviationFromLinearFunction, minStep;
 
     function = this.m_function;
-    segments = new double[FunctionSamplingJob.MAX_ADAPTIVE_POINTS * 5];
+    segments = new double[FunctionSamplingJob.MAX_ADAPTIVE_POINTS * 6];
 
     totalSegments = FunctionSamplingJob.__fillInPoint(//
         xStart = xMid = this.m_min, //
         yStart = yMid = function.computeAsDouble(this.m_min), //
         xEnd = this.m_max, //
         yEnd = function.computeAsDouble(this.m_max), //
-        7e-5d, segments, 0);
+        7e-5d, //
+        (xEnd - xStart) * 1e-6d, //
+        segments, 0);
 
     optimizer = new __Optimizer(function);
 
@@ -141,44 +144,82 @@ public class FunctionSamplingJob
       yStart = segments[processedSegments++];
       xEnd = segments[processedSegments++];
       yEnd = segments[processedSegments++];
-      multiplier = segments[processedSegments++];
+      minDeviationFromLinearFunction = segments[processedSegments++];
+      minStep = segments[processedSegments++];
 
-      if ((!(MathUtils.isFinite(yEnd) && MathUtils.isFinite(yStart)))
-          || (xStart >= xEnd)) {
+      if (xStart >= xEnd) {
+        // The interval is empty: continue with the next segment.
         continue processSegments;
       }
 
-      if (totalSegments >= segments.length) {
-        break processSegments;
+      if (MathUtils.isFinite(yEnd) && MathUtils.isFinite(yStart)) {
+        // Both ends of the interval are finite. We can find the point in
+        // the middle which deviates the most from a linear function by
+        // using a univariate optimization method.
+        optimizer._solve(xStart, yStart, xEnd, yEnd, result);
+        if (result[0] < minDeviationFromLinearFunction) {
+          continue processSegments;
+        }
+        xMid = result[1];
+        yMid = result[2];
+      } else {
+        // At least one end of the interval is non-finite. In this case, we
+        // just split it in the middle and try again.
+        xMid = ((xEnd + xStart) * 0.5d);
+        yMid = function.computeAsDouble(xMid);
       }
 
-      optimizer._solve(xStart, yStart, xEnd, yEnd, result);
-
-      if (result[0] < multiplier) {
-        continue processSegments;
+      // We obtained a mid point at which we can split the interval into
+      // two pieces. We now need to check whether this point is too close
+      // to one of the interval ends. If so, we adjust it (and recompute
+      // the corresponding y value).
+      recompute: {
+        if (xMid < (xStart + minStep)) {
+          xMid = (xStart + minStep);
+          if (xMid > (xEnd - minStep)) {
+            continue processSegments;
+          }
+        } else {
+          if (xMid > (xEnd - minStep)) {
+            xMid = (xEnd - minStep);
+            if (xMid < (xStart + minStep)) {
+              continue processSegments;
+            }
+          } else {
+            break recompute;
+          }
+        }
+        yMid = function.computeAsDouble(xMid);
       }
 
-      xMid = result[1];
-      if ((xMid <= xStart) || (xMid >= xEnd)) {
-        continue processSegments;
-      }
+      // Ok, we can now split the segment into two new segments. We adjust
+      // the minDeviationFromLinearFunction: smaller intervals need larger
+      // minDeviationFromLinearFunction to
+      // produce visibly different.
+      minStep *= 1.7d;
 
-      yMid = result[2];
+      // Add first new segment.
       totalSegments = FunctionSamplingJob.__fillInPoint(xStart, yStart,
-          xMid, yMid,
-          (0.9d * multiplier * (xEnd - xStart)) / (xMid - xStart),
+          xMid, yMid, ///
+          (0.9d * minDeviationFromLinearFunction * (xEnd - xStart))
+              / (xMid - xStart), //
+          minStep, //
           segments, totalSegments);
 
       if (totalSegments >= segments.length) {
         break processSegments;
       }
 
+      // Add second new segment.
       totalSegments = FunctionSamplingJob.__fillInPoint(xMid, yMid, xEnd,
-          yEnd, (0.9d * multiplier * (xEnd - xStart)) / (xEnd - xMid),
+          yEnd, //
+          (0.9d * minDeviationFromLinearFunction * (xEnd - xStart))
+              / (xEnd - xMid), //
+          minStep, //
           segments, totalSegments);
     }
 
-    return this.__createMatrix(segments, (totalSegments / 5));
+    return this.__createMatrix(segments, (totalSegments / 6));
 
   }
 
@@ -193,8 +234,10 @@ public class FunctionSamplingJob
    *          the ending {@code x}-coordinate
    * @param yEnd
    *          the ending {@code y}-coordinate
-   * @param multiplier
-   *          the multiplier
+   * @param minDeviationFromLinearFunction
+   *          the minDeviationFromLinearFunction
+   * @param minStep
+   *          the minimum step length
    * @param dest
    *          the destination array
    * @param created
@@ -203,17 +246,20 @@ public class FunctionSamplingJob
    */
   private static final int __fillInPoint(final double xStart,
       final double yStart, final double xEnd, final double yEnd,
-      final double multiplier, final double[] dest, final int created) {
+      final double minDeviationFromLinearFunction, final double minStep,
+      final double[] dest, final int created) {
     dest[created] = xStart;
     dest[created + 1] = yStart;
     dest[created + 2] = xEnd;
     dest[created + 3] = yEnd;
-    dest[created + 4] = multiplier;
-    return (created + 5);
+    dest[created + 4] = minDeviationFromLinearFunction;
+    dest[created + 5] = minStep;
+    return (created + 6);
   }
 
   /**
-   * Create the matrix from the stored points
+   * Create the matrix from the stored (adaptive) points and also add
+   * {@value #GRID_POINTS} points at fixed intervals.
    *
    * @param segments
    *          the segments
@@ -243,7 +289,7 @@ public class FunctionSamplingJob
       // end points of segments
       point[0] = segments[dataIndex++];
       point[1] = segments[dataIndex++];
-      dataIndex += 3;
+      dataIndex += 4;
     }
 
     // 2. Add fixed-grid points for complicated functions
@@ -333,7 +379,7 @@ public class FunctionSamplingJob
   // int index;
   // double cur, prev;
   //
-  // matrix = new FunctionSamplingJob(BesselJ1.INSTANCE, 0, 10).call();
+  // matrix = new FunctionSamplingJob(ATan.INSTANCE, 0, 10).call();
   //
   // System.out.println(matrix.m());
   // System.out.println();
@@ -370,7 +416,9 @@ public class FunctionSamplingJob
     private double m_yBest;
     /** the best distance */
     private double m_distanceBest;
-    /** the multiplier */
+    /**
+     * the sum term to be added when computing the distance from the line
+     */
     private double m_addendum;
     /** the divisor */
     private double m_divisor;
