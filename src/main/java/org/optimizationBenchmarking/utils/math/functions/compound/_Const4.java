@@ -20,8 +20,7 @@ import org.optimizationBenchmarking.utils.text.textOutput.MemoryTextOutput;
  * 4-ary} which returns a constant value.
  */
 final class _Const4 extends QuaternaryFunction
-    implements Iterable<Object> {
-
+    implements Iterable<Object>, ICloneable {
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
 
@@ -35,7 +34,7 @@ final class _Const4 extends QuaternaryFunction
    * Create the
    * {@link org.optimizationBenchmarking.utils.math.functions.compound._Const4}
    * , a function which returns a constant value.
-   *
+   * 
    * @param constant
    *          the instance of {@link java.lang.Number} holding the constant
    *          value returned by this function

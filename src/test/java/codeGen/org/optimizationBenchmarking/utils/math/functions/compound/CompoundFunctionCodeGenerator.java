@@ -1699,7 +1699,10 @@ public class CompoundFunctionCodeGenerator extends CodeGeneratorBase {
               .getSimpleName());
           bw.print(" implements ");//$NON-NLS-1$
           bw.print(Iterable.class.getSimpleName());
-          bw.println("<Object> {");//$NON-NLS-1$
+          bw.println("<Object>");//$NON-NLS-1$
+          bw.print(',');
+          bw.print(ICloneable.class.getSimpleName());
+          bw.print('{');
 
           bw.println();
           bw.println("/** the serial version uid */");//$NON-NLS-1$

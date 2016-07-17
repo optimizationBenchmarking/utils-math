@@ -19,8 +19,8 @@ import org.optimizationBenchmarking.utils.text.textOutput.MemoryTextOutput;
  * {@link org.optimizationBenchmarking.utils.math.functions.BinaryFunction
  * 2-ary} which returns a constant value.
  */
-final class _Const2 extends BinaryFunction implements Iterable<Object> {
-
+final class _Const2 extends BinaryFunction
+    implements Iterable<Object>, ICloneable {
   /** the serial version uid */
   private static final long serialVersionUID = 1L;
 
@@ -34,7 +34,7 @@ final class _Const2 extends BinaryFunction implements Iterable<Object> {
    * Create the
    * {@link org.optimizationBenchmarking.utils.math.functions.compound._Const2}
    * , a function which returns a constant value.
-   *
+   * 
    * @param constant
    *          the instance of {@link java.lang.Number} holding the constant
    *          value returned by this function
