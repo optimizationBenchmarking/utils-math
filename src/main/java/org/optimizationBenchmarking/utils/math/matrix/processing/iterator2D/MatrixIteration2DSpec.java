@@ -123,8 +123,8 @@ public abstract class MatrixIteration2DSpec {
 
     list = this.m_sourceMatrixList;
     if (list == null) {
-      this.m_sourceMatrixList = list = new ArrayListView<>(
-          this.m_matrices);
+      this.m_sourceMatrixList = list = new ArrayListView<>(this.m_matrices,
+          false);
     }
     return list;
   }

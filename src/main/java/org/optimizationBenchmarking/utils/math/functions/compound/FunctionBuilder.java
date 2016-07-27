@@ -121,7 +121,7 @@ public abstract class FunctionBuilder<T extends MathematicalFunction> {
   @SafeVarargs
   public final T compound(final MathematicalFunction func,
       final T... params) {
-    return this.compound(func, new ArrayListView<>(params));
+    return this.compound(func, new ArrayListView<>(params, false));
   }
 
   /**
