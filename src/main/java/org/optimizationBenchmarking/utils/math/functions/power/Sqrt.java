@@ -104,6 +104,25 @@ public final class Sqrt extends UnaryFunction {
 
   /** {@inheritDoc} */
   @Override
+  public final double computeAsDouble(final long x1) {
+    final long res;
+
+    if (x1 > 0L) {
+      res = Sqrt.__isqrt(x1);
+      if ((res * res) == x1) {
+        return res;
+      }
+    } else {
+      if (x1 == 0L) {
+        return 0d;
+      }
+    }
+
+    return FastMath.sqrt(x1);
+  }
+
+  /** {@inheritDoc} */
+  @Override
   public final Sqr invertFor(final int index) {
     return Sqr.INSTANCE;
   }
