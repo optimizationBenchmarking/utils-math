@@ -43,11 +43,11 @@ import org.optimizationBenchmarking.utils.tools.spec.ICallableToolJob;
  * </p>
  * <ol>
  * <li>First, we compute a fixed number of samples from an equally-spaced
- * grid of {@value #GRID_POINTS} cells.</li>
- * <li>Second, we allow for at most {@value #MAX_ADAPTIVE_POINTS} adaptive
- * points to be added, whose locations are automatically detected by trying
- * to find areas where the function deviates the most from a linear
- * function.</li>
+ * grid of {@value #DEFAULT_GRID_POINTS} cells.</li>
+ * <li>Second, we allow for at most {@value #DEFAULT_MAX_ADAPTIVE_POINTS}
+ * adaptive points to be added, whose locations are automatically detected
+ * by trying to find areas where the function deviates the most from a
+ * linear function.</li>
  * </ol>
  * <p>
  * The second step is done by trying to find a point {@code (xMid, yMid)}
@@ -82,10 +82,10 @@ import org.optimizationBenchmarking.utils.tools.spec.ICallableToolJob;
 public class FunctionSamplingJob
     implements ICallableToolJob<DoubleMatrix1D> {
 
-  /** the maximum number of adaptively sampled points in a plot */
-  private static final int MAX_ADAPTIVE_POINTS = 3096;
-  /** the number of points sampled from the grid */
-  private static final int GRID_POINTS = 128;
+  /** the default maximum number of adaptively sampled points in a plot */
+  public static final int DEFAULT_MAX_ADAPTIVE_POINTS = 3096;
+  /** the default number of points sampled from the grid */
+  public static final int DEFAULT_GRID_POINTS = 128;
 
   /** the unary function */
   private final UnaryFunction m_function;
@@ -101,6 +101,11 @@ public class FunctionSamplingJob
    * them for the computations
    */
   private final UnaryFunction m_xTransformation;
+
+  /** the maximum adaptive points */
+  private final int m_maxAdaptivePoints;
+  /** the grid points */
+  private final int m_gridPoints;
 
   /**
    * Create the function sampling job
@@ -132,6 +137,31 @@ public class FunctionSamplingJob
   public FunctionSamplingJob(final UnaryFunction function,
       final double min, final double max,
       final UnaryFunction xCoordinateTransformation) {
+    this(function, min, max, xCoordinateTransformation, -1, -1);
+  }
+
+  /**
+   * Create the function sampling job
+   *
+   * @param function
+   *          the function to be sampled
+   * @param min
+   *          the minimum
+   * @param max
+   *          the maximum
+   * @param xCoordinateTransformation
+   *          the transformation for the {@code x}-coordinate
+   * @param maxAdaptivePoints
+   *          a suggestion for the maximum number of adaptively located
+   *          points,{@code -1} for default
+   * @param gridPoints
+   *          a suggestion for the maximum number of grid points,
+   *          {@code -1} for default
+   */
+  public FunctionSamplingJob(final UnaryFunction function,
+      final double min, final double max,
+      final UnaryFunction xCoordinateTransformation,
+      final int maxAdaptivePoints, final int gridPoints) {
 
     super();
     if (function == null) {
@@ -156,6 +186,13 @@ public class FunctionSamplingJob
 
     this.m_xTransformation = ((xCoordinateTransformation != null)
         ? xCoordinateTransformation : Identity.INSTANCE);
+
+    this.m_maxAdaptivePoints = (((maxAdaptivePoints < 0)
+        ? FunctionSamplingJob.DEFAULT_MAX_ADAPTIVE_POINTS
+        : ((maxAdaptivePoints < 10) ? 10 : maxAdaptivePoints)));
+    this.m_gridPoints = (((gridPoints < 0)
+        ? FunctionSamplingJob.DEFAULT_GRID_POINTS
+        : ((gridPoints < 10) ? 10 : gridPoints)));
   }
 
   /** {@inheritDoc} */
@@ -173,7 +210,8 @@ public class FunctionSamplingJob
 
     function = this.m_function;
     transformation = this.m_xTransformation;
-    segments = new double[FunctionSamplingJob.MAX_ADAPTIVE_POINTS * 8];
+    segments = new double[Math.max((this.m_maxAdaptivePoints * 8),
+        ((this.m_maxAdaptivePoints + this.m_gridPoints + 2) << 1))];
 
     totalSegments = FunctionSamplingJob.__fillInPoint(//
         xStart = xMid = this.m_min, //
@@ -419,7 +457,7 @@ public class FunctionSamplingJob
 
   /**
    * Create the matrix from the stored (adaptive) points and also add
-   * {@value #GRID_POINTS} points at fixed intervals.
+   * {@ling #m_gridPoints} points at fixed intervals.
    *
    * @param segments
    *          the segments
@@ -434,8 +472,7 @@ public class FunctionSamplingJob
     double xPrevious, xCurrent, yCurrent, xStart, xEnd;
     int dataIndex, pointsIndex;
 
-    points = new double[totalSegments
-        + FunctionSamplingJob.GRID_POINTS][2];
+    points = new double[totalSegments + this.m_gridPoints][2];
 
     // 1. Transform segments into 2-dimensional array of [x,y] pairs
     point = points[0];
@@ -455,10 +492,10 @@ public class FunctionSamplingJob
     // 2. Add fixed-grid points for complicated functions
     xStart = this.m_min;
     xEnd = this.m_max;
-    for (dataIndex = FunctionSamplingJob.GRID_POINTS; (--dataIndex) > 0;) {
+    for (dataIndex = this.m_gridPoints; (--dataIndex) > 0;) {
       point = points[pointsIndex++];
-      xCurrent = (xStart + ((dataIndex * (xEnd - xStart))
-          / FunctionSamplingJob.GRID_POINTS));
+      xCurrent = (xStart
+          + ((dataIndex * (xEnd - xStart)) / this.m_gridPoints));
       point[0] = this.m_xTransformation.computeAsDouble(xCurrent);
       point[1] = this.m_function.computeAsDouble(xCurrent);
     }
