@@ -42,7 +42,7 @@ public class AbstractMatrix implements IMatrix, ITextable {
   public double getDouble(final int row, final int column) {
     throw new IndexOutOfBoundsException(//
         (((((("Matrix access " + //$NON-NLS-1$
-            TextUtils.className(this.getClass())) + ".getDouble(" + row) //$NON-NLS-1$
+            TextUtils.className(this)) + ".getDouble(" + row) //$NON-NLS-1$
             + ',') + column + ") is invalid, the valid index range is (0.."//$NON-NLS-1$
             + (this.m() - 1)) + ", 0.."//$NON-NLS-1$
             + (this.n() - 1)) + ')') + '.');
@@ -53,7 +53,7 @@ public class AbstractMatrix implements IMatrix, ITextable {
   public long getLong(final int row, final int column) {
     throw new IndexOutOfBoundsException(//
         (((((("Matrix access " + //$NON-NLS-1$
-            TextUtils.className(this.getClass())) + ".getLong(" + row) //$NON-NLS-1$
+            TextUtils.className(this)) + ".getLong(" + row) //$NON-NLS-1$
             + ',') + column + ") is invalid, the valid index range is (0.."//$NON-NLS-1$
             + (this.m() - 1)) + ", 0.."//$NON-NLS-1$
             + (this.n() - 1)) + ')') + '.');

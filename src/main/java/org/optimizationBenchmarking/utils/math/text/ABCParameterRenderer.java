@@ -3,6 +3,7 @@ package org.optimizationBenchmarking.utils.math.text;
 import org.optimizationBenchmarking.utils.document.spec.IMath;
 import org.optimizationBenchmarking.utils.document.spec.IParameterRenderer;
 import org.optimizationBenchmarking.utils.document.spec.IText;
+import org.optimizationBenchmarking.utils.text.TextUtils;
 import org.optimizationBenchmarking.utils.text.textOutput.ITextOutput;
 
 /** A parameter renderer rendering parameters as 'A', 'B', 'C', ... */
@@ -22,7 +23,7 @@ public final class ABCParameterRenderer implements IParameterRenderer {
       final ITextOutput out) {
     if (index > 25) {
       throw new IllegalArgumentException((((//
-      "The " + this.getClass().getSimpleName()) + //$NON-NLS-1$
+      "The " + TextUtils.className(this)) + //$NON-NLS-1$
           " cannot deal with parameter indices greater than 25, but you specified ") //$NON-NLS-1$
           + index) + '.');
     }

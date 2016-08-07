@@ -2,6 +2,7 @@ package org.optimizationBenchmarking.utils.math.statistics.aggregate;
 
 import org.optimizationBenchmarking.utils.math.BasicNumber;
 import org.optimizationBenchmarking.utils.math.NumericalTypes;
+import org.optimizationBenchmarking.utils.text.TextUtils;
 
 /**
  * An aggregate with a single, scale result.
@@ -94,7 +95,7 @@ public abstract class ScalarAggregate extends BasicNumber
     if (v == null) {
       throw new IllegalArgumentException(//
           "Cannot add null number to aggregate " //$NON-NLS-1$
-              + this.getClass().getSimpleName());
+              + TextUtils.className(this));
     }
 
     switch (NumericalTypes.getMinType(v)) {

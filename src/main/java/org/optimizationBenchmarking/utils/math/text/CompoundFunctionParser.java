@@ -21,6 +21,7 @@ import org.optimizationBenchmarking.utils.math.functions.compound.TernaryFunctio
 import org.optimizationBenchmarking.utils.math.functions.compound.UnaryFunctionBuilder;
 import org.optimizationBenchmarking.utils.parsers.AnyNumberParser;
 import org.optimizationBenchmarking.utils.parsers.Parser;
+import org.optimizationBenchmarking.utils.text.TextUtils;
 import org.optimizationBenchmarking.utils.text.charset.Brace;
 import org.optimizationBenchmarking.utils.text.charset.Char;
 import org.optimizationBenchmarking.utils.text.charset.Characters;
@@ -143,7 +144,7 @@ public class CompoundFunctionParser<T extends MathematicalFunction>
           "Mathematical function expected at index " //$NON-NLS-1$
               + start + " in token list " + tokens + //$NON-NLS-1$
               ", but '" + //$NON-NLS-1$
-              token + "', a " + token.getClass().getSimpleName() //$NON-NLS-1$
+              token + "', a " + TextUtils.className(token) //$NON-NLS-1$
               + ", encountered."); //$NON-NLS-1$
     }
 
@@ -213,7 +214,7 @@ public class CompoundFunctionParser<T extends MathematicalFunction>
               " in "//$NON-NLS-1$
               + tokens + ", but encountered " + token//$NON-NLS-1$
               + " which is an instance of "//$NON-NLS-1$
-              + token.getClass().getSimpleName());
+              + TextUtils.className(token));
     }
 
     // If we get here, the structure of tokens is such that it is not

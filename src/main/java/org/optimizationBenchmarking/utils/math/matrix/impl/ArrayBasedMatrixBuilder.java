@@ -5,6 +5,7 @@ import org.optimizationBenchmarking.utils.math.NumericalTypes;
 import org.optimizationBenchmarking.utils.math.matrix.AbstractMatrix;
 import org.optimizationBenchmarking.utils.math.statistics.aggregate.IAggregate;
 import org.optimizationBenchmarking.utils.reflection.EPrimitiveType;
+import org.optimizationBenchmarking.utils.text.TextUtils;
 
 /** A builder for arrays of numerical types. */
 public class ArrayBasedMatrixBuilder implements IAggregate {
@@ -232,7 +233,7 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
    */
   protected AbstractMatrix make(final byte[] data) {
     throw new UnsupportedOperationException(//
-        this.getClass().getSimpleName() + //
+        TextUtils.className(this) + //
             " does not support building matrices based on byte[] data."); //$NON-NLS-1$
   }
 
@@ -245,7 +246,7 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
    */
   protected AbstractMatrix make(final short[] data) {
     throw new UnsupportedOperationException(//
-        this.getClass().getSimpleName() + //
+        TextUtils.className(this) + //
             " does not support building matrices based on short[] data."); //$NON-NLS-1$
   }
 
@@ -258,7 +259,7 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
    */
   protected AbstractMatrix make(final int[] data) {
     throw new UnsupportedOperationException(//
-        this.getClass().getSimpleName() + //
+        TextUtils.className(this) + //
             " does not support building matrices based on int[] data."); //$NON-NLS-1$
   }
 
@@ -271,7 +272,7 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
    */
   protected AbstractMatrix make(final long[] data) {
     throw new UnsupportedOperationException(//
-        this.getClass().getSimpleName() + //
+        TextUtils.className(this) + //
             " does not support building matrices based on long[] data."); //$NON-NLS-1$
   }
 
@@ -284,7 +285,7 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
    */
   protected AbstractMatrix make(final float[] data) {
     throw new UnsupportedOperationException(//
-        this.getClass().getSimpleName() + //
+        TextUtils.className(this) + //
             " does not support building matrices based on float[] data."); //$NON-NLS-1$
   }
 
@@ -297,7 +298,7 @@ public class ArrayBasedMatrixBuilder implements IAggregate {
    */
   protected AbstractMatrix make(final double[] data) {
     throw new UnsupportedOperationException(//
-        this.getClass().getSimpleName() + //
+        TextUtils.className(this) + //
             " does not support building matrices based on double[] data."); //$NON-NLS-1$
   }
 
