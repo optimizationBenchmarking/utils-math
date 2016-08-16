@@ -457,7 +457,7 @@ public class FunctionSamplingJob
 
   /**
    * Create the matrix from the stored (adaptive) points and also add
-   * {@ling #m_gridPoints} points at fixed intervals.
+   * {@link #m_gridPoints} points at fixed intervals.
    *
    * @param segments
    *          the segments
