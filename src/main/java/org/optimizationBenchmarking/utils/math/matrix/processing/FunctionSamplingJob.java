@@ -467,6 +467,7 @@ public class FunctionSamplingJob
    */
   private final DoubleMatrix1D __createMatrix(final double[] segments,
       final int totalSegments) {
+    final UnaryFunction inverse;
     double[][] points;
     double[] point;
     double xPrevious, xCurrent, yCurrent, xStart, xEnd;
@@ -490,14 +491,50 @@ public class FunctionSamplingJob
     }
 
     // 2. Add fixed-grid points for complicated functions
-    xStart = this.m_min;
-    xEnd = this.m_max;
-    for (dataIndex = this.m_gridPoints; (--dataIndex) > 0;) {
-      point = points[pointsIndex++];
-      xCurrent = (xStart
-          + ((dataIndex * (xEnd - xStart)) / this.m_gridPoints));
-      point[0] = this.m_xTransformation.computeAsDouble(xCurrent);
-      point[1] = this.m_function.computeAsDouble(xCurrent);
+    doGrid: {
+      // Let's see whether we can directly sample in the transformed
+      // coordinate space. This means that we generate equi-distance points
+      // from the perspective of the x-axis transformation, which is the
+      // desirable behavior. In order to do so, we need to be able to
+      // invert the transformation of the x-axis.
+      inverse = this.m_xTransformation.invertFor(0);
+      if (inverse != null) {
+        xStart = this.m_xTransformation.computeAsDouble(this.m_min);
+        if (MathUtils.isFinite(xStart)
+            && MathUtils.isFinite(inverse.computeAsDouble(xStart))) {
+          xEnd = this.m_xTransformation.computeAsDouble(this.m_max);
+          if (MathUtils.isFinite(xEnd)
+              && MathUtils.isFinite(inverse.computeAsDouble(xEnd))) {
+
+            for (dataIndex = this.m_gridPoints; (--dataIndex) > 0;) {
+              point = points[pointsIndex++];
+              xCurrent = (xStart
+                  + ((dataIndex * (xEnd - xStart)) / this.m_gridPoints));
+              point[0] = xCurrent;
+              point[1] = this.m_function.computeAsDouble(//
+                  ((dataIndex <= 0) ? this.m_min//
+                      : ((dataIndex >= (this.m_gridPoints - 1))//
+                          ? this.m_max//
+                          : inverse.computeAsDouble(xCurrent))));
+            }
+            break doGrid;
+          }
+        }
+      }
+
+      // Fallback: There is no inverse function for the x-axis
+      // transformation that we could use to sample the grid in the final
+      // coordinate space, so we sample in the original, untransformed
+      // (x,y) space
+      xStart = this.m_min;
+      xEnd = this.m_max;
+      for (dataIndex = this.m_gridPoints; (--dataIndex) > 0;) {
+        point = points[pointsIndex++];
+        xCurrent = (xStart
+            + ((dataIndex * (xEnd - xStart)) / this.m_gridPoints));
+        point[0] = this.m_xTransformation.computeAsDouble(xCurrent);
+        point[1] = this.m_function.computeAsDouble(xCurrent);
+      }
     }
 
     // 3. Sort the 2-dimensional array of [x,y] pairs
