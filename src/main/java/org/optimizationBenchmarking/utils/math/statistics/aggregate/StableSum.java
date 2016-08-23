@@ -208,6 +208,7 @@ public final class StableSum extends _StatefulNumber {
   @Override
   public final void append(final long value) {
     final int state;
+    double doubleValue;
 
     // if the sum is empty, we can take the long value directly
     state = this.m_state;
@@ -240,7 +241,16 @@ public final class StableSum extends _StatefulNumber {
       // Fall through to double arithmetic
     }
 
-    this.__plainDoubleAdd(value);
+    // A long value may not uniquely be represented as double, since double
+    // only provides 52 bits of integer mantissa. So we try to add first
+    // the double corresponding to the long and then add the potentially
+    // lost remainder.
+    doubleValue = value;
+    this.__plainDoubleAdd(doubleValue);
+    doubleValue = (value - ((long) doubleValue));
+    if (doubleValue != 0d) {
+      this.__plainDoubleAdd(doubleValue);
+    }
   }
 
   /**

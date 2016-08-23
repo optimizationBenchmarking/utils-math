@@ -38,7 +38,7 @@ public abstract class ScalarAggregate extends BasicNumber
    *          the value to visit
    */
   @Override
-  public final void append(final int value) {
+  public void append(final int value) {
     this.append((long) value);
   }
 
