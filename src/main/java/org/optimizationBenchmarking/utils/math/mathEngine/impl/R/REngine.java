@@ -225,19 +225,19 @@ public final class REngine extends MathEngine {
             continue iterateTokens;
           }
           if (REngine.NEGATIVE_INFINITY.equalsIgnoreCase(token)) {
-            mb.append(Double.NEGATIVE_INFINITY);
+            mb.append(Float.NEGATIVE_INFINITY);
             continue iterateTokens;
           }
           if (REngine.POSITIVE_INFINITY.equalsIgnoreCase(token)) {
-            mb.append(Double.POSITIVE_INFINITY);
+            mb.append(Float.POSITIVE_INFINITY);
             continue iterateTokens;
           }
           if (REngine.TRUE.equalsIgnoreCase(token)) {
-            mb.append(1);
+            mb.append((byte) 1);
             continue iterateTokens;
           }
           if (REngine.FALSE.equalsIgnoreCase(token)) {
-            mb.append(0);
+            mb.append((byte) 0);
             continue iterateTokens;
           }
           mb.append(token);
@@ -411,6 +411,7 @@ public final class REngine extends MathEngine {
   private final void __assignmentEnd(final String variable)
       throws IOException {
     final BufferedWriter out;
+    String line;
 
     out = this.m_process.getStdIn();
 
@@ -424,7 +425,14 @@ public final class REngine extends MathEngine {
     out.write("\");"); //$NON-NLS-1$
     out.newLine();
     out.flush();
-    this.m_process.getStdOut().readLine();
+
+    line = this.m_process.getStdOut().readLine();
+    if ((line == null) || (!(line.contains(REngine.TRUE)))) {
+      throw new IllegalStateException("Assignment of variable '" //$NON-NLS-1$
+          + variable + "' has failed, 'exists(\""//$NON-NLS-1$
+          + variable + "\")' returns '" + line //$NON-NLS-1$
+          + '\'' + '.');
+    }
   }
 
   /**
