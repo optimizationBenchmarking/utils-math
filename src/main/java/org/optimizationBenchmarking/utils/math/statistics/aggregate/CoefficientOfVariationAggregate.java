@@ -51,17 +51,16 @@ public class CoefficientOfVariationAggregate extends MeanBasedAggregate {
       }
 
       case STATE_INTEGER: {
+        stddevLong = this.m_stddev.longValue();
+        if (stddevLong <= 0L) {
+          this._setLong(0L);
+          return;
+        }
         if (this.m_stddev.m_variance.m_mean
             .getState() == BasicNumber.STATE_INTEGER) {
           meanLong = this.m_stddev.m_variance.m_mean.longValue();
           if (meanLong > Long.MIN_VALUE) {
-            stddevLong = this.m_stddev.longValue();
-
             if (meanLong == 0L) {
-              if (stddevLong <= 0L) {
-                this._setLong(0L);
-                return;
-              }
               this._setPositiveInfinity();
               return;
             }
@@ -83,13 +82,13 @@ public class CoefficientOfVariationAggregate extends MeanBasedAggregate {
         //$FALL-THROUGH$
       default: {
         stddevDouble = this.m_stddev.doubleValue();
+        if (stddevDouble <= 0d) {
+          this._setLong(0L);
+          return;
+        }
         meanDouble = Math
             .abs(this.m_stddev.m_variance.m_mean.doubleValue());
         if (meanDouble <= 0d) {
-          if (stddevDouble <= 0d) {
-            this._setLong(0L);
-            return;
-          }
           this._setPositiveInfinity();
           return;
         }
