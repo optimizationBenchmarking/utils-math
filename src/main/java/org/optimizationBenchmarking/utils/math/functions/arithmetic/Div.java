@@ -96,48 +96,48 @@ public final class Div extends BinaryFunction {
   /** {@inheritDoc} */
   @Override
   public final double computeAsDouble(final long x0, final long x1) {
-	    final long gcd;
-	    long res;
+    final long gcd;
+    long res;
 
-	    if (x1 == 0L) {
-	      if (x0 < 0L) {
-	        return Double.NEGATIVE_INFINITY;
-	      }
-	      if (x0 > 0L) {
-	        return Double.POSITIVE_INFINITY;
-	      }
-	      return Double.NaN;
-	    }
+    if (x1 == 0L) {
+      if (x0 < 0L) {
+        return Double.NEGATIVE_INFINITY;
+      }
+      if (x0 > 0L) {
+        return Double.POSITIVE_INFINITY;
+      }
+      return Double.NaN;
+    }
 
-	    final boolean x0Min = (x0 != Long.MIN_VALUE);
-	    if (x0Min) {
-	      // guard against overflow due to (-Long.MIN_VALUE) == Long.MIN_VALUE
-	      res = (x0 / x1);
-	      if ((x1 * res) == x0) {
-	        return res;
-	      }
-	    }
+    final boolean x0Min = (x0 != Long.MIN_VALUE);
+    if (x0Min) {
+      // guard against overflow due to (-Long.MIN_VALUE) == Long.MIN_VALUE
+      res = (x0 / x1);
+      if ((x1 * res) == x0) {
+        return res;
+      }
+    }
 
-	    final boolean x1Min = (x1 != Long.MIN_VALUE);
-	    if (x1Min) {
-	      // guard against overflow due to (-Long.MIN_VALUE) == Long.MIN_VALUE
-	      res = (x1 / x0);
-	      if ((x0 * res) == x1) {
-	        return (1d / res);
-	      }
-	    }
+    final boolean x1Min = (x1 != Long.MIN_VALUE);
+    if (x1Min) {
+      // guard against overflow due to (-Long.MIN_VALUE) == Long.MIN_VALUE
+      res = (x1 / x0);
+      if ((x0 * res) == x1) {
+        return (1d / res);
+      }
+    }
 
-	    if (x0Min && x1Min) {
-	      // guard against overflow due to (-Long.MIN_VALUE) == Long.MIN_VALUE
+    if (x0Min && x1Min) {
+      // guard against overflow due to (-Long.MIN_VALUE) == Long.MIN_VALUE
 
-	      // Try to achieve maximum accuracy by first dividing both numbers by
-	      // their greatest common divisor. This could lead to the least
-	      // rounding/truncation errors in the subsequent floating point
-	      // division.
-	      gcd = GCD.INSTANCE.computeAsLong(x0, x1);
-	      return (((double) (x0 / gcd)) / ((double) (x1 / gcd)));
-	    }
-	    return (((double) x0) / ((double) x1));
+      // Try to achieve maximum accuracy by first dividing both numbers by
+      // their greatest common divisor. This could lead to the least
+      // rounding/truncation errors in the subsequent floating point
+      // division.
+      gcd = GCD.INSTANCE.computeAsLong(x0, x1);
+      return (((double) (x0 / gcd)) / ((double) (x1 / gcd)));
+    }
+    return (((double) x0) / ((double) x1));
   }
 
   /** {@inheritDoc} */
